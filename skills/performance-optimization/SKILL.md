@@ -3,7 +3,7 @@ name: performance-optimization
 description: Optimiert die Performance von Anwendungen in Frontend, Backend, Abfragen und Datenbanken. Verwenden, wenn Performance-Anforderungen bestehen, wenn Performance-Regressionen vermutet werden, wenn Core Web Vitals oder Ladezeiten verbessert werden müssen, wenn N+1-Query-Muster behoben werden müssen oder wenn Profiling Engpässe aufdeckt. Typische Auslöser sind „mach die Seite schneller“, „die API ist zu langsam“, „finde den Performance-Engpass“, „behebe die N+1-Queries“ oder „verbessere den LCP-Wert“.
 ---
 
-# Performance Optimization
+# Performance-Optimierung
 
 ## Überblick
 

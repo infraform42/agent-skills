@@ -3,7 +3,7 @@ name: constraint-driven-development
 description: "Legt den Qualitätsmaßstab eines Projekts als schriftlichen Vertrag in CONSTRAINTS.md fest und verhindert, dass Agents ihn stillschweigend senken. Befragt den Nutzer zu den relevanten Dimensionen (z. B. Accessibility, Web-Performance, Coverage), schlägt Standard-Schwellen vor und prüft den Diff auf aufgeweichte Maßstäbe: neue @ts-ignore- oder eslint-disable-Unterdrückungen, übersprungene oder gelöschte Tests, entfernte Assertions, Stubs, gesenkte Schwellen. Verwenden, wenn kein Qualitätsmaßstab festgehalten ist, wenn ein Agent Checks abschaltet oder Tests überspringt, um grün zu werden, oder wenn eine Coverage- oder Performance-Schwelle gebraucht wird. Englische Trigger: \"set up constraints\", \"define our standards\". Typische Anfragen: „leg unsere Qualitätsstandards fest“, „richte Constraints für das Projekt ein“, „welche Coverage-Schwelle sollen wir nehmen“, „der Agent hat die Tests einfach übersprungen“."
 ---
 
-# Constraint-Driven Development
+# Constraint-getriebene Entwicklung
 
 ## Überblick
 

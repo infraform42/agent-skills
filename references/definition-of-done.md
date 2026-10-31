@@ -1,67 +1,67 @@
 # Definition of Done
 
-A standing, project-wide bar that every change must clear before it counts as done. Unlike acceptance criteria, which vary per task and answer "did we build the right thing?", the Definition of Done is the same every time and answers "is this finished to our standard?". Use it as the final gate in `planning-and-task-breakdown`, `incremental-implementation`, and `shipping-and-launch`.
+Ein projektweiter, fester Maßstab, den jede Änderung erfüllen muss, bevor sie als erledigt gilt. Anders als Akzeptanzkriterien, die pro Aufgabe variieren und die Frage „Haben wir das Richtige gebaut?“ beantworten, ist die Definition of Done jedes Mal dieselbe und beantwortet die Frage „Ist das nach unserem Standard fertig?“. Nutze sie als letztes Gate in `planning-and-task-breakdown`, `incremental-implementation` und `shipping-and-launch`.
 
-## Definition of Done vs. Acceptance Criteria
+## Definition of Done vs. Akzeptanzkriterien
 
-| | Acceptance Criteria | Definition of Done |
+| | Akzeptanzkriterien | Definition of Done |
 |---|---|---|
-| Scope | Specific to one task or spec | Applies to every increment |
-| Changes | Different for each item | Fixed and reused |
-| Answers | "Did we build *this thing*?" | "Is it *ready*?" |
-| Owner | Defined when planning the task | Defined once for the project |
-| Example | "User can reset password via email link" | "Tests pass, no regressions, docs updated" |
+| Geltungsbereich | Spezifisch für eine Aufgabe oder ein Spec | Gilt für jedes Inkrement |
+| Änderungen | Für jedes Element anders | Fest und wiederverwendet |
+| Beantwortet | „Haben wir *dieses Ding* gebaut?“ | „Ist es *bereit*?“ |
+| Verantwortlich | Wird bei der Planung der Aufgabe festgelegt | Wird einmal für das Projekt festgelegt |
+| Beispiel | „Nutzer kann das Passwort über einen E-Mail-Link zurücksetzen“ | „Tests laufen durch, keine Regressionen, Doku aktualisiert“ |
 
-The two are complementary. A task is done only when **its** acceptance criteria are met **and** the standing Definition of Done is satisfied. Skipping either leaves work that looks finished but is not.
+Beides ergänzt sich. Eine Aufgabe ist erst dann erledigt, wenn **ihre** Akzeptanzkriterien erfüllt sind **und** die feste Definition of Done erfüllt ist. Wer eines von beiden überspringt, hinterlässt Arbeit, die fertig aussieht, es aber nicht ist.
 
-## The Standing Checklist
+## Die feste Checkliste
 
-Apply this to every change before declaring it done.
+Wende sie auf jede Änderung an, bevor du sie für erledigt erklärst.
 
-### Correctness
-- [ ] All acceptance criteria for the task are met
-- [ ] Code runs and behaves as intended, verified at runtime, not just compiled or typechecked
-- [ ] New behavior is covered by tests that fail without the change and pass with it
-- [ ] Existing tests still pass; no regressions introduced
-- [ ] Edge cases and error paths are handled, not just the happy path
+### Korrektheit
+- [ ] Alle Akzeptanzkriterien der Aufgabe sind erfüllt
+- [ ] Der Code läuft und verhält sich wie vorgesehen, zur Laufzeit verifiziert, nicht nur kompiliert oder typgeprüft
+- [ ] Neues Verhalten ist durch Tests abgedeckt, die ohne die Änderung fehlschlagen und mit ihr durchlaufen
+- [ ] Bestehende Tests laufen weiterhin durch; es wurden keine Regressionen eingeführt
+- [ ] Randfälle und Fehlerpfade sind behandelt, nicht nur der Happy Path
 
-### Quality
-- [ ] Code reveals intent through naming and structure; no comments needed to explain *what* it does
-- [ ] No duplicated business logic
-- [ ] No dead code, debug output, or commented-out blocks left behind
-- [ ] Changes are scoped to the task; no unrelated refactors snuck in
-- [ ] Linting and formatting pass
+### Qualität
+- [ ] Der Code macht seine Absicht durch Benennung und Struktur deutlich; es braucht keine Kommentare, die erklären, *was* er tut
+- [ ] Keine duplizierte Geschäftslogik
+- [ ] Kein toter Code, keine Debug-Ausgaben und keine auskommentierten Blöcke zurückgelassen
+- [ ] Änderungen beschränken sich auf die Aufgabe; keine fachfremden Refaktorierungen eingeschmuggelt
+- [ ] Linting und Formatierung laufen durch
 
-The depth behind these items lives in `code-review-and-quality` (the five-axis review) and `code-simplification` (reducing complexity without changing behavior).
+Die Tiefe hinter diesen Punkten steckt in `code-review-and-quality` (das Fünf-Achsen-Review) und `code-simplification` (Komplexität reduzieren, ohne das Verhalten zu ändern).
 
 ### Integration
-- [ ] Change works with the rest of the system, not just in isolation
-- [ ] Database migrations, config changes, and feature flags are accounted for
-- [ ] Backward compatibility considered for any public interface or API change
+- [ ] Die Änderung funktioniert mit dem Rest des Systems, nicht nur isoliert
+- [ ] Datenbank-Migrationen, Konfigurationsänderungen und Feature-Flags sind berücksichtigt
+- [ ] Abwärtskompatibilität ist für jede Änderung an einer öffentlichen Schnittstelle oder API bedacht
 
-### Documentation
-- [ ] Public interfaces, APIs, and user-facing behavior are documented
-- [ ] Architectural decisions worth preserving are recorded (see `documentation-and-adrs`)
-- [ ] Documentation describes the current state in timeless language, not the change history
+### Dokumentation
+- [ ] Öffentliche Schnittstellen, APIs und nutzersichtbares Verhalten sind dokumentiert
+- [ ] Erhaltenswerte Architekturentscheidungen sind festgehalten (siehe `documentation-and-adrs`)
+- [ ] Die Dokumentation beschreibt den aktuellen Stand in zeitloser Sprache, nicht die Änderungshistorie
 
-### Ship-readiness
-- [ ] Security implications reviewed for any untrusted input, auth, or data handling (see `security-and-hardening`)
-- [ ] Observability in place for new critical paths (logs, metrics, traces) (see `observability-and-instrumentation`)
-- [ ] Rollback path exists for anything risky (see `shipping-and-launch`)
-- [ ] The human has reviewed and approved before merge or deploy
+### Ship-Bereitschaft
+- [ ] Sicherheitsauswirkungen sind bei nicht vertrauenswürdigen Eingaben, Authentifizierung oder Datenverarbeitung geprüft (siehe `security-and-hardening`)
+- [ ] Observability ist für neue kritische Pfade vorhanden (Logs, Metriken, Traces) (siehe `observability-and-instrumentation`)
+- [ ] Für alles Riskante existiert ein Rollback-Pfad (siehe `shipping-and-launch`)
+- [ ] Ein Mensch hat die Änderung geprüft und freigegeben, bevor sie gemergt oder deployt wird
 
-## How to Apply
+## Anwendung
 
-- **Per task**: confirm the Correctness and Quality sections before checking the task off.
-- **Per feature**: confirm Integration and Documentation before considering the feature complete.
-- **Per release**: the full checklist is the floor; `shipping-and-launch` adds the deploy-specific gates on top.
+- **Pro Aufgabe**: Bestätige die Abschnitte Korrektheit und Qualität, bevor du die Aufgabe abhakst.
+- **Pro Feature**: Bestätige Integration und Dokumentation, bevor du das Feature als abgeschlossen betrachtest.
+- **Pro Release**: Die vollständige Checkliste ist die Untergrenze; `shipping-and-launch` ergänzt darüber hinaus die deploy-spezifischen Gates.
 
-Tailor the list to the project once, then reuse it unchanged. A Definition of Done that is renegotiated every sprint is not a Definition of Done.
+Passe die Liste einmal an das Projekt an und nutze sie dann unverändert weiter. Eine Definition of Done, die in jedem Sprint neu verhandelt wird, ist keine Definition of Done.
 
-## Red Flags
+## Warnsignale
 
-- "It's done, I just haven't run it yet": unverified work is not done.
-- "Tests pass" used as a synonym for done while docs, regressions, or runtime verification are skipped.
-- A different bar applied depending on deadline pressure.
-- Acceptance criteria treated as the whole bar, with no standing quality floor.
-- "Done" declared before human review on changes that need it.
+- „Es ist fertig, ich habe es nur noch nicht ausgeführt“: Nicht verifizierte Arbeit ist nicht erledigt.
+- „Tests laufen durch“ als Synonym für erledigt, während Doku, Regressionen oder Laufzeitverifikation übersprungen werden.
+- Ein anderer Maßstab je nach Termindruck.
+- Akzeptanzkriterien werden als der gesamte Maßstab behandelt, ohne festen Qualitätsboden.
+- „Fertig“ wird erklärt, bevor ein Mensch eine Änderung geprüft hat, die das braucht.

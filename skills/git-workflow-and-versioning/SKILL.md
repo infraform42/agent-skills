@@ -3,7 +3,7 @@ name: git-workflow-and-versioning
 description: "Git-Workflow-Methodik: atomare Commits, Commit-Nachrichten, Branch-Strategie, Konfliktauflösung, Pull Requests, Releases, Semantic Versioning, Tags und Changelog. Verwenden, wenn eine Commit-Nachricht oder ein Changelog-Eintrag geschrieben, unaufgeräumte Änderungen in saubere Commits aufgeteilt, ein Merge-Konflikt gelöst, ein Pull Request vorbereitet oder ein Release getaggt werden soll. Nicht bei gewöhnlichen Codeänderungen; committen und pushen nur auf ausdrücklichen Wunsch des Nutzers. Typische Anfragen: „schreib die Commit-Message dazu“, „teile das in saubere Commits auf“, „löse den Merge-Konflikt“, „tagge den Release“, „schreib den Changelog-Eintrag“."
 ---
 
-# Git Workflow and Versioning
+# Git-Workflow und Versionierung
 
 ## Überblick
 

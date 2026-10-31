@@ -3,7 +3,7 @@ name: shipping-and-launch
 description: Bereitet Produktions-Launches vor (Pre-Launch-Checkliste, Monitoring, gestaffelter Rollout, Rollback-Strategie). Verwenden, wenn ein Deployment in die Produktion vorbereitet wird oder wenn geklärt werden soll, was vor dem Shipping vorhanden sein muss. Verwenden bei Pre-Launch-Checkliste, Monitoring-Einrichtung, gestaffeltem Rollout oder Rollback-Strategie. Typische Formulierungen „bereite den Launch vor“, „was brauchen wir vor dem Go-live?“, „erstell eine Pre-Launch-Checkliste“, „plane den gestaffelten Rollout“, „schreib einen Rollback-Plan“.
 ---
 
-# Shipping and Launch
+# Auslieferung und Launch
 
 ## Überblick
 

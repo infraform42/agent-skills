@@ -1,19 +1,19 @@
-# Testing Patterns Reference (JavaScript/TypeScript)
+# Referenz für Testmuster (JavaScript/TypeScript)
 
-Quick reference of JavaScript/TypeScript testing patterns — Jest, React Testing Library, Supertest, and Playwright — illustrating the universal principles from the `test-driven-development` skill. The principles (Arrange-Act-Assert, naming, mock discipline, anti-patterns) apply in any ecosystem; the syntax and tooling shown here are JS/TS-specific. In another stack, follow the same principles with the repository's own test framework and commands.
+Kurzreferenz für JavaScript/TypeScript-Testmuster – Jest, React Testing Library, Supertest und Playwright – die die universellen Prinzipien aus dem Skill `test-driven-development` veranschaulichen. Die Prinzipien (Arrange-Act-Assert, Benennung, Mock-Disziplin, Anti-Patterns) gelten in jedem Ökosystem; Syntax und Tooling hier sind JS/TS-spezifisch. Folge in einem anderen Stack denselben Prinzipien mit dem Test-Framework und den Befehlen des jeweiligen Repositorys.
 
-## Table of Contents
+## Inhaltsverzeichnis
 
-- [Test Structure (Arrange-Act-Assert)](#test-structure-arrange-act-assert)
-- [Test Naming Conventions](#test-naming-conventions)
-- [Common Assertions](#common-assertions)
-- [Mocking Patterns](#mocking-patterns)
-- [React/Component Testing](#reactcomponent-testing)
-- [API / Integration Testing](#api--integration-testing)
-- [E2E Testing (Playwright)](#e2e-testing-playwright)
-- [Test Anti-Patterns](#test-anti-patterns)
+- [Teststruktur (Arrange-Act-Assert)](#test-structure-arrange-act-assert)
+- [Namenskonventionen für Tests](#test-naming-conventions)
+- [Gängige Assertions](#common-assertions)
+- [Mocking-Muster](#mocking-patterns)
+- [React-/Komponententests](#reactcomponent-testing)
+- [API-/Integrationstests](#api--integration-testing)
+- [E2E-Tests (Playwright)](#e2e-testing-playwright)
+- [Test-Anti-Patterns](#test-anti-patterns)
 
-## Test Structure (Arrange-Act-Assert)
+## Teststruktur (Arrange-Act-Assert)
 
 ```typescript
 it('describes expected behavior', () => {
@@ -30,7 +30,7 @@ it('describes expected behavior', () => {
 });
 ```
 
-## Test Naming Conventions
+## Namenskonventionen für Tests
 
 ```typescript
 // Pattern: [unit] [expected behavior] [condition]
@@ -42,7 +42,7 @@ describe('TaskService.createTask', () => {
 });
 ```
 
-## Common Assertions
+## Gängige Assertions
 
 ```typescript
 // Equality
@@ -81,9 +81,9 @@ await expect(asyncFn()).resolves.toBe(value);
 await expect(asyncFn()).rejects.toThrow(Error);
 ```
 
-## Mocking Patterns
+## Mocking-Muster
 
-### Mock Functions
+### Mock-Funktionen
 
 ```typescript
 const mockFn = jest.fn();
@@ -96,7 +96,7 @@ expect(mockFn).toHaveBeenCalledWith('arg1', 'arg2');
 expect(mockFn).toHaveBeenCalledTimes(3);
 ```
 
-### Mock Modules
+### Mock-Module
 
 ```typescript
 // Mock an entire module
@@ -111,7 +111,7 @@ jest.mock('./utils', () => ({
 }));
 ```
 
-### Mock at Boundaries Only
+### Nur an den Grenzen mocken
 
 ```
 Mock these:                    Don't mock these:
@@ -122,7 +122,7 @@ Mock these:                    Don't mock these:
 └── Time/Date (when needed)    └── Pure functions
 ```
 
-## React/Component Testing
+## React-/Komponententests
 
 ```tsx
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
@@ -154,7 +154,7 @@ describe('TaskForm', () => {
 });
 ```
 
-## API / Integration Testing
+## API-/Integrationstests
 
 ```typescript
 import request from 'supertest';
@@ -194,7 +194,7 @@ describe('POST /api/tasks', () => {
 });
 ```
 
-## E2E Testing (Playwright)
+## E2E-Tests (Playwright)
 
 ```typescript
 import { test, expect } from '@playwright/test';
@@ -222,15 +222,15 @@ test('user can create and complete a task', async ({ page }) => {
 });
 ```
 
-## Test Anti-Patterns
+## Test-Anti-Patterns
 
-| Anti-Pattern | Problem | Better Approach |
+| Anti-Pattern | Problem | Besserer Ansatz |
 |---|---|---|
-| Testing implementation details | Breaks on refactor | Test inputs/outputs |
-| Snapshot everything | No one reviews snapshot diffs | Assert specific values |
-| Shared mutable state | Tests pollute each other | Setup/teardown per test |
-| Testing third-party code | Wastes time, not your bug | Mock the boundary |
-| Skipping tests to pass CI | Hides real bugs | Fix or delete the test |
-| Using `test.skip` permanently | Dead code | Remove or fix it |
-| Overly broad assertions | Doesn't catch regressions | Be specific |
-| No async error handling | Swallowed errors, false passes | Always `await` async tests |
+| Implementierungsdetails testen | Bricht beim Refaktorieren | Ein- und Ausgaben testen |
+| Alles per Snapshot testen | Niemand prüft Snapshot-Diffs | Konkrete Werte prüfen |
+| Geteilter veränderlicher Zustand | Tests beeinflussen sich gegenseitig | Setup/Teardown pro Test |
+| Code von Drittanbietern testen | Verschwendet Zeit, nicht dein Bug | Die Grenze mocken |
+| Tests überspringen, damit CI durchläuft | Verdeckt echte Bugs | Test reparieren oder löschen |
+| `test.skip` dauerhaft nutzen | Toter Code | Entfernen oder reparieren |
+| Zu breite Assertions | Fängt keine Regressionen | Konkret prüfen |
+| Keine Fehlerbehandlung bei async | Verschluckte Fehler, falsche Erfolge | Async-Tests immer mit `await` |

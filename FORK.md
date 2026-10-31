@@ -18,7 +18,13 @@ Alle Anpassungen setzt `tools/fork_manifest.py`:
 - Commands rufen Skills als `agent-skills-de:<skill>` auf.
 - `brew install` → `sudo port install` (MacPorts).
 - Skills, die sich mit `mattpocock-skills-de` oder eingebauten Skills überschneiden, bekommen eine enge `description` aus `.i18n/overrides.yaml` und lösen nicht mehr automatisch aus. Die Commands rufen sie weiterhin auf.
+- `git-workflow-and-versioning` löst nur noch bei Commit-Nachrichten, Commit-Aufteilung, Konflikten, PRs, Releases und Changelog aus (ebenfalls `.i18n/overrides.yaml`).
+- Feste deutsche H1-Titel aus `.i18n/titles.yaml` (erste `# `-Zeile außerhalb von Codeblöcken).
 - Die Hooks unter `hooks/` sind nicht eingebunden (wie upstream).
+
+## Upstream beobachten
+
+`tools/upstream-check.sh` holt nur `upstream/main` und meldet neue Commits als macOS-Mitteilung; Branches und Arbeitsverzeichnis bleiben unberührt. `tools/install-upstream-check.sh` richtet das als launchd-Job ein (montags 09:00, Log `~/Library/Logs/agent-skills-upstream.log`), `--remove` entfernt ihn.
 
 ## Upstream übernehmen
 
@@ -34,7 +40,7 @@ Konflikte in `description`-Zeilen, Manifesten oder Commands: Upstream-Fassung ne
 
 ## Übersetzung
 
-Alle `SKILL.md`, Commands (`.claude/commands/*.md`) und Agents (`agents/*.md`) sind ins Deutsche übersetzt, nach dem Muster von `infraform42/skills`. Unterlagen von Skills (`references/`, `examples.md` usw.) bleiben englisch.
+Alle `SKILL.md`, Commands (`.claude/commands/*.md`), Agents (`agents/*.md`) und Unterlagen (`references/*.md`, weitere `.md` in `skills/`) sind ins Deutsche übersetzt, nach dem Muster von `infraform42/skills`; zusammen 51 Dateien.
 
 ```bash
 ~/venvs/skills-i18n/bin/python -I tools/i18n.py stale   # neu oder veraltet gegenüber main
@@ -42,5 +48,5 @@ tools/translate-stale.sh                                # übersetzt alles Offen
 ```
 
 - Übersetzt wird mit `claude -p` (Sonnet), Regeln und Glossar in `.i18n/translator-prompt.md`, Stand in `.i18n/translations.lock.json`.
-- `i18n.py` prüft Frontmatter, Codeblöcke und Inline-Code. Bei „Inline-Code verändert“ die Rohausgabe (`$TMPDIR/i18n_<pfad>`) korrigieren oder erneut übersetzen.
+- `i18n.py` setzt Codeblöcke und Inline-Code positionsgenau auf die Originale zurück und prüft danach Frontmatter, Codeblöcke und Inline-Code. Unterlagen ohne Frontmatter müssen wie das Original mit einer Überschrift beginnen. Meldet es trotzdem „Inline-Code verändert“ (abweichende Anzahl), die Rohausgabe (`$TMPDIR/i18n_<pfad>`) prüfen oder erneut übersetzen.
 - Ist eine `description` mit deutschen Triggern länger als 1024 Zeichen, eine feste Fassung in `.i18n/overrides.yaml` setzen.

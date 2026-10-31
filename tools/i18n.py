@@ -48,9 +48,15 @@ def shipped_skill_files() -> list[str]:
     roots = [roots] if isinstance(roots, str) else roots
     paths = [r.removeprefix("./").rstrip("/") for r in roots]
     files = git("ls-tree", "-r", "--name-only", EN_REF, "--", *paths).splitlines()
-    extra = git("ls-tree", "-r", "--name-only", EN_REF, "--", ".claude/commands", "agents").splitlines()
-    return sorted([f for f in files if f.endswith("/SKILL.md")] +
+    extra = git("ls-tree", "-r", "--name-only", EN_REF, "--", ".claude/commands", "agents", "references").splitlines()
+    # Unterlagen der Skills (references/, examples.md …) ohne Frontmatter
+    docs = [f for f in files if f.endswith(".md") and not f.endswith("/SKILL.md")]
+    return sorted([f for f in files if f.endswith("/SKILL.md")] + docs +
                   [f for f in extra if f.endswith(".md")])
+
+
+def has_frontmatter(text: str) -> bool:
+    return text.startswith("---\n")
 
 
 def split(text: str) -> tuple[dict, str]:
@@ -65,6 +71,9 @@ def fences(body: str) -> list[str]:
 
 
 def verify(src: str, dst: str) -> None:
+    if not has_frontmatter(src):
+        verify_body(src, dst)
+        return
     fs, bs = split(src)
     fd, bd = split(dst)
     if list(fs) != list(fd):
@@ -74,6 +83,15 @@ def verify(src: str, dst: str) -> None:
         raise ValueError(f"Felder dürfen nicht übersetzt werden: {changed}")
     if len(str(fd.get("description", ""))) > 1024:
         raise ValueError("description > 1024 Zeichen")
+    verify_body(bs, bd)
+
+
+def verify_body(bs: str, bd: str) -> None:
+    if has_frontmatter(bd) and not has_frontmatter(bs):
+        raise ValueError("Frontmatter hinzugefügt")
+    first = lambda t: t.lstrip().split("\n", 1)[0]
+    if first(bs).startswith("#") and not first(bd).startswith("#"):
+        raise ValueError(f"Beginnt nicht mit Überschrift (Vorrede?): {first(bd)[:60]!r}")
     if fences(bs) != fences(bd):
         raise ValueError("Codeblöcke verändert")
     lost = set(INLINE.findall(FENCE.sub("", bs))) - set(INLINE.findall(FENCE.sub("", bd)))
@@ -107,9 +125,13 @@ def claude_cmd() -> list[str]:
             "--system-prompt", PROMPT.read_text()]
 
 
-def clean(raw: str) -> str:
+def clean(raw: str, frontmatter: bool = True) -> str:
     """Entfernt Vorrede und umschließenden Markdown-Fence (auch mit 4+ Backticks)."""
     out = raw.strip()
+    if not frontmatter:
+        # Ohne Frontmatter kein Anker für eine Vorrede; nur einen Fence um die ganze Datei entfernen
+        m = re.match(r"\A(`{3,}|~{3,})[a-z]*\n(.*)\n\1\Z", out, re.S)
+        return (m.group(2) if m else out).rstrip() + "\n"
     lead = re.search(r"^---\n", out, re.M)
     if lead and lead.start() > 0:
         prefix, out = out[:lead.start()], out[lead.start():]
@@ -125,6 +147,27 @@ def restore_fences(src: str, dst: str) -> str:
         raise ValueError(f"Anzahl Codeblöcke geändert: {len(orig)} → {len(got)}")
     it = iter(orig)
     return FENCE.sub(lambda m: next(it), dst)
+
+
+def restore_inline(src: str, dst: str) -> str:
+    """Setzt Inline-Code außerhalb von Codeblöcken der Reihe nach auf die Originale zurück.
+
+    Sonnet übersetzt gelegentlich Wörter in Inline-Code (z. B. `max × instances`). Stimmt die
+    Anzahl nicht überein, bleibt die Übersetzung unverändert und verify() meldet den Fehler.
+    """
+    orig = INLINE.findall(FENCE.sub("", src))
+    # Text zwischen den Codeblöcken (gerade Indizes) und Codeblöcke selbst (ungerade) im Wechsel
+    parts, pos = [], 0
+    for m in FENCE.finditer(dst):
+        parts += [dst[pos:m.start()], m.group(0)]
+        pos = m.end()
+    parts.append(dst[pos:])
+    if sum(len(INLINE.findall(t)) for t in parts[0::2]) != len(orig):
+        return dst
+    it = iter(orig)
+    for i in range(0, len(parts), 2):
+        parts[i] = INLINE.sub(lambda m: next(it), parts[i])
+    return "".join(parts)
 
 
 OVERRIDES = ROOT / ".i18n" / "overrides.yaml"
@@ -156,8 +199,9 @@ def translate(path: str) -> None:
     data = json.loads(res.stdout)
     if data.get("is_error"):
         raise RuntimeError(str(data.get("result")))
-    out = clean(data["result"])
+    out = clean(data["result"], has_frontmatter(src))
     out = restore_fences(src, out)
+    out = restore_inline(src, out)
     out = apply_override(path, out)
     Path(tempfile.gettempdir(), "i18n_" + path.replace("/", "_")).write_text(data["result"])
     verify(src, out)

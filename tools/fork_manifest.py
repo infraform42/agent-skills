@@ -17,6 +17,8 @@ MARKET = "infraform42-agent-skills"
 REPO = "https://github.com/infraform42/agent-skills"
 DESC = "Addy Osmanis Agent-Skills, angepasst für infraform42 (Fork von addyosmani/agent-skills)."
 OVERRIDES = ROOT / ".i18n" / "overrides.yaml"
+TITLES = ROOT / ".i18n" / "titles.yaml"
+FENCE = re.compile(r"^(`{3,}|~{3,})[^\n]*\n.*?^\1[ \t]*$", re.S | re.M)
 # Homebrew-Installationen → MacPorts
 PORTS = {"brew install gitleaks": "sudo port install gitleaks",
          "brew install osv-scanner": "sudo port install osv-scanner"}
@@ -79,9 +81,24 @@ def overrides():
         p.write_text(text)
 
 
+def titles():
+    """Setzt die erste H1-Zeile außerhalb von Codeblöcken auf den festen deutschen Titel."""
+    for path, title in (yaml.safe_load(TITLES.read_text()) or {}).items():
+        p = ROOT / path
+        text = p.read_text()
+        masked = FENCE.sub(lambda m: re.sub(r"[^\n]", " ", m.group(0)), text)
+        m = re.search(r"^# .*$", masked, re.M)
+        if not m:
+            raise SystemExit(f"H1-Zeile nicht gefunden: {path}")
+        new = text[:m.start()] + f"# {title}" + text[m.end():]
+        if new != text:
+            p.write_text(new)
+
+
 if __name__ == "__main__":
     rw("plugin.json", plugin)
     rw("marketplace.json", market)
     namespace()
     macports()
     overrides()
+    titles()

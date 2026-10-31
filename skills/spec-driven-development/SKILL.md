@@ -3,7 +3,7 @@ name: spec-driven-development
 description: "Spec vor dem Code (SPEC.md) aus agent-skills. Nur verwenden, wenn der Nutzer /agent-skills-de:spec aufruft oder diesen Skill ausdrücklich nennt. Für Specs im Alltag gilt der Skill to-spec."
 ---
 
-# Spec-Driven Development
+# Spec-getriebene Entwicklung
 
 ## Überblick
 

@@ -3,7 +3,7 @@ name: interview-me
 description: "Interview Frage für Frage, bis die eigentliche Absicht klar ist (agent-skills). Nur verwenden, wenn der Nutzer diesen Skill ausdrücklich nennt. Für Befragungen im Alltag gelten grill-me und grilling."
 ---
 
-# Interview Me
+# Interview zur eigentlichen Absicht
 
 ## Overview
 

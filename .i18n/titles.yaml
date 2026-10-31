@@ -1,0 +1,34 @@
+---
+# Feste deutsche H1-Titel (Pfad → Titel ohne "# "). tools/fork_manifest.py ersetzt damit
+# die erste Zeile, die mit "# " beginnt, außerhalb von Codeblöcken.
+skills/api-and-interface-design/SKILL.md: API- und Schnittstellendesign
+skills/browser-testing-with-devtools/SKILL.md: Browser-Tests mit DevTools
+skills/ci-cd-and-automation/SKILL.md: CI/CD und Automatisierung
+skills/code-review-and-quality/SKILL.md: Code-Review und Qualität
+skills/code-simplification/SKILL.md: Code-Vereinfachung
+skills/constraint-driven-development/SKILL.md: Constraint-getriebene Entwicklung
+skills/context-engineering/SKILL.md: Context Engineering
+skills/debugging-and-error-recovery/SKILL.md: Debugging und Fehlerbehebung
+skills/deprecation-and-migration/SKILL.md: Abkündigung und Migration
+skills/documentation-and-adrs/SKILL.md: Dokumentation und ADRs
+skills/doubt-driven-development/SKILL.md: Zweifelgetriebene Entwicklung
+skills/frontend-ui-engineering/SKILL.md: Frontend-UI-Engineering
+skills/git-workflow-and-versioning/SKILL.md: Git-Workflow und Versionierung
+skills/idea-refine/SKILL.md: Ideen schärfen
+skills/incremental-implementation/SKILL.md: Inkrementelle Umsetzung
+skills/interview-me/SKILL.md: Interview zur eigentlichen Absicht
+skills/observability-and-instrumentation/SKILL.md: Observability und Instrumentierung
+skills/performance-optimization/SKILL.md: Performance-Optimierung
+skills/planning-and-task-breakdown/SKILL.md: Planung und Aufgabenzerlegung
+skills/security-and-hardening/SKILL.md: Sicherheit und Härtung
+skills/shipping-and-launch/SKILL.md: Auslieferung und Launch
+skills/source-driven-development/SKILL.md: Quellengestützte Entwicklung
+skills/spec-driven-development/SKILL.md: Spec-getriebene Entwicklung
+skills/test-driven-development/SKILL.md: Testgetriebene Entwicklung
+skills/using-agent-skills/SKILL.md: agent-skills verwenden
+references/accessibility-checklist.md: Accessibility-Checkliste
+skills/security-and-hardening/references/hardening-patterns.md: Härtungsmuster
+agents/code-reviewer.md: Senior-Code-Reviewer
+agents/security-auditor.md: Security-Auditor
+agents/test-engineer.md: Test-Engineer
+agents/web-performance-auditor.md: Web-Performance-Auditor

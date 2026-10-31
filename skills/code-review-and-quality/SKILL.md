@@ -3,7 +3,7 @@ name: code-review-and-quality
 description: "Fünf-Achsen-Code-Review aus agent-skills (Korrektheit, Lesbarkeit, Architektur, Sicherheit, Performance). Nur verwenden, wenn der Nutzer /agent-skills-de:review aufruft oder diesen Skill ausdrücklich nennt. Für Reviews im Alltag gilt der Skill code-review."
 ---
 
-# Code Review und Qualität
+# Code-Review und Qualität
 
 ## Überblick
 

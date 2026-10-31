@@ -3,7 +3,7 @@ name: using-agent-skills
 description: "Router über alle agent-skills-de-Skills mit Entscheidungsbaum. Nur verwenden, wenn der Nutzer ausdrücklich fragt, welcher agent-skills-Skill passt. Als allgemeiner Router gilt ask-matt."
 ---
 
-# Agent Skills verwenden
+# agent-skills verwenden
 
 ## Überblick
 

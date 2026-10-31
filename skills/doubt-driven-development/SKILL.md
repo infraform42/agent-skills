@@ -3,7 +3,7 @@ name: doubt-driven-development
 description: Unterzieht jede nicht triviale Entscheidung einem adversarialen Review mit frischem Kontext, bevor sie Bestand hat. Verwenden, wenn jede Annahme vor dem Weitermachen ins Kreuzverhör soll, wenn ein Plan auf versteckte Fehlermodi hin belastet wird, wenn Korrektheit wichtiger ist als Tempo, bei Arbeit in unbekanntem Code, bei hohem Risiko (Production-Auth, sicherheitskritische Logik, riskante Migration, irreversible Operationen) oder immer dann, wenn sich ein selbstsicheres Ergebnis jetzt günstiger verifizieren lässt, als es später zu debuggen. Auslöser wie „hinterfrag diese Entscheidung kritisch“, „versuch meinen Plan zu widerlegen“, „stell diese Annahme auf den Prüfstand“, „such die Schwachstellen in meinem Ansatz“, „mach ein Doubt-Review, bevor wir committen“.
 ---
 
-# Doubt-Driven Development
+# Zweifelgetriebene Entwicklung
 
 ## Überblick
 

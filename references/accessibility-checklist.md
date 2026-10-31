@@ -1,56 +1,56 @@
-# Accessibility Checklist
+# Accessibility-Checkliste
 
-Quick reference for WCAG 2.1 AA compliance. Use alongside the `frontend-ui-engineering` skill.
+Kurze Referenz für die Konformität mit WCAG 2.1 AA. Verwende sie zusammen mit dem Skill `frontend-ui-engineering`.
 
-## Table of Contents
+## Inhaltsverzeichnis
 
-- [Essential Checks](#essential-checks)
-- [Common HTML Patterns](#common-html-patterns)
-- [Testing Tools](#testing-tools)
-- [Quick Reference: ARIA Live Regions](#quick-reference-aria-live-regions)
-- [Common Anti-Patterns](#common-anti-patterns)
+- [Wesentliche Prüfpunkte](#essential-checks)
+- [Gängige HTML-Muster](#common-html-patterns)
+- [Test-Tools](#testing-tools)
+- [Kurzreferenz: ARIA Live Regions](#quick-reference-aria-live-regions)
+- [Gängige Anti-Patterns](#common-anti-patterns)
 
 ## Essential Checks
 
 ### Keyboard Navigation
-- [ ] All interactive elements focusable via Tab key
-- [ ] Focus order follows visual/logical order
-- [ ] Focus is visible (outline/ring on focused elements)
-- [ ] Custom widgets have keyboard support (Enter to activate, Escape to close)
-- [ ] No keyboard traps (user can always Tab away from a component)
-- [ ] Skip-to-content link at top of page - visible (at least) on keyboard focus
-- [ ] Modals trap focus while open, return focus on close
+- [ ] Alle interaktiven Elemente sind per Tab-Taste fokussierbar
+- [ ] Die Fokusreihenfolge folgt der visuellen bzw. logischen Reihenfolge
+- [ ] Der Fokus ist sichtbar (Outline/Ring an fokussierten Elementen)
+- [ ] Eigene Widgets unterstützen die Tastatur (Enter zum Aktivieren, Escape zum Schließen)
+- [ ] Keine Tastaturfallen (Nutzer können per Tab immer aus einer Komponente herausspringen)
+- [ ] Skip-to-content-Link am Seitenanfang – sichtbar (mindestens) bei Tastaturfokus
+- [ ] Modale Dialoge halten den Fokus gefangen, solange sie offen sind, und geben ihn beim Schließen zurück
 
 ### Screen Readers
-- [ ] All images have `alt` text (or `alt=""` for decorative images)
-- [ ] All form inputs have associated labels (`<label>` or `aria-label`)
-- [ ] Buttons and links have descriptive text (not "Click here")
-- [ ] Icon-only buttons have `aria-label`
-- [ ] Page has one `<h1>` and headings don't skip levels
-- [ ] Dynamic content changes announced (`aria-live` regions)
-- [ ] Tables have `<th>` headers with scope
+- [ ] Alle Bilder haben `alt`-Text (oder `alt=""` bei dekorativen Bildern)
+- [ ] Alle Formularfelder haben zugeordnete Labels (`<label>` oder `aria-label`)
+- [ ] Buttons und Links haben aussagekräftigen Text (nicht „Hier klicken“)
+- [ ] Buttons nur mit Icon haben `aria-label`
+- [ ] Die Seite hat genau ein `<h1>`, und Überschriften überspringen keine Ebenen
+- [ ] Dynamische Inhaltsänderungen werden angekündigt (`aria-live`-Regionen)
+- [ ] Tabellen haben `<th>`-Kopfzellen mit scope
 
 ### Visual
-- [ ] Text contrast ≥ 4.5:1 for normal text or ≥ 3:1 for large text (at least 18pt / 24 CSS px, or 14pt / about 18.67 CSS px when bold). Do not round a failing contrast ratio up to the threshold.
-- [ ] UI components contrast ≥ 3:1 against background
-- [ ] Color is not the only way to convey information
-- [ ] Text resizable to 200% without breaking layout
-- [ ] No content that flashes more than 3 times per second
+- [ ] Textkontrast ≥ 4,5:1 bei normalem Text bzw. ≥ 3:1 bei großem Text (mindestens 18 pt / 24 CSS-px, bei Fettdruck 14 pt / etwa 18,67 CSS-px). Runde ein nicht erreichtes Kontrastverhältnis nicht auf den Schwellenwert auf.
+- [ ] Kontrast von UI-Komponenten ≥ 3:1 gegenüber dem Hintergrund
+- [ ] Farbe ist nicht das einzige Mittel, um Informationen zu vermitteln
+- [ ] Text lässt sich auf 200 % vergrößern, ohne das Layout zu zerstören
+- [ ] Keine Inhalte, die öfter als dreimal pro Sekunde blinken
 
 ### Forms
-- [ ] Every input has a visible label
-- [ ] Required fields indicated (not by color alone)
-- [ ] Error messages specific and associated with the field
-- [ ] Error state visible by more than color (icon, text, border)
-- [ ] Form submission errors summarized and focusable
-- [ ] Known fields use autocomplete (for example `type="email" autocomplete="email"`)
+- [ ] Jedes Eingabefeld hat ein sichtbares Label
+- [ ] Pflichtfelder sind gekennzeichnet (nicht allein durch Farbe)
+- [ ] Fehlermeldungen sind spezifisch und dem Feld zugeordnet
+- [ ] Der Fehlerzustand ist nicht nur durch Farbe erkennbar (Icon, Text, Rahmen)
+- [ ] Fehler beim Absenden des Formulars werden zusammengefasst und sind fokussierbar
+- [ ] Bekannte Felder nutzen Autocomplete (zum Beispiel `type="email" autocomplete="email"`)
 
 ### Content
-- [ ] Language declared (`<html lang="en">`)
-- [ ] Page has a descriptive `<title>`
-- [ ] Links distinguish from surrounding text (not by color alone)
-- [ ] Touch targets ≥ 44x44px on mobile
-- [ ] Meaningful empty states (not blank screens)
+- [ ] Sprache ist deklariert (`<html lang="en">`)
+- [ ] Die Seite hat einen aussagekräftigen `<title>`
+- [ ] Links heben sich vom umgebenden Text ab (nicht allein durch Farbe)
+- [ ] Touch-Ziele ≥ 44x44 px auf Mobilgeräten
+- [ ] Sinnvolle Leerzustände (keine leeren Bildschirme)
 
 ## Common HTML Patterns
 
@@ -139,22 +139,22 @@ npx pa11y             # CLI accessibility checker
 
 ## Quick Reference: ARIA Live Regions
 
-| Value | Behavior | Use For |
+| Wert | Verhalten | Verwendung für |
 |-------|----------|---------|
-| `aria-live="polite"` | Announced at next pause | Status updates, saved confirmations |
-| `aria-live="assertive"` | Announced immediately | Errors, time-sensitive alerts |
-| `role="status"` | Same as `polite` | Status messages |
-| `role="alert"` | Same as `assertive` | Error messages |
+| `aria-live="polite"` | Wird bei der nächsten Pause angekündigt | Statusmeldungen, Speicherbestätigungen |
+| `aria-live="assertive"` | Wird sofort angekündigt | Fehler, zeitkritische Hinweise |
+| `role="status"` | Wie `polite` | Statusmeldungen |
+| `role="alert"` | Wie `assertive` | Fehlermeldungen |
 
 ## Common Anti-Patterns
 
-| Anti-Pattern | Problem | Fix |
+| Anti-Pattern | Problem | Lösung |
 |---|---|---|
-| `div` as button | Not focusable, no keyboard support | Use `<button>` |
-| Missing `alt` text | Images invisible to screen readers | Add descriptive `alt` |
-| Color-only states | Invisible to color-blind users | Add icons, text, or patterns |
-| Autoplaying media | Disorienting, can't be stopped | Add controls, don't autoplay |
-| Custom dropdown with no ARIA | Unusable by keyboard/screen reader | Use native `<select>` or proper ARIA listbox |
-| Removing focus outlines | Users can't see where they are | Style outlines, don't remove them |
-| Empty links/buttons | "Link" announced with no description | Add text or `aria-label` |
-| `tabindex > 0` | Breaks natural tab order | Use `tabindex="0"` or `-1` only |
+| `div` als Button | Nicht fokussierbar, keine Tastaturunterstützung | `<button>` verwenden |
+| Fehlender `alt`-Text | Bilder sind für Screen Reader unsichtbar | Aussagekräftiges `alt` ergänzen |
+| Zustände nur durch Farbe | Für Farbenblinde unsichtbar | Icons, Text oder Muster ergänzen |
+| Automatisch startende Medien | Irritierend, nicht stoppbar | Steuerelemente ergänzen, nicht automatisch abspielen |
+| Eigenes Dropdown ohne ARIA | Per Tastatur/Screen Reader unbenutzbar | Natives `<select>` oder korrekte ARIA-Listbox verwenden |
+| Fokus-Outlines entfernen | Nutzer sehen nicht, wo sie sind | Outlines gestalten, nicht entfernen |
+| Leere Links/Buttons | „Link“ wird ohne Beschreibung angekündigt | Text oder `aria-label` ergänzen |
+| `tabindex > 0` | Zerstört die natürliche Tab-Reihenfolge | Nur `tabindex="0"` oder `-1` verwenden |

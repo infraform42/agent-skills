@@ -3,7 +3,7 @@ name: api-and-interface-design
 description: Leitet das Design stabiler APIs und Schnittstellen an. Verwenden, wenn du APIs, Modulgrenzen oder öffentliche Schnittstellen entwirfst. Verwenden, wenn du REST- oder GraphQL-Endpunkte erstellst, Typ-Contracts zwischen Modulen definierst oder Grenzen zwischen Frontend und Backend festlegst. Typische Auslöser sind „entwirf die API für das Task-Modul“, „definiere die Schnittstelle zwischen Frontend und Backend“, „leg die REST-Endpunkte fest“, „wie sollten wir die Modulgrenzen schneiden?“ oder „entwirf ein GraphQL-Schema dafür“.
 ---
 
-# API and Interface Design
+# API- und Schnittstellendesign
 
 ## Überblick
 

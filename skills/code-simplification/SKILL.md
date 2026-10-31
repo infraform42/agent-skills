@@ -3,7 +3,7 @@ name: code-simplification
 description: "Vereinfacht Code ohne Verhaltensänderung (agent-skills). Nur verwenden, wenn der Nutzer /agent-skills-de:code-simplify aufruft oder diesen Skill ausdrücklich nennt. Im Alltag gilt der eingebaute Skill simplify."
 ---
 
-# Code Simplification
+# Code-Vereinfachung
 
 > Inspiriert vom [Claude Code Simplifier plugin](https://github.com/anthropics/claude-plugins-official/blob/main/plugins/code-simplifier/agents/code-simplifier.md). Hier angepasst als modellunabhängiger, prozessgetriebener Skill für jeden KI-Coding-Agenten.
 

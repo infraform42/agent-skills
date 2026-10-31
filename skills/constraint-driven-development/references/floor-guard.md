@@ -1,18 +1,18 @@
-# Floor guard: reference implementation
+# Floor Guard: Referenzimplementierung
 
-Every numbered dimension in `CONSTRAINTS.md` maps to a de facto tool (Step 4). The **floor** does not: it is a diff-scoped check for the five moves in Step 6, and without a shipped reference every agent invents its own, so two runs (or a Python repo and a Go one) produce two different guards. That is the exact non-determinism this skill exists to remove.
+Jede nummerierte Dimension in `CONSTRAINTS.md` entspricht einem De-facto-Tool (Schritt 4). Der **Floor** nicht: Er ist eine auf den Diff beschränkte Prüfung der fünf Züge aus Schritt 6, und ohne mitgelieferte Referenz erfindet jeder Agent seine eigene, sodass zwei Läufe (oder ein Python- und ein Go-Repo) zwei verschiedene Guards erzeugen. Genau diesen Nichtdeterminismus soll dieser Skill beseitigen.
 
-This is the reference. Adapt the patterns to your stack; keep the contract identical.
+Dies ist die Referenz. Passe die Muster an deinen Stack an; lass den Vertrag unverändert.
 
-## Contract
+## Vertrag
 
-- **Input:** the diff between the merge base and the working tree (added *and* removed lines, plus untracked files). A guard that reads only `git diff` misses new files and staged-but-uncommitted work.
-- **Detects the five Step 6 moves:** a weakened threshold in `CONSTRAINTS.md`, a test made easier (`.skip`, a deleted test file, an assertion removed from a test that stayed), a silenced checker (a new suppression comment), unfinished work (a stub or empty `catch`), a new Exceptions row.
-- **Exit codes:** `0` clean, `1` at least one floor violation (block the change), `2` the guard could not run (no merge base, not a git repo). Never let a `2` read as a `0`.
-- **Reports the rule and the location, never the matched secret value.** Redaction is not optional (Step 4).
-- **Tightening is silent, loosening is loud:** only surfaces moves that lower the bar.
+- **Eingabe:** der Diff zwischen der Merge-Base und dem Arbeitsverzeichnis (hinzugefügte *und* entfernte Zeilen sowie untracked Dateien). Ein Guard, der nur `git diff` liest, übersieht neue Dateien und gestagte, aber nicht committete Arbeit.
+- **Erkennt die fünf Züge aus Schritt 6:** einen abgeschwächten Schwellenwert in `CONSTRAINTS.md`, einen erleichterten Test (`.skip`, eine gelöschte Testdatei, eine entfernte Assertion in einem Test, der bestehen blieb), einen stummgeschalteten Checker (ein neuer Suppression-Kommentar), unfertige Arbeit (ein Stub oder ein leerer `catch`), eine neue Zeile in der Exceptions-Tabelle.
+- **Exit-Codes:** `0` sauber, `1` mindestens eine Floor-Verletzung (Änderung blockieren), `2` der Guard konnte nicht laufen (keine Merge-Base, kein Git-Repo). Lass eine `2` niemals als `0` durchgehen.
+- **Meldet die Regel und die Fundstelle, niemals den gefundenen geheimen Wert.** Schwärzung ist nicht optional (Schritt 4).
+- **Verschärfen bleibt still, Lockern schlägt laut an:** Es werden nur Züge gemeldet, die den Maßstab senken.
 
-## Reference (Node, ~stack-agnostic patterns)
+## Referenz (Node, weitgehend stack-agnostische Muster)
 
 ```js
 #!/usr/bin/env node
@@ -175,8 +175,8 @@ console.error('\nEach is a move that lowers the bar. Fix the code, or route it t
 process.exit(1);
 ```
 
-## Adapting it
+## Anpassen
 
-- **Patterns are the only stack-specific part.** Add your language's suppression and stub forms to the three regexes; the diff plumbing, the CONSTRAINTS.md checks, and the exit codes stay as-is.
-- **A `.constraintsignore`** (one glob per line) lets you exempt a path the guard would otherwise flag; check each added line's file against it before flagging, so a genuine exception is a tracked file rather than a loosened rule.
-- **This is a starting point, not a finished tool.** It is deliberately regex-shallow: it catches the cheap-road-to-green moves agents actually make, not a determined human hiding a change. That is the right trade for a check that runs on every diff. Once you outgrow it, move to a real runner (Escalation Path level 3).
+- **Nur die Muster sind stackspezifisch.** Ergänze die Suppression- und Stub-Formen deiner Sprache in den drei Regexen; die Diff-Mechanik, die `CONSTRAINTS.md`-Prüfungen und die Exit-Codes bleiben unverändert.
+- **Eine `.constraintsignore`** (ein Glob pro Zeile) erlaubt es, einen Pfad auszunehmen, den der Guard sonst melden würde; gleiche die Datei jeder hinzugefügten Zeile damit ab, bevor du sie meldest, damit eine echte Ausnahme eine nachverfolgte Datei ist und keine gelockerte Regel.
+- **Das hier ist ein Startpunkt, kein fertiges Werkzeug.** Es ist bewusst nur oberflächlich per Regex gebaut: Es erwischt die Abkürzungen auf dem Weg zu Grün, die Agenten tatsächlich nehmen, nicht einen Menschen, der eine Änderung gezielt versteckt. Das ist der richtige Kompromiss für eine Prüfung, die bei jedem Diff läuft. Sobald sie nicht mehr ausreicht, steige auf einen echten Runner um (Escalation Path, Stufe 3).

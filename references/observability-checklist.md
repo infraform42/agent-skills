@@ -1,92 +1,92 @@
-# Observability Checklist
+# Observability-Checkliste
 
-Quick reference for instrumenting production code. Use alongside the `observability-and-instrumentation` skill.
+Kurzreferenz für die Instrumentierung von Produktionscode. Verwende sie zusammen mit dem Skill `observability-and-instrumentation`.
 
-## Table of Contents
+## Inhaltsverzeichnis
 
-- [On-Call Questions (Start Here)](#on-call-questions-start-here)
-- [Structured Logging](#structured-logging)
-- [Metrics](#metrics)
+- [On-Call-Fragen (hier beginnen)](#on-call-questions-start-here)
+- [Strukturiertes Logging](#structured-logging)
+- [Metriken](#metrics)
 - [Distributed Tracing](#distributed-tracing)
 - [Alerting](#alerting)
 - [Dashboards](#dashboards)
-- [Verify the Telemetry](#verify-the-telemetry)
-- [Pre-Launch Gate](#pre-launch-gate)
+- [Telemetrie verifizieren](#verify-the-telemetry)
+- [Pre-Launch-Gate](#pre-launch-gate)
 
-## On-Call Questions (Start Here)
+## On-Call-Fragen (hier beginnen)
 
-Telemetry without a question is noise. Before instrumenting anything:
+Telemetrie ohne Frage ist Rauschen. Bevor du irgendetwas instrumentierst:
 
-- [ ] 2–4 questions an on-call engineer will ask about this feature are written down
-- [ ] Every signal below maps to one of those questions
-- [ ] Each question is matched to the right signal type: metrics say **that** something is wrong, traces say **where**, logs say **why**
+- [ ] 2–4 Fragen, die ein On-Call-Engineer zu diesem Feature stellen wird, sind aufgeschrieben
+- [ ] Jedes Signal unten lässt sich einer dieser Fragen zuordnen
+- [ ] Jede Frage ist dem passenden Signaltyp zugeordnet: Metriken zeigen, **dass** etwas falsch läuft, Traces zeigen, **wo**, Logs zeigen, **warum**
 
-## Structured Logging
+## Strukturiertes Logging
 
-- [ ] Logs are structured (JSON) with stable event names — not free-form strings
-- [ ] Every log line carries a correlation/request ID, generated or accepted at the system boundary
-- [ ] Correlation ID is propagated on every outbound call and async boundary (HTTP headers, queue metadata)
-- [ ] Any log stream written by more than one entry point (scheduler, replay endpoint, manual run) carries an entry-point field, set where the run starts and propagated alongside the correlation ID
-- [ ] Log levels are consistent: `error` = invariant broken, someone may act; `warn` = degraded but handled; `info` = significant business event; `debug` = off in production
-- [ ] No secrets, tokens, passwords, or unredacted PII in any log line (hard rule from `security-and-hardening`)
-- [ ] Fields are allowlisted — no whole request/response bodies, no auth headers
-- [ ] External service calls logged with metadata only: endpoint, status, latency, attempt count, sanitized identifiers
-- [ ] Actual log output spot-checked: structured fields, not `[object Object]`
+- [ ] Logs sind strukturiert (JSON) und haben stabile Event-Namen – keine freien Strings
+- [ ] Jede Logzeile trägt eine Correlation-/Request-ID, die an der Systemgrenze erzeugt oder übernommen wird
+- [ ] Die Correlation-ID wird bei jedem ausgehenden Aufruf und an jeder asynchronen Grenze weitergegeben (HTTP-Header, Queue-Metadaten)
+- [ ] Jeder Log-Stream, in den mehr als ein Einstiegspunkt schreibt (Scheduler, Replay-Endpunkt, manueller Lauf), enthält ein Einstiegspunkt-Feld, das dort gesetzt wird, wo der Lauf startet, und zusammen mit der Correlation-ID weitergegeben wird
+- [ ] Log-Level sind konsistent: `error` = Invariante verletzt, jemand muss ggf. handeln; `warn` = beeinträchtigt, aber behandelt; `info` = bedeutsames Geschäftsereignis; `debug` = in Produktion aus
+- [ ] Keine Secrets, Tokens, Passwörter oder unmaskierten personenbezogenen Daten (PII) in irgendeiner Logzeile (harte Regel aus `security-and-hardening`)
+- [ ] Felder sind per Allowlist festgelegt – keine vollständigen Request-/Response-Bodies, keine Auth-Header
+- [ ] Aufrufe externer Dienste werden nur mit Metadaten geloggt: Endpunkt, Status, Latenz, Anzahl der Versuche, bereinigte Identifier
+- [ ] Tatsächliche Log-Ausgabe stichprobenartig geprüft: strukturierte Felder, nicht `[object Object]`
 
-## Metrics
+## Metriken
 
-- [ ] **RED** instrumented for every endpoint and every external dependency: Rate, Errors, Duration
-- [ ] **USE** instrumented for every resource (queues, pools, hosts): Utilization, Saturation, Errors
-- [ ] Latency is a histogram; p50/p95/p99 queryable — never an average
-- [ ] All labels come from small, fixed sets (route template, status class, provider name)
-- [ ] No unbounded label values: no user IDs, tenant IDs, emails, raw URLs, request IDs, or error message text
-- [ ] Status codes grouped by class (`5xx`, not `503`)
-- [ ] Queue depth and processing duration tracked for every worker/queue
+- [ ] **RED** ist für jeden Endpunkt und jede externe Abhängigkeit instrumentiert: Rate, Errors, Duration
+- [ ] **USE** ist für jede Ressource (Queues, Pools, Hosts) instrumentiert: Utilization, Saturation, Errors
+- [ ] Latenz ist ein Histogramm; p50/p95/p99 sind abfragbar – niemals ein Durchschnitt
+- [ ] Alle Labels stammen aus kleinen, festen Mengen (Route-Template, Statusklasse, Provider-Name)
+- [ ] Keine unbegrenzten Label-Werte: keine User-IDs, Tenant-IDs, E-Mail-Adressen, rohen URLs, Request-IDs oder Fehlermeldungstexte
+- [ ] Statuscodes nach Klasse gruppiert (`5xx`, nicht `503`)
+- [ ] Queue-Tiefe und Verarbeitungsdauer werden für jeden Worker und jede Queue erfasst
 
 ## Distributed Tracing
 
-- [ ] OpenTelemetry (or equivalent) initialized at service startup, before other imports
-- [ ] Auto-instrumentation enabled for HTTP, gRPC, and DB clients
-- [ ] Trace context propagated on every outbound call (W3C `traceparent`/`tracestate`) and extracted from every inbound request
-- [ ] Context survives async boundaries — queue messages carry trace metadata
-- [ ] Manual spans only around meaningful internal units of work, with the attributes on-call will filter by
-- [ ] No secrets or PII as span attributes
-- [ ] Head-based sampling at a low default rate; 100% of errors kept if tail sampling is available
+- [ ] OpenTelemetry (oder Äquivalent) wird beim Service-Start initialisiert, vor anderen Imports
+- [ ] Auto-Instrumentierung ist für HTTP-, gRPC- und DB-Clients aktiviert
+- [ ] Der Trace-Kontext wird bei jedem ausgehenden Aufruf weitergegeben (W3C `traceparent`/`tracestate`) und aus jedem eingehenden Request extrahiert
+- [ ] Der Kontext übersteht asynchrone Grenzen – Queue-Nachrichten tragen Trace-Metadaten
+- [ ] Manuelle Spans nur um sinnvolle interne Arbeitseinheiten, mit den Attributen, nach denen On-Call filtern wird
+- [ ] Keine Secrets oder PII als Span-Attribute
+- [ ] Head-based Sampling mit niedriger Standardrate; 100 % der Fehler bleiben erhalten, falls Tail-Sampling verfügbar ist
 
 ## Alerting
 
-- [ ] Every alert is symptom-based (error rate, p99 latency, queue age) — causes (CPU, disk, restarts) go to dashboards, not pagers
-- [ ] Every alert is actionable; "ignore it, it self-heals" alerts are deleted
-- [ ] Every alert links to a runbook — minimum three lines: what it means, first query to run, escalation path
-- [ ] Thresholds and durations justified by an SLO or historical data, not guesses
-- [ ] Two severities only: **page** (user-facing, act now) and **ticket** (degradation, act this week)
-- [ ] Each new alert test-fired once: it reached the right channel and the runbook link works
-- [ ] No alerts that fire daily and get acknowledged without action
+- [ ] Jeder Alert ist symptombasiert (Fehlerrate, p99-Latenz, Queue-Alter) – Ursachen (CPU, Disk, Neustarts) gehören in Dashboards, nicht auf Pager
+- [ ] Jeder Alert ist umsetzbar; Alerts nach dem Muster „ignorieren, heilt sich selbst" werden gelöscht
+- [ ] Jeder Alert verlinkt auf ein Runbook – mindestens drei Zeilen: was er bedeutet, die erste auszuführende Abfrage, Eskalationspfad
+- [ ] Schwellenwerte und Dauern sind durch ein SLO oder historische Daten begründet, nicht geraten
+- [ ] Nur zwei Schweregrade: **Page** (nutzersichtbar, sofort handeln) und **Ticket** (Beeinträchtigung, diese Woche handeln)
+- [ ] Jeder neue Alert wurde einmal testweise ausgelöst: Er hat den richtigen Kanal erreicht und der Runbook-Link funktioniert
+- [ ] Keine Alerts, die täglich feuern und ohne Aktion quittiert werden
 
 ## Dashboards
 
-- [ ] Service health dashboard exists: error rate, latency p99, traffic, saturation
-- [ ] Dependency health panel shows per-service error rates and latency
-- [ ] Dashboard answers the on-call questions from the top of this checklist — not "everything except the answer"
-- [ ] Default time range is sensible (1h–6h, not 30d)
+- [ ] Ein Service-Health-Dashboard existiert: Fehlerrate, p99-Latenz, Traffic, Saturation
+- [ ] Das Dependency-Health-Panel zeigt Fehlerraten und Latenz pro Service
+- [ ] Das Dashboard beantwortet die On-Call-Fragen vom Anfang dieser Checkliste – nicht „alles außer der Antwort"
+- [ ] Der Standard-Zeitraum ist sinnvoll (1 h–6 h, nicht 30 d)
 
-## Verify the Telemetry
+## Telemetrie verifizieren
 
-Instrumentation is code; it can be wrong:
+Instrumentierung ist Code; sie kann falsch sein:
 
-- [ ] Forced an error in staging → found it in the logs by correlation ID
-- [ ] Sent test traffic → metric series appear with expected labels and sane values
-- [ ] Followed one request end-to-end in the tracing UI → no broken spans
-- [ ] An induced failure was diagnosed from telemetry alone, without reading the source
+- [ ] Einen Fehler in Staging erzwungen → ihn anhand der Correlation-ID in den Logs gefunden
+- [ ] Test-Traffic gesendet → Metrik-Serien erscheinen mit den erwarteten Labels und plausiblen Werten
+- [ ] Einen Request in der Tracing-UI Ende-zu-Ende verfolgt → keine abgebrochenen Spans
+- [ ] Einen herbeigeführten Ausfall allein anhand der Telemetrie diagnostiziert, ohne den Quellcode zu lesen
 
-## Pre-Launch Gate
+## Pre-Launch-Gate
 
-Before a feature ships to production, all of the following are true:
+Bevor ein Feature in Produktion geht, trifft alles Folgende zu:
 
-- [ ] Structured logs flowing to the log aggregator
-- [ ] RED metrics visible in dashboards for every new endpoint and dependency
-- [ ] At least one symptom-based alert configured, with runbook, test-fired
-- [ ] A request can be traced across every service it touches
-- [ ] On-call knows where the runbooks are
+- [ ] Strukturierte Logs fließen in den Log-Aggregator
+- [ ] RED-Metriken sind in Dashboards für jeden neuen Endpunkt und jede neue Abhängigkeit sichtbar
+- [ ] Mindestens ein symptombasierter Alert ist konfiguriert, mit Runbook und testweise ausgelöst
+- [ ] Ein Request lässt sich über jeden Service nachverfolgen, den er berührt
+- [ ] On-Call weiß, wo die Runbooks liegen
 
-For launch-day monitoring sequence and rollback triggers, see the `shipping-and-launch` skill.
+Die Abfolge für das Monitoring am Launch-Tag und die Rollback-Trigger findest du im Skill `shipping-and-launch`.

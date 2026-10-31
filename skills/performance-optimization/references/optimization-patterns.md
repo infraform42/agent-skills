@@ -1,10 +1,10 @@
-# Optimization Patterns
+# Optimierungsmuster
 
-Worked fixes for the anti-patterns named in Step 3 of the `performance-optimization` skill. The skill states the rule and the signature to look for; this file shows one concrete implementation. Open the section you need after Step 2 has identified the bottleneck — it is not meant to be read top to bottom.
+Ausgearbeitete Lösungen für die Anti-Patterns aus Schritt 3 des Skills `performance-optimization`. Der Skill nennt die Regel und die Signatur, nach der du suchst; diese Datei zeigt jeweils eine konkrete Umsetzung. Öffne den Abschnitt, den du brauchst, nachdem Schritt 2 den Engpass identifiziert hat – sie ist nicht dafür gedacht, von oben nach unten gelesen zu werden.
 
-Checklists, measurement commands, TTFB diagnosis, and caching read/write strategies live in `../../../references/performance-checklist.md`.
+Checklisten, Messbefehle, TTFB-Diagnose und Lese-/Schreibstrategien für Caching findest du in `../../../references/performance-checklist.md`.
 
-## N+1 Queries (Backend)
+## N+1-Queries (Backend)
 
 ```typescript
 // BAD: N+1 — one query per task for the owner
@@ -19,7 +19,7 @@ const tasks = await db.tasks.findMany({
 });
 ```
 
-## Unbounded Data Fetching
+## Unbegrenztes Laden von Daten
 
 ```typescript
 // BAD: Fetching all records
@@ -33,9 +33,9 @@ const tasks = await db.tasks.findMany({
 });
 ```
 
-## Queries That Ignore Their Index
+## Queries, die ihren Index ignorieren
 
-"Add an index" is the guess. The query plan is the measurement:
+„Einen Index anlegen“ ist die Vermutung. Der Query-Plan ist die Messung:
 
 ```sql
 EXPLAIN ANALYZE
@@ -43,34 +43,34 @@ SELECT id, title FROM tasks
 WHERE owner_id = 42 ORDER BY created_at DESC LIMIT 20;
 ```
 
-Three things in the output decide the fix:
+Drei Dinge in der Ausgabe entscheiden über die Lösung:
 
-| What you see | What it means |
+| Was du siehst | Was es bedeutet |
 |---|---|
-| `Seq Scan` on a large table where you expected an index | No usable index for this predicate |
-| Estimated `rows=` off from actual by an order of magnitude | Stale statistics; the planner is choosing on bad information |
-| A `Sort` node above the scan | The index covers the filter but not the `ORDER BY` |
+| `Seq Scan` auf einer großen Tabelle, obwohl du einen Index erwartet hast | Kein nutzbarer Index für dieses Prädikat |
+| Geschätztes `rows=` weicht um eine Größenordnung vom tatsächlichen Wert ab | Veraltete Statistiken; der Planner entscheidet auf Basis schlechter Informationen |
+| Ein `Sort`-Knoten oberhalb des Scans | Der Index deckt den Filter ab, aber nicht das `ORDER BY` |
 
-Index for the **shape of the query**, not the column in isolation. In a composite index, equality columns come first, then the range or sort column:
+Lege den Index für die **Form der Query** an, nicht für die einzelne Spalte. In einem zusammengesetzten Index stehen die Gleichheitsspalten zuerst, danach die Bereichs- oder Sortierspalte:
 
 ```sql
 CREATE INDEX idx_tasks_owner_created ON tasks (owner_id, created_at DESC);
 ```
 
-**When an index will not help:**
+**Wenn ein Index nicht hilft:**
 
-| Situation | Why |
+| Situation | Grund |
 |---|---|
-| Low selectivity, querying the dominant value (a `status` column that is 95% `active`, filtered on `active`) | A sequential scan is genuinely cheaper; the planner will ignore the index. Filtering on the rare value is the opposite case, and a partial index serves it well |
-| Leading wildcard (`LIKE '%term'`) | A B-tree cannot seek without a prefix; needs trigram or full-text |
-| Function on the column (`WHERE lower(email) = ?`) | The plain column index is unusable; index the expression instead |
-| Write-heavy table | Every index is a tax on every `INSERT`/`UPDATE`; measure the write cost, not just the read gain |
+| Geringe Selektivität, Abfrage des dominanten Werts (eine `status`-Spalte, die zu 95 % `active` ist, gefiltert auf `active`) | Ein Sequential Scan ist tatsächlich günstiger; der Planner ignoriert den Index. Beim Filtern auf den seltenen Wert ist es umgekehrt, und ein partieller Index bedient ihn gut |
+| Führendes Wildcard (`LIKE '%term'`) | Ein B-Tree kann ohne Präfix nicht gezielt suchen; es braucht Trigram oder Volltext |
+| Funktion auf der Spalte (`WHERE lower(email) = ?`) | Der einfache Spaltenindex ist unbrauchbar; indiziere stattdessen den Ausdruck |
+| Schreiblastige Tabelle | Jeder Index belastet jedes `INSERT`/`UPDATE`; miss die Schreibkosten, nicht nur den Lesegewinn |
 
-Re-run `EXPLAIN ANALYZE` after. An index that did not change the plan is a revert (Step 4), and it is not free: it still costs on every write.
+Führe danach erneut `EXPLAIN ANALYZE` aus. Ein Index, der den Plan nicht verändert hat, ist ein Revert (Schritt 4) – und er ist nicht kostenlos: Er kostet weiterhin bei jedem Schreibzugriff.
 
-## Connection Pool Exhaustion
+## Erschöpfter Connection-Pool
 
-The signature is distinctive: **every** endpoint slows at once, the slow time is spent waiting for a connection rather than executing, and the database reports mostly idle sessions.
+Die Signatur ist eindeutig: **Alle** Endpoints werden gleichzeitig langsam, die Zeit geht fürs Warten auf eine Verbindung statt fürs Ausführen drauf, und die Datenbank meldet überwiegend inaktive Sessions.
 
 ```typescript
 // BAD: a pool per request or per module — under serverless this multiplies
@@ -83,9 +83,9 @@ const pool = new Pool({
 });
 ```
 
-**Bigger is not faster.** A pool larger than what the database can execute concurrently just relocates the queue from your app to the database, where it is harder to see. When instance count is unbounded (serverless, autoscaling), a proxy that multiplexes connections (pgbouncer, RDS Proxy) is the fix, not a higher `max`.
+**Größer ist nicht schneller.** Ein Pool, der größer ist als das, was die Datenbank gleichzeitig ausführen kann, verlagert die Warteschlange nur von deiner App in die Datenbank, wo sie schwerer zu sehen ist. Wenn die Anzahl der Instanzen unbegrenzt ist (Serverless, Autoscaling), ist ein Proxy, der Verbindungen bündelt (pgbouncer, RDS Proxy), die Lösung – nicht ein höheres `max`.
 
-## Missing Image Optimization (Frontend)
+## Fehlende Bildoptimierung (Frontend)
 
 ```html
 <!-- BAD: No dimensions, no format optimization -->
@@ -150,7 +150,7 @@ const pool = new Pool({
 />
 ```
 
-## Unnecessary Re-renders (React)
+## Unnötige Re-Renders (React)
 
 ```tsx
 // BAD: Creates new object on every render, causing children to re-render
@@ -176,7 +176,7 @@ function TaskStats({ tasks }: Props) {
 }
 ```
 
-## Large Bundle Size
+## Zu große Bundle-Größe
 
 ```typescript
 // Modern bundlers (Vite, webpack 5+) handle named imports with tree-shaking automatically,
@@ -198,17 +198,17 @@ function App() {
 }
 ```
 
-## Missing Caching (Backend)
+## Fehlendes Caching (Backend)
 
-Cache what is expensive to produce and read far more often than it changes. Caching a query that was already fast adds a network hop, a staleness bug, and an eviction policy to maintain, in exchange for nothing.
+Cache, was aufwendig zu erzeugen ist und viel häufiger gelesen als geändert wird. Wer eine Query cacht, die ohnehin schnell war, handelt sich einen Netzwerk-Hop, einen Staleness-Bug und eine zu pflegende Eviction-Policy ein – und bekommt dafür nichts.
 
-**Pick the layer deliberately:**
+**Wähle die Ebene bewusst:**
 
-| Layer | Visible to | Use when | Cost |
+| Ebene | Sichtbar für | Einsatz, wenn | Kosten |
 |---|---|---|---|
-| In-process (`Map`, LRU) | One instance | Small, hot, per-instance staleness is acceptable | Each instance drifts independently; invalidation reaches only one |
-| Shared (Redis, Memcached) | All instances | Instances must agree, or the value is expensive to recompute | A network hop, and another service to run and monitor |
-| CDN / edge | Everyone, per URL | Responses are public and identical for a given key | Invalidation is the hard part; assume you cannot recall a bad response quickly |
+| In-Process (`Map`, LRU) | Eine Instanz | Klein, häufig genutzt, Staleness pro Instanz ist akzeptabel | Jede Instanz driftet unabhängig; die Invalidierung erreicht nur eine |
+| Shared (Redis, Memcached) | Alle Instanzen | Instanzen müssen sich einig sein, oder der Wert ist teuer neu zu berechnen | Ein Netzwerk-Hop und ein weiterer Dienst, der betrieben und überwacht werden muss |
+| CDN / Edge | Alle, pro URL | Antworten sind öffentlich und für einen gegebenen Key identisch | Die Invalidierung ist der schwierige Teil; geh davon aus, dass du eine fehlerhafte Antwort nicht schnell zurückholen kannst |
 
 ```typescript
 // Cache frequently-read, rarely-changed data
@@ -235,16 +235,16 @@ app.use('/static', express.static('public', {
 res.set('Cache-Control', 'public, max-age=300'); // 5 minutes
 ```
 
-**Key design decides correctness.** Every input that changes the response belongs in the key: tenant, locale, permissions, feature flags. A key that omits the viewer is how one user's data gets served to another, and that ships as a performance win.
+**Das Key-Design entscheidet über die Korrektheit.** Jede Eingabe, die die Antwort verändert, gehört in den Key: Tenant, Locale, Berechtigungen, Feature-Flags. Ein Key ohne den Betrachter ist der Weg, auf dem Daten eines Nutzers an einen anderen ausgeliefert werden – und das geht dann als Performance-Gewinn live.
 
-**Choose one invalidation strategy, not three:**
+**Wähle eine Invalidierungsstrategie, nicht drei:**
 
-| Strategy | Trade-off |
+| Strategie | Trade-off |
 |---|---|
-| TTL | Simplest. You accept staleness up to the TTL, so state the acceptable window explicitly |
-| Event or tag based | Fresh on write, but writers now have to know the cache topology |
-| Versioned keys (`user:42:profile:v7`) | Never invalidate, just stop reading old keys. Costs memory until eviction |
+| TTL | Am einfachsten. Du akzeptierst Staleness bis zur Dauer der TTL, also lege das akzeptable Zeitfenster explizit fest |
+| Event- oder Tag-basiert | Beim Schreiben aktuell, aber Schreibende müssen jetzt die Cache-Topologie kennen |
+| Versionierte Keys (`user:42:profile:v7`) | Nie invalidieren, einfach alte Keys nicht mehr lesen. Kostet Speicher bis zur Eviction |
 
-**Guard against the stampede.** A hot key expires, every concurrent request misses together, and the origin takes the full load at once, which is how a cache turns into an outage instead of preventing one. Serve stale while a single request recomputes (`stale-while-revalidate`), or coalesce concurrent misses behind one in-flight promise so N waiters cause one recompute.
+**Schütze dich vor dem Stampede.** Ein häufig genutzter Key läuft ab, alle gleichzeitigen Requests verfehlen den Cache gemeinsam, und der Origin bekommt die volle Last auf einmal – so wird aus einem Cache ein Ausfall statt dessen Vermeidung. Liefere veraltete Daten aus, während ein einzelner Request neu berechnet (`stale-while-revalidate`), oder bündle gleichzeitige Misses hinter einem einzigen laufenden Promise, sodass N Wartende nur eine Neuberechnung auslösen.
 
-**Do not cache:** anything whose staleness is a correctness bug (balances, permissions, inventory at checkout), or per-user data under a key that does not identify the user. See `../../../references/performance-checklist.md#caching-strategies` for request coalescing, write strategies, negative caching, and the cache checklist.
+**Nicht cachen:** alles, dessen Staleness ein Korrektheitsfehler ist (Kontostände, Berechtigungen, Lagerbestand beim Checkout), sowie nutzerspezifische Daten unter einem Key, der den Nutzer nicht identifiziert. Request Coalescing, Schreibstrategien, Negative Caching und die Cache-Checkliste findest du unter `../../../references/performance-checklist.md#caching-strategies`.

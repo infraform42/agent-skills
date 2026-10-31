@@ -1,12 +1,12 @@
-# Hardening Patterns
+# Härtungsmuster
 
-Code patterns and decision aids for the `security-and-hardening` skill. The skill states each rule; this file shows one concrete implementation of it. Open the section you need when you reach that code — it is not meant to be read top to bottom.
+Code-Patterns und Entscheidungshilfen für den Skill `security-and-hardening`. Der Skill nennt jede Regel; diese Datei zeigt eine konkrete Umsetzung dazu. Öffne den Abschnitt, den du brauchst, wenn du an der betreffenden Stelle im Code angekommen bist – die Datei ist nicht dafür gedacht, von oben nach unten durchgelesen zu werden.
 
-Shared checklists (threat modeling, pre-commit checks, security headers, CORS, the package-manager matrix, install-script gate, and the OWASP quick-reference tables) live in `../../../references/security-checklist.md`.
+Gemeinsame Checklisten (Threat Modeling, Pre-commit-Prüfungen, Security-Header, CORS, Package-Manager-Matrix, Install-Script-Gate und die OWASP-Kurzreferenztabellen) befinden sich in `../../../references/security-checklist.md`.
 
-## OWASP Top 10 Prevention Patterns
+## Präventionsmuster für die OWASP Top 10
 
-These are prevention patterns, not a ranking. For the 2021 ordering, see the quick-reference table in `../../../references/security-checklist.md#owasp-top-10-quick-reference`.
+Das sind Präventionsmuster, kein Ranking. Die Reihenfolge von 2021 findest du in der Kurzreferenztabelle in `../../../references/security-checklist.md#owasp-top-10-quick-reference`.
 
 ### Injection
 
@@ -125,7 +125,7 @@ if (!API_KEY) throw new Error('STRIPE_API_KEY not configured');
 
 ### Server-Side Request Forgery (SSRF)
 
-Any time the server fetches a URL the user influenced — webhooks, "import from URL", image proxies, link previews — an attacker can aim it at internal services (cloud metadata, `localhost`, private IPs).
+Sobald der Server eine URL abruft, die der Nutzer beeinflusst hat – Webhooks, „Import von URL“, Bild-Proxys, Link-Vorschauen –, kann ein Angreifer ihn auf interne Dienste lenken (Cloud-Metadaten, `localhost`, private IPs).
 
 ```typescript
 // BAD: fetch whatever the user gives you
@@ -152,13 +152,13 @@ async function assertSafeUrl(raw: string): Promise<URL> {
 await fetch(await assertSafeUrl(req.body.webhookUrl), { redirect: 'error' });
 ```
 
-The `range() !== 'unicast'` check covers loopback, link-local `169.254.169.254` (cloud metadata, the #1 SSRF target), private, and unique-local ranges across IPv4 and IPv6.
+Die Prüfung `range() !== 'unicast'` deckt Loopback, Link-Local `169.254.169.254` (Cloud-Metadaten, das SSRF-Ziel Nr. 1), private sowie Unique-Local-Bereiche in IPv4 und IPv6 ab.
 
-**Caveat — this still has a TOCTOU gap.** `fetch` resolves DNS again after the check, so an attacker using a short-TTL record can rebind to an internal IP between validation and connection. For high-risk surfaces, resolve once and connect to the pinned IP, or put a filtering agent in front (`request-filtering-agent` / `ssrf-req-filter`).
+**Einschränkung – hier bleibt eine TOCTOU-Lücke.** `fetch` löst DNS nach der Prüfung erneut auf. Ein Angreifer mit einem Record mit kurzer TTL kann daher zwischen Validierung und Verbindungsaufbau auf eine interne IP umschwenken (DNS-Rebinding). Löse bei Angriffsflächen mit hohem Risiko einmal auf und verbinde dich mit der fixierten IP, oder schalte einen filternden Agent davor (`request-filtering-agent` / `ssrf-req-filter`).
 
-## Input Validation Patterns
+## Muster für die Eingabevalidierung
 
-### Schema Validation at Boundaries
+### Schema-Validierung an den Grenzen
 
 ```typescript
 import { z } from 'zod';
@@ -188,7 +188,7 @@ app.post('/api/tasks', async (req, res) => {
 });
 ```
 
-### File Upload Safety
+### Sicherheit bei Datei-Uploads
 
 ```typescript
 // Restrict file types and sizes
@@ -206,17 +206,17 @@ function validateUpload(file: UploadedFile) {
 }
 ```
 
-### Destructive Operations on Derived Paths
+### Destruktive Operationen auf abgeleiteten Pfaden
 
-A delete, move, or overwrite is only as safe as the value that names its target. Reading that value from the kernel, a job payload, or a sibling service proves where it *arrived from*, not who *wrote* it — another process's command line is as attacker-controlled as a form field. A shape check ("absolute path, at least one directory deep") proves well-formedness and gets mistaken for authorization; that is how a cleanup routine deletes the root instead of the leaf.
+Ein Löschen, Verschieben oder Überschreiben ist nur so sicher wie der Wert, der sein Ziel benennt. Dass du diesen Wert vom Kernel, aus einem Job-Payload oder von einem Nachbardienst liest, beweist nur, *woher er kam* – nicht, *wer ihn geschrieben hat*: Die Kommandozeile eines anderen Prozesses ist genauso angreiferkontrolliert wie ein Formularfeld. Eine Formprüfung („absoluter Pfad, mindestens ein Verzeichnis tief“) belegt nur die Wohlgeformtheit und wird fälschlich für eine Autorisierung gehalten – so löscht eine Cleanup-Routine die Wurzel statt des Blatts.
 
-Before a destructive call, require all three: the resolved target sits under an **allowlisted root** (compare after resolving symlinks, never on the raw string); it is at least one level **below** that root, so a root is never itself the target; and it carries **evidence that it is yours**, read *before* the operation and before any teardown that removes it — otherwise "absent" and "not mine" are indistinguishable. On refusal, log the rejected target and stop: a cleanup that falls back to a broader default path is the failure this guards against. Worked example in `../../../references/security-checklist.md#destructive-path-operations`.
+Verlange vor einem destruktiven Aufruf alle drei Bedingungen: Das aufgelöste Ziel liegt unter einer **Root auf der Allowlist** (vergleiche nach dem Auflösen von Symlinks, nie auf dem rohen String); es liegt mindestens eine Ebene **unterhalb** dieser Root, sodass eine Root nie selbst das Ziel ist; und es trägt einen **Nachweis, dass es dir gehört**, der *vor* der Operation und vor jedem Teardown gelesen wird, der ihn entfernt – sonst sind „nicht vorhanden“ und „nicht meins“ nicht zu unterscheiden. Protokolliere bei einer Ablehnung das abgelehnte Ziel und brich ab: Ein Cleanup, der auf einen breiteren Standardpfad zurückfällt, ist genau der Fehler, den diese Prüfung verhindern soll. Ein durchgespieltes Beispiel steht in `../../../references/security-checklist.md#destructive-path-operations`.
 
-Two limits, because the check reads stronger than it is. A marker inside the tree is self-attestation — anything that can write there can write the marker — so the expected owner has to come from authenticated state, and the marker needs integrity protection (restrictive ownership, or a MAC) before it counts as authorization. And resolving a path and then operating on the *name* is a check/use race wherever an untrusted process can swap an ancestor: on a shared volume, hold the target by descriptor and use no-follow, beneath-the-root operations, or make sure the hierarchy cannot change for the duration.
+Zwei Einschränkungen, weil die Prüfung stärker wirkt, als sie ist. Ein Marker im Verzeichnisbaum ist Selbstbeglaubigung – wer dort schreiben kann, kann auch den Marker schreiben –, daher muss der erwartete Eigentümer aus authentifiziertem Zustand stammen, und der Marker braucht Integritätsschutz (restriktive Eigentümerschaft oder einen MAC), bevor er als Autorisierung zählt. Und einen Pfad aufzulösen und dann auf dem *Namen* zu operieren, ist überall dort ein Check/Use-Race, wo ein nicht vertrauenswürdiger Prozess einen übergeordneten Ordner austauschen kann: Halte das Ziel auf einem geteilten Volume per Descriptor fest und nutze No-Follow-Operationen, die unterhalb der Root bleiben – oder stelle sicher, dass sich die Hierarchie für die Dauer nicht ändern kann.
 
-## Dependency Audit Triage
+## Triage von Dependency-Audits
 
-Package-manager audits report known advisories; they do not prove a package is trustworthy or that vulnerable code is reachable. Use this decision tree:
+Audits des Package-Managers melden bekannte Advisories; sie beweisen weder, dass ein Paket vertrauenswürdig ist, noch, dass verwundbarer Code erreichbar ist. Nutze diesen Entscheidungsbaum:
 
 ```
 The native package-manager audit reports a vulnerability
@@ -234,12 +234,12 @@ The native package-manager audit reports a vulnerability
     └── Track and fix during regular dependency updates
 ```
 
-**Key questions:**
-- Is the vulnerable function actually called in your code path?
-- Is the dependency a runtime dependency or dev-only?
-- Is the vulnerability exploitable given your deployment context (e.g., a server-side vulnerability in a client-only app)?
+**Schlüsselfragen:**
+- Wird die verwundbare Funktion in deinem Codepfad tatsächlich aufgerufen?
+- Ist die Dependency eine Laufzeit-Dependency oder nur für die Entwicklung?
+- Ist die Schwachstelle in deinem Deployment-Kontext ausnutzbar (z. B. eine serverseitige Schwachstelle in einer reinen Client-App)?
 
-When you defer a fix, document the reason and set a review date.
+Wenn du einen Fix aufschiebst, dokumentiere den Grund und setze ein Review-Datum.
 
 ## Rate Limiting
 
@@ -261,7 +261,7 @@ app.use('/api/auth/', rateLimit({
 }));
 ```
 
-**Count in a shared store once there is more than one process.** `express-rate-limit` keeps its counters in process memory by default. Behind a load balancer each instance holds its own count, so the effective limit is `max × instances`; on serverless or edge runtimes a fresh invocation starts from zero, so the auth limit above may never fire. Pass a shared `store` (Redis via `rate-limit-redis`), or use an HTTP-based limiter that works where a long-lived TCP connection does not (for example `@upstash/ratelimit`):
+**Zähle in einem gemeinsamen Store, sobald mehr als ein Prozess läuft.** `express-rate-limit` hält seine Zähler standardmäßig im Prozessspeicher. Hinter einem Load Balancer führt jede Instanz ihren eigenen Zähler, das effektive Limit beträgt also `max × instances`; auf Serverless- oder Edge-Runtimes startet jeder frische Aufruf bei null, sodass das Auth-Limit oben womöglich nie greift. Übergib einen gemeinsamen `store` (Redis über `rate-limit-redis`) oder nutze einen HTTP-basierten Limiter, der dort funktioniert, wo eine langlebige TCP-Verbindung nicht möglich ist (zum Beispiel `@upstash/ratelimit`):
 
 ```typescript
 import { Ratelimit } from '@upstash/ratelimit';
@@ -275,7 +275,7 @@ const { success } = await authLimiter.limit(`login:${req.ip}`);
 if (!success) return res.status(429).end();
 ```
 
-## Secrets Management
+## Secrets-Management
 
 ```
 .env files:
@@ -291,7 +291,7 @@ if (!success) return res.status(429).end();
   *.key
 ```
 
-**Always check before committing:**
+**Prüfe immer vor dem commit:**
 ```bash
 # Check for accidentally staged secrets — prints only the names of files whose
 # staged diff matches, so the raw value never lands in terminal output or agent
@@ -299,19 +299,19 @@ if (!success) return res.status(429).end();
 git diff --cached -i -G'password|secret|api_key|token' --name-only
 ```
 
-**If a secret is ever committed, rotate it.** Deleting the line or rewriting history is not enough — assume it's compromised the moment it reaches a remote. Revoke and reissue the key first, then purge it from history.
+**Wenn ein Secret jemals committed wurde, rotiere es.** Die Zeile zu löschen oder die Historie umzuschreiben reicht nicht – geh davon aus, dass es kompromittiert ist, sobald es ein Remote erreicht. Widerrufe den Schlüssel zuerst und stelle einen neuen aus, dann entferne ihn aus der Historie.
 
-## Data Classification
+## Datenklassifizierung
 
-Classify personal data as you add fields, so export and deletion requests can find it later:
+Klassifiziere personenbezogene Daten, sobald du Felder hinzufügst, damit Export- und Löschanfragen sie später finden:
 
-| Class | Examples | Handling |
+| Klasse | Beispiele | Umgang |
 |---|---|---|
-| **Non-personal** | Aggregates, anonymized counts | Normal handling |
-| **Personal (PII)** | Name, email, IP, device/user IDs | Minimize, access-control, include in export/delete |
-| **Sensitive** | Health, finance, location, biometrics, gov IDs, anything about minors | Extra basis to collect, stricter access, often encryption + audit logging |
+| **Nicht personenbezogen** | Aggregate, anonymisierte Zählwerte | Normaler Umgang |
+| **Personenbezogen (PII)** | Name, E-Mail, IP, Geräte-/Nutzer-IDs | Minimieren, Zugriff beschränken, in Export/Löschung einbeziehen |
+| **Sensibel** | Gesundheit, Finanzen, Standort, Biometrie, amtliche IDs, alles über Minderjährige | Zusätzliche Rechtsgrundlage für die Erhebung, strengerer Zugriff, oft Verschlüsselung + Audit-Logging |
 
-## LLM Output Handling
+## Umgang mit LLM-Ausgaben
 
 ```typescript
 // BAD: trusting model output as a command or as markup

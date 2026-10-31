@@ -3,7 +3,7 @@ name: idea-refine
 description: "Schärft vage Ideen durch divergentes und konvergentes Denken (agent-skills). Nur verwenden, wenn der Nutzer diesen Skill ausdrücklich nennt. Für das Hinterfragen von Plänen im Alltag gelten grill-me und grilling."
 ---
 
-# Idea Refine
+# Ideen schärfen
 
 ## Overview
 

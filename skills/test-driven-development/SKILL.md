@@ -3,7 +3,7 @@ name: test-driven-development
 description: "Red-green-refactor-Methode aus agent-skills. Nur verwenden, wenn der Nutzer /agent-skills-de:test oder /agent-skills-de:build aufruft oder diesen Skill ausdrücklich nennt. Für TDD im Alltag gilt der Skill tdd."
 ---
 
-# Test-Driven Development
+# Testgetriebene Entwicklung
 
 ## Überblick
 

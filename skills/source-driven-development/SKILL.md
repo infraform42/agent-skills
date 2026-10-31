@@ -3,7 +3,7 @@ name: source-driven-development
 description: "Belegt Umsetzungsentscheidungen mit offizieller Dokumentation (agent-skills). Nur verwenden, wenn der Nutzer diesen Skill ausdrücklich nennt. Im Alltag gilt der Skill research."
 ---
 
-# Source-Driven Development
+# Quellengestützte Entwicklung
 
 ## Overview
 

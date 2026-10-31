@@ -3,7 +3,7 @@ name: documentation-and-adrs
 description: Hält Entscheidungen und Dokumentation fest. Verwenden, wenn eine Architekturentscheidung (ADR) oder die Begründung hinter einer Designentscheidung dokumentiert werden soll, bei Änderungen an öffentlichen APIs, beim Ausliefern von Features oder wenn Kontext festgehalten werden muss, den künftige Entwickler und Agents zum Verständnis der Codebasis brauchen. Typische Anfragen sind „schreib einen ADR dazu“, „dokumentiere diese Architekturentscheidung“, „halte fest, warum wir das so gebaut haben“, „aktualisiere die README und das Changelog“ oder „dokumentiere die öffentliche API“.
 ---
 
-# Documentation and ADRs
+# Dokumentation und ADRs
 
 ## Überblick
 

@@ -3,7 +3,7 @@ name: frontend-ui-engineering
 description: Baut produktionsreife, barrierefreie und responsive Benutzeroberflächen. Verwenden, wenn Oberflächen und Seiten gebaut oder geändert, Komponenten erstellt, Layouts umgesetzt, WCAG-Barrierefreiheitsanforderungen erfüllt oder State verwaltet werden oder wenn das Ergebnis nach Produktion statt nach KI-Generat aussehen und sich so anfühlen soll. Auch bei „baue die Komponente für die Aufgabenliste“, „mach das Layout responsive“, „die Seite muss barrierefrei sein“, „die UI sieht zu sehr nach KI aus“.
 ---
 
-# Frontend UI Engineering
+# Frontend-UI-Engineering
 
 ## Überblick
 
