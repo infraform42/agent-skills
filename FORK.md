@@ -18,13 +18,26 @@ Alle Anpassungen setzt `tools/fork_manifest.py`:
 - Commands rufen Skills als `agent-skills-de:<skill>` auf.
 - `brew install` → `sudo port install` (MacPorts).
 - Skills, die sich mit `mattpocock-skills-de` oder eingebauten Skills überschneiden, bekommen eine enge `description` aus `.i18n/overrides.yaml` und lösen nicht mehr automatisch aus. Die Commands rufen sie weiterhin auf.
-- `git-workflow-and-versioning` löst nur noch bei Commit-Nachrichten, Commit-Aufteilung, Konflikten, PRs, Releases und Changelog aus (ebenfalls `.i18n/overrides.yaml`).
+- `git-workflow-and-versioning`: Übersetzung ohne den Upstream-Satz „Verwenden bei jeder Codeänderung“ (ebenfalls `.i18n/overrides.yaml`). Eine freie Neufassung hatte das Auslösen bei Commit-Nachrichten verhindert; Änderungen an dieser description immer mit den gitflow-Evals prüfen (nächster Abschnitt).
 - Feste deutsche H1-Titel aus `.i18n/titles.yaml` (erste `# `-Zeile außerhalb von Codeblöcken).
 - Die Hooks unter `hooks/` sind nicht eingebunden (wie upstream).
+
+## Evals
+
+Die Upstream-Evals liegen unter `evals/plugin/`; die Fälle `*-de` sind Fork-eigene deutsche Fälle. Fälle, die ein automatisches Auslösen von Skills erwarten, die der Fork bewusst nur per Command zulässt (z. B. `tdd-fires-*`, `code-review-fires`), schlagen im Fork erwartungsgemäß fehl.
+
+```bash
+claude plugin eval agent-skills-de@infraform42-agent-skills --case 'gitflow-*' --runs 2 \
+  --ablation none --model sonnet --no-publish --trust-plugin --max-cost-usd 2
+```
 
 ## Upstream beobachten
 
 `tools/upstream-check.sh` holt nur `upstream/main` und meldet neue Commits als macOS-Mitteilung; Branches und Arbeitsverzeichnis bleiben unberührt. `tools/install-upstream-check.sh` richtet das als launchd-Job ein (montags 09:00, Log `~/Library/Logs/agent-skills-upstream.log`), `--remove` entfernt ihn.
+
+## Weitere Hosts
+
+opencode v2 lädt die Skills über `"skills": ["~/src/agent-skills-de/skills"]` in `~/.config/opencode/opencode.jsonc` (alle `**/SKILL.md`). Die Commands und Agents gibt es dort nicht; die nur per Command gedachten Skills verweisen auf `/agent-skills-de:*`-Commands von Claude Code.
 
 ## Upstream übernehmen
 
