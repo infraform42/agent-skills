@@ -1,6 +1,6 @@
 ---
 name: planning-and-task-breakdown
-description: Breaks work into ordered tasks. Use when you have a spec or clear requirements and need to break work into implementable tasks. Use when a task feels too large to start, when you need to estimate scope, or when parallel work is possible.
+description: "Zerlegt eine Spec in geordnete Aufgaben (tasks/plan.md) aus agent-skills. Nur verwenden, wenn der Nutzer /agent-skills-de:plan oder /agent-skills-de:build aufruft oder diesen Skill ausdrücklich nennt. Für Ticket-Zerlegung im Alltag gilt der Skill to-tickets."
 ---
 
 # Planning and Task Breakdown

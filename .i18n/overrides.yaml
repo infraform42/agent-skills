@@ -1,0 +1,66 @@
+---
+# Feste Werte, die nach jedem Upstream-Merge (tools/fork_manifest.py) und nach jeder
+# Übersetzung (tools/i18n.py) gesetzt werden (Pfad → Feld → Wert).
+#
+# Diese Skills überschneiden sich mit mattpocock-skills-de oder eingebauten Skills.
+# Die enge description verhindert automatisches Auslösen; die Commands rufen sie
+# weiterhin per Name auf.
+skills/test-driven-development/SKILL.md:
+  description: >-
+    Red-green-refactor-Methode aus agent-skills. Nur verwenden, wenn der Nutzer
+    /agent-skills-de:test oder /agent-skills-de:build aufruft oder diesen Skill ausdrücklich
+    nennt. Für TDD im Alltag gilt der Skill tdd.
+skills/code-review-and-quality/SKILL.md:
+  description: >-
+    Fünf-Achsen-Code-Review aus agent-skills (Korrektheit, Lesbarkeit, Architektur,
+    Sicherheit, Performance). Nur verwenden, wenn der Nutzer /agent-skills-de:review aufruft
+    oder diesen Skill ausdrücklich nennt. Für Reviews im Alltag gilt der Skill code-review.
+skills/debugging-and-error-recovery/SKILL.md:
+  description: >-
+    Systematische Ursachensuche aus agent-skills. Nur verwenden, wenn ein agent-skills-de-Command
+    darauf verweist oder der Nutzer diesen Skill ausdrücklich nennt. Für Fehlersuche im Alltag
+    gilt der Skill diagnosing-bugs.
+skills/spec-driven-development/SKILL.md:
+  description: >-
+    Spec vor dem Code (SPEC.md) aus agent-skills. Nur verwenden, wenn der Nutzer
+    /agent-skills-de:spec aufruft oder diesen Skill ausdrücklich nennt. Für Specs im Alltag
+    gilt der Skill to-spec.
+skills/planning-and-task-breakdown/SKILL.md:
+  description: >-
+    Zerlegt eine Spec in geordnete Aufgaben (tasks/plan.md) aus agent-skills. Nur verwenden,
+    wenn der Nutzer /agent-skills-de:plan oder /agent-skills-de:build aufruft oder diesen
+    Skill ausdrücklich nennt. Für Ticket-Zerlegung im Alltag gilt der Skill to-tickets.
+skills/incremental-implementation/SKILL.md:
+  description: >-
+    Umsetzung in dünnen, prüfbaren Scheiben aus agent-skills. Nur verwenden, wenn der Nutzer
+    /agent-skills-de:build aufruft oder diesen Skill ausdrücklich nennt. Für Umsetzung im
+    Alltag gilt der Skill implement.
+skills/interview-me/SKILL.md:
+  description: >-
+    Interview Frage für Frage, bis die eigentliche Absicht klar ist (agent-skills). Nur
+    verwenden, wenn der Nutzer diesen Skill ausdrücklich nennt. Für Befragungen im Alltag
+    gelten grill-me und grilling.
+skills/idea-refine/SKILL.md:
+  description: >-
+    Schärft vage Ideen durch divergentes und konvergentes Denken (agent-skills). Nur
+    verwenden, wenn der Nutzer diesen Skill ausdrücklich nennt. Für das Hinterfragen von
+    Plänen im Alltag gelten grill-me und grilling.
+skills/code-simplification/SKILL.md:
+  description: >-
+    Vereinfacht Code ohne Verhaltensänderung (agent-skills). Nur verwenden, wenn der Nutzer
+    /agent-skills-de:code-simplify aufruft oder diesen Skill ausdrücklich nennt. Im Alltag
+    gilt der eingebaute Skill simplify.
+skills/security-and-hardening/SKILL.md:
+  description: >-
+    Härtung gegen Schwachstellen (agent-skills). Nur verwenden, wenn ein agent-skills-de-Command
+    oder -Agent darauf verweist oder der Nutzer diesen Skill ausdrücklich nennt. Im Alltag gilt
+    der eingebaute Skill security-review.
+skills/source-driven-development/SKILL.md:
+  description: >-
+    Belegt Umsetzungsentscheidungen mit offizieller Dokumentation (agent-skills). Nur verwenden,
+    wenn der Nutzer diesen Skill ausdrücklich nennt. Im Alltag gilt der Skill research.
+skills/using-agent-skills/SKILL.md:
+  description: >-
+    Router über alle agent-skills-de-Skills mit Entscheidungsbaum. Nur verwenden, wenn der
+    Nutzer ausdrücklich fragt, welcher agent-skills-Skill passt. Als allgemeiner Router gilt
+    ask-matt.

@@ -1,6 +1,6 @@
 ---
 name: test-driven-development
-description: Drives development with tests using the red-green-refactor loop. Use when implementing any logic, fixing any bug, or changing any behavior. Use when you need to prove that code works, when a bug report arrives, or when you're about to modify existing functionality. Use when asked to add tests to a function, fix a bug in it or change its behavior, even when the code is pasted inline and the request does not mention tests.
+description: "Red-green-refactor-Methode aus agent-skills. Nur verwenden, wenn der Nutzer /agent-skills-de:test oder /agent-skills-de:build aufruft oder diesen Skill ausdrücklich nennt. Für TDD im Alltag gilt der Skill tdd."
 ---
 
 # Test-Driven Development

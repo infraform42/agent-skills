@@ -151,8 +151,8 @@ Picking a dimension means installing something. Don't leave the user with a numb
 | Coverage (JS) | your test runner | Vitest: `npm i -D @vitest/coverage-v8`; Jest: already there | `vitest run --coverage` (or `jest --coverage`) | coverage of changed lines |
 | Coverage (Python) | pytest-cov | `pip install pytest-cov` | `pytest --cov --cov-report=lcov` | same |
 | Security: code | Semgrep | `pipx install semgrep` | `npm run check:security` (below) | high or critical, including legacy `ERROR` |
-| Security: secrets | gitleaks | `brew install gitleaks` | `gitleaks dir . --redact --no-banner` | any finding |
-| Security: dependencies | osv-scanner | `brew install osv-scanner` | `osv-scanner scan source -r .` | high or above |
+| Security: secrets | gitleaks | `sudo port install gitleaks` | `gitleaks dir . --redact --no-banner` | any finding |
+| Security: dependencies | osv-scanner | `sudo port install osv-scanner` | `osv-scanner scan source -r .` | high or above |
 | Performance: page | Lighthouse | `npm i -D lighthouse` | `lighthouse $URL --output=json --quiet` | LCP, CLS, performance score |
 | Performance: bundle | size-limit | `npm i -D size-limit` | `size-limit --json` | per-entry byte budget |
 | Accessibility | axe-core | `npm i -D @axe-core/cli` | `npm run check:a11y` (below) | zero critical or serious |
