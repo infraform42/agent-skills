@@ -49,7 +49,7 @@ def shipped_skill_files() -> list[str]:
     paths = [r.removeprefix("./").rstrip("/") for r in roots]
     files = git("ls-tree", "-r", "--name-only", EN_REF, "--", *paths).splitlines()
     extra = git("ls-tree", "-r", "--name-only", EN_REF, "--", ".claude/commands", "agents", "references").splitlines()
-    # Unterlagen der Skills (references/, examples.md …) ohne Frontmatter
+    # Unterlagen der Skills (references/, examples.md usw.) ohne Frontmatter
     docs = [f for f in files if f.endswith(".md") and not f.endswith("/SKILL.md")]
     return sorted([f for f in files if f.endswith("/SKILL.md")] + docs +
                   [f for f in extra if f.endswith(".md")])
