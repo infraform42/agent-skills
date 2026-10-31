@@ -73,6 +73,17 @@ skills/constraint-driven-development/SKILL.md:
     constraints", "define our standards". Typische Anfragen: „leg unsere Qualitätsstandards
     fest“, „richte Constraints für das Projekt ein“, „welche Coverage-Schwelle sollen wir
     nehmen“, „der Agent hat die Tests einfach übersprungen“.
+skills/git-workflow-and-versioning/SKILL.md:
+  # Upstream: "Use when making any code change" → löste bei jeder Codeänderung aus
+  description: >-
+    Git-Workflow-Methodik: atomare Commits, Commit-Nachrichten, Branch-Strategie,
+    Konfliktauflösung, Pull Requests, Releases, Semantic Versioning, Tags und Changelog.
+    Verwenden, wenn eine Commit-Nachricht oder ein Changelog-Eintrag geschrieben,
+    unaufgeräumte Änderungen in saubere Commits aufgeteilt, ein Merge-Konflikt gelöst, ein
+    Pull Request vorbereitet oder ein Release getaggt werden soll. Nicht bei gewöhnlichen
+    Codeänderungen; committen und pushen nur auf ausdrücklichen Wunsch des Nutzers.
+    Typische Anfragen: „schreib die Commit-Message dazu“, „teile das in saubere Commits auf“,
+    „löse den Merge-Konflikt“, „tagge den Release“, „schreib den Changelog-Eintrag“.
 skills/using-agent-skills/SKILL.md:
   description: >-
     Router über alle agent-skills-de-Skills mit Entscheidungsbaum. Nur verwenden, wenn der
