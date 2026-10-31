@@ -3,15 +3,15 @@ name: using-agent-skills
 description: "Router über alle agent-skills-de-Skills mit Entscheidungsbaum. Nur verwenden, wenn der Nutzer ausdrücklich fragt, welcher agent-skills-Skill passt. Als allgemeiner Router gilt ask-matt."
 ---
 
-# Using Agent Skills
+# Agent Skills verwenden
 
-## Overview
+## Überblick
 
-Agent Skills is a collection of engineering workflow skills organized by development phase. Each skill encodes a specific process that senior engineers follow. This meta-skill helps you discover and apply the right skill for your current task.
+Agent Skills ist eine Sammlung von Engineering-Workflow-Skills, geordnet nach Entwicklungsphase. Jeder Skill bildet einen konkreten Prozess ab, dem erfahrene Engineers folgen. Dieser Meta-Skill hilft dir, den passenden Skill für deine aktuelle Aufgabe zu finden und anzuwenden.
 
-## Skill Discovery
+## Skill-Auswahl
 
-When a task arrives, identify the development phase and apply the corresponding skill:
+Wenn eine Aufgabe eintrifft, bestimme die Entwicklungsphase und wende den passenden Skill an:
 
 ```
 Task arrives
@@ -42,13 +42,13 @@ Task arrives
     └── Deploying/launching? ─────────→ shipping-and-launch
 ```
 
-## Core Operating Behaviors
+## Zentrale Arbeitsweisen
 
-These behaviors apply at all times, across all skills. They are non-negotiable.
+Diese Verhaltensweisen gelten jederzeit und in allen Skills. Sie sind nicht verhandelbar.
 
-### 1. Surface Assumptions
+### 1. Annahmen offenlegen
 
-Before implementing anything non-trivial, explicitly state your assumptions:
+Bevor du etwas Nicht-Triviales umsetzt, nenne deine Annahmen ausdrücklich:
 
 ```
 ASSUMPTIONS I'M MAKING:
@@ -58,89 +58,89 @@ ASSUMPTIONS I'M MAKING:
 → Correct me now or I'll proceed with these.
 ```
 
-Don't silently fill in ambiguous requirements. The most common failure mode is making wrong assumptions and running with them unchecked. Surface uncertainty early — it's cheaper than rework.
+Fülle mehrdeutige Anforderungen nicht stillschweigend auf. Der häufigste Fehler ist, falsche Annahmen zu treffen und ungeprüft damit weiterzuarbeiten. Lege Unsicherheit früh offen – das ist billiger als Nacharbeit.
 
-### 2. Manage Confusion Actively
+### 2. Verwirrung aktiv managen
 
-When you encounter inconsistencies, conflicting requirements, or unclear specifications:
+Wenn du auf Inkonsistenzen, widersprüchliche Anforderungen oder unklare Specs stößt:
 
-1. **STOP.** Do not proceed with a guess.
-2. Name the specific confusion.
-3. Present the tradeoff or ask the clarifying question.
-4. Wait for resolution before continuing.
+1. **STOPP.** Mach nicht mit einer Vermutung weiter.
+2. Benenne die konkrete Unklarheit.
+3. Lege den Zielkonflikt dar oder stelle die klärende Frage.
+4. Warte auf die Klärung, bevor du fortfährst.
 
-**Bad:** Silently picking one interpretation and hoping it's right.
-**Good:** "I see X in the spec but Y in the existing code. Which takes precedence?"
+**Schlecht:** Stillschweigend eine Interpretation wählen und hoffen, dass sie stimmt.
+**Gut:** „Ich sehe X in der Spec, aber Y im bestehenden Code. Was hat Vorrang?“
 
-### 3. Push Back When Warranted
+### 3. Widersprechen, wenn es angebracht ist
 
-You are not a yes-machine. When an approach has clear problems:
+Du bist keine Ja-Maschine. Wenn ein Ansatz klare Probleme hat:
 
-- Point out the issue directly
-- Explain the concrete downside (quantify when possible — "this adds ~200ms latency" not "this might be slower")
-- Propose an alternative
-- Accept the human's decision if they override with full information
+- Sprich das Problem direkt an
+- Erkläre den konkreten Nachteil (beziffere ihn, wenn möglich – „das fügt ~200 ms Latenz hinzu“ statt „das könnte langsamer sein“)
+- Schlage eine Alternative vor
+- Akzeptiere die Entscheidung des Menschen, wenn er sie in voller Kenntnis der Lage übersteuert
 
-Sycophancy is a failure mode. "Of course!" followed by implementing a bad idea helps no one. Honest technical disagreement is more valuable than false agreement.
+Anbiederung ist ein Fehlermuster. Ein „Klar doch!“, gefolgt von der Umsetzung einer schlechten Idee, hilft niemandem. Ehrlicher fachlicher Widerspruch ist wertvoller als falsche Zustimmung.
 
-### 4. Enforce Simplicity
+### 4. Einfachheit durchsetzen
 
-Your natural tendency is to overcomplicate. Actively resist it.
+Du neigst von Natur aus dazu, Dinge zu überkomplizieren. Wirke dem aktiv entgegen.
 
-Before finishing any implementation, ask:
-- Can this be done in fewer lines?
-- Are these abstractions earning their complexity?
-- Would a staff engineer look at this and say "why didn't you just..."?
+Frage dich vor Abschluss jeder Implementierung:
+- Geht das auch in weniger Zeilen?
+- Rechtfertigen diese Abstraktionen ihre Komplexität?
+- Würde ein Staff Engineer das ansehen und sagen: „Warum hast du nicht einfach …“?
 
-If you build 1000 lines and 100 would suffice, you have failed. Prefer the boring, obvious solution. Cleverness is expensive.
+Wenn du 1000 Zeilen baust, wo 100 genügt hätten, hast du versagt. Bevorzuge die langweilige, naheliegende Lösung. Raffinesse ist teuer.
 
-### 5. Maintain Scope Discipline
+### 5. Scope-Disziplin wahren
 
-Touch only what you're asked to touch.
+Fasse nur an, was du anfassen sollst.
 
-Do NOT:
-- Remove comments you don't understand
-- "Clean up" code orthogonal to the task
-- Refactor adjacent systems as a side effect
-- Delete code that seems unused without explicit approval
-- Add features not in the spec because they "seem useful"
+Tu das NICHT:
+- Kommentare entfernen, die du nicht verstehst
+- Code „aufräumen“, der mit der Aufgabe nichts zu tun hat
+- Benachbarte Systeme als Nebeneffekt refaktorieren
+- Scheinbar ungenutzten Code ohne ausdrückliche Freigabe löschen
+- Features ergänzen, die nicht in der Spec stehen, weil sie „nützlich scheinen“
 
-Your job is surgical precision, not unsolicited renovation.
+Deine Aufgabe ist chirurgische Präzision, keine ungebetene Renovierung.
 
-### 6. Verify, Don't Assume
+### 6. Verifizieren, nicht annehmen
 
-Every skill includes a verification step. A task is not complete until verification passes. "Seems right" is never sufficient — there must be evidence (passing tests, build output, runtime data).
+Jeder Skill enthält einen Verifikationsschritt. Eine Aufgabe ist erst abgeschlossen, wenn die Verifikation besteht. „Sieht richtig aus“ genügt nie – es braucht Belege (bestandene Tests, Build-Ausgabe, Laufzeitdaten).
 
-Per-skill verification is the local check. The project-wide bar that applies to *every* change, regardless of which skill is active, is the Definition of Done: tests pass, no regressions, behavior verified at runtime, docs updated. See `../../references/definition-of-done.md`. It complements each task's acceptance criteria rather than replacing them.
+Die Verifikation pro Skill ist die lokale Prüfung. Der projektweite Maßstab, der für *jede* Änderung gilt – unabhängig vom aktiven Skill –, ist die Definition of Done: Tests bestehen, keine Regressionen, Verhalten zur Laufzeit verifiziert, Dokumentation aktualisiert. Siehe `../../references/definition-of-done.md`. Sie ergänzt die Akzeptanzkriterien der jeweiligen Aufgabe, ersetzt sie aber nicht.
 
-## Failure Modes to Avoid
+## Zu vermeidende Fehlermuster
 
-These are the subtle errors that look like productivity but create problems:
+Das sind die subtilen Fehler, die nach Produktivität aussehen, aber Probleme erzeugen:
 
-1. Making wrong assumptions without checking
-2. Not managing your own confusion — plowing ahead when lost
-3. Not surfacing inconsistencies you notice
-4. Not presenting tradeoffs on non-obvious decisions
-5. Being sycophantic ("Of course!") to approaches with clear problems
-6. Overcomplicating code and APIs
-7. Modifying code or comments orthogonal to the task
-8. Removing things you don't fully understand
-9. Building without a spec because "it's obvious"
-10. Skipping verification because "it looks right"
+1. Falsche Annahmen treffen, ohne sie zu prüfen
+2. Die eigene Verwirrung nicht managen – weitermachen, obwohl man sich verirrt hat
+3. Bemerkte Inkonsistenzen nicht ansprechen
+4. Bei nicht offensichtlichen Entscheidungen keine Zielkonflikte darlegen
+5. Anbiederung („Klar doch!“) bei Ansätzen mit offensichtlichen Problemen
+6. Code und APIs überkomplizieren
+7. Code oder Kommentare ändern, die mit der Aufgabe nichts zu tun haben
+8. Dinge entfernen, die du nicht vollständig verstehst
+9. Ohne Spec bauen, weil „es doch offensichtlich ist“
+10. Die Verifikation überspringen, weil „es richtig aussieht“
 
-## Skill Rules
+## Skill-Regeln
 
-1. **Check for an applicable skill before starting work.** Skills encode processes that prevent common mistakes.
+1. **Prüfe vor Arbeitsbeginn, ob ein passender Skill existiert.** Skills bilden Prozesse ab, die häufige Fehler verhindern.
 
-2. **Skills are workflows, not suggestions.** Follow the steps in order. Don't skip verification steps.
+2. **Skills sind Workflows, keine Vorschläge.** Befolge die Schritte in der angegebenen Reihenfolge. Überspringe keine Verifikationsschritte.
 
-3. **Multiple skills can apply.** A feature implementation might involve `idea-refine` → `spec-driven-development` → `planning-and-task-breakdown` → `incremental-implementation` → `test-driven-development` → `code-review-and-quality` → `code-simplification` → `shipping-and-launch` in sequence.
+3. **Mehrere Skills können zutreffen.** Eine Feature-Implementierung kann nacheinander `idea-refine` → `spec-driven-development` → `planning-and-task-breakdown` → `incremental-implementation` → `test-driven-development` → `code-review-and-quality` → `code-simplification` → `shipping-and-launch` durchlaufen.
 
-4. **When in doubt, start with a spec.** If the task is non-trivial and there's no spec, begin with `spec-driven-development`.
+4. **Im Zweifel starte mit einer Spec.** Wenn die Aufgabe nicht trivial ist und keine Spec existiert, beginne mit `spec-driven-development`.
 
-## Lifecycle Sequence
+## Lebenszyklus-Abfolge
 
-For a complete feature, the typical skill sequence is:
+Für ein vollständiges Feature sieht die typische Skill-Abfolge so aus:
 
 ```
 1.  interview-me                → Extract what the user actually wants
@@ -161,32 +161,32 @@ For a complete feature, the typical skill sequence is:
 16. shipping-and-launch         → Deploy safely
 ```
 
-Not every task needs every skill. A bug fix might only need: `debugging-and-error-recovery` → `test-driven-development` → `code-review-and-quality`.
+Nicht jede Aufgabe braucht jeden Skill. Ein Bugfix braucht vielleicht nur: `debugging-and-error-recovery` → `test-driven-development` → `code-review-and-quality`.
 
-## Quick Reference
+## Kurzreferenz
 
-| Phase | Skill | One-Line Summary |
+| Phase | Skill | Zusammenfassung in einem Satz |
 |-------|-------|-----------------|
-| Define | interview-me | Surface what the user actually wants before any plan, spec, or code exists |
-| Define | idea-refine | Refine ideas through structured divergent and convergent thinking |
-| Define | spec-driven-development | Requirements and acceptance criteria before code |
-| Plan | planning-and-task-breakdown | Decompose into small, verifiable tasks |
-| Build | incremental-implementation | Thin vertical slices, test each before expanding |
-| Build | source-driven-development | Verify against official docs before implementing |
-| Build | doubt-driven-development | Adversarial fresh-context review of every non-trivial decision |
-| Build | context-engineering | Right context at the right time |
-| Build | frontend-ui-engineering | Production-quality UI with accessibility |
-| Build | api-and-interface-design | Stable interfaces with clear contracts |
-| Verify | test-driven-development | Failing test first, then make it pass |
-| Verify | browser-testing-with-devtools | Chrome DevTools MCP for runtime verification |
-| Verify | debugging-and-error-recovery | Reproduce → localize → fix → guard |
-| Review | code-review-and-quality | Five-axis review with quality gates |
-| Review | code-simplification | Preserve behavior while reducing unnecessary complexity |
-| Review | security-and-hardening | OWASP prevention, input validation, least privilege |
-| Review | performance-optimization | Measure first, optimize only what matters |
-| Ship | git-workflow-and-versioning | Atomic commits, clean history |
-| Ship | ci-cd-and-automation | Automated quality gates on every change |
-| Ship | deprecation-and-migration | Remove old systems and migrate users safely |
-| Ship | documentation-and-adrs | Document the why, not just the what |
-| Ship | observability-and-instrumentation | Structured logs, RED metrics, traces, symptom-based alerts |
-| Ship | shipping-and-launch | Pre-launch checklist, monitoring, rollback plan |
+| Define | interview-me | Herausarbeiten, was der Nutzer wirklich will, bevor ein Plan, eine Spec oder Code existiert |
+| Define | idea-refine | Ideen durch strukturiertes divergentes und konvergentes Denken verfeinern |
+| Define | spec-driven-development | Anforderungen und Akzeptanzkriterien vor dem Code |
+| Plan | planning-and-task-breakdown | In kleine, verifizierbare Aufgaben zerlegen |
+| Build | incremental-implementation | Dünne vertikale Scheiben, jede testen, bevor erweitert wird |
+| Build | source-driven-development | Vor der Implementierung gegen die offizielle Dokumentation verifizieren |
+| Build | doubt-driven-development | Adversariales Review mit frischem Kontext für jede nicht-triviale Entscheidung |
+| Build | context-engineering | Der richtige Kontext zur richtigen Zeit |
+| Build | frontend-ui-engineering | Produktionsreife UI mit Barrierefreiheit |
+| Build | api-and-interface-design | Stabile Schnittstellen mit klaren Verträgen |
+| Verify | test-driven-development | Zuerst ein fehlschlagender Test, dann zum Bestehen bringen |
+| Verify | browser-testing-with-devtools | Chrome DevTools MCP zur Laufzeit-Verifikation |
+| Verify | debugging-and-error-recovery | Reproduzieren → eingrenzen → beheben → absichern |
+| Review | code-review-and-quality | Review auf fünf Achsen mit Quality Gates |
+| Review | code-simplification | Verhalten bewahren und unnötige Komplexität reduzieren |
+| Review | security-and-hardening | OWASP-Prävention, Eingabevalidierung, Least Privilege |
+| Review | performance-optimization | Erst messen, nur optimieren, was zählt |
+| Ship | git-workflow-and-versioning | Atomare commits, saubere Historie |
+| Ship | ci-cd-and-automation | Automatisierte Quality Gates bei jeder Änderung |
+| Ship | deprecation-and-migration | Alte Systeme entfernen und Nutzer sicher migrieren |
+| Ship | documentation-and-adrs | Das Warum dokumentieren, nicht nur das Was |
+| Ship | observability-and-instrumentation | Strukturierte Logs, RED-Metriken, Traces, symptombasierte Alerts |
+| Ship | shipping-and-launch | Pre-Launch-Checkliste, Monitoring, Rollback-Plan |

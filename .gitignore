@@ -8,3 +8,5 @@ node_modules/
 evals/results/
 evals/plugin/results/
 __pycache__/
+.i18n/translations.lock.flock
+.i18n/last-run.log

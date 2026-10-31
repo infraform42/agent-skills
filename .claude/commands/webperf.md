@@ -1,33 +1,33 @@
 ---
-description: Run a web performance audit via the web-performance-auditor persona
+description: Führt ein Web-Performance-Audit über die Persona web-performance-auditor durch
 disable-model-invocation: true
 ---
 
-`/webperf` targets web applications specifically. Do not use it for utility libraries, CLIs, or server-only code with no browser-facing output.
+`/webperf` zielt speziell auf Webanwendungen. Verwende den Command nicht für Utility-Bibliotheken, CLIs oder reinen Server-Code ohne Ausgabe im Browser.
 
-## Determine the mode
+## Modus bestimmen
 
-**Deep mode** — activate when any of these is available:
-- A Lighthouse JSON report file (e.g. `npx lighthouse <url> --output json --output-path ./report.json`, or `npx -p chrome-devtools-mcp chrome-devtools lighthouse_audit --output-format=json` from the Chrome DevTools MCP CLI)
-- A PageSpeed Insights JSON response (includes Lighthouse + CrUX)
-- A CrUX API response (requires `CRUX_API_KEY` or `GOOGLE_API_KEY`)
-- A DevTools performance trace
-- A live URL plus the `chrome-devtools` MCP server configured in the harness (the agent can capture metrics directly via `lighthouse_audit` and `performance_*` tools)
-- The Chrome DevTools MCP CLI invoked locally (via `npx -p chrome-devtools-mcp chrome-devtools <tool>` or after `npm i -g chrome-devtools-mcp`) — the user runs commands like `chrome-devtools lighthouse_audit --output-format=json` and passes the JSON output to the agent
+**Deep-Modus** — aktiviere ihn, sobald eines der folgenden Elemente vorliegt:
+- Eine Lighthouse-JSON-Report-Datei (z. B. `npx lighthouse <url> --output json --output-path ./report.json` oder `npx -p chrome-devtools-mcp chrome-devtools lighthouse_audit --output-format=json` aus der Chrome-DevTools-MCP-CLI)
+- Eine PageSpeed-Insights-JSON-Antwort (enthält Lighthouse + CrUX)
+- Eine CrUX-API-Antwort (erfordert `CRUX_API_KEY` oder `GOOGLE_API_KEY`)
+- Ein DevTools-Performance-Trace
+- Eine Live-URL plus der im Harness konfigurierte MCP-Server `chrome-devtools` (der Agent kann Metriken direkt über `lighthouse_audit` und die `performance_*`-Tools erfassen)
+- Die lokal aufgerufene Chrome-DevTools-MCP-CLI (über `npx -p chrome-devtools-mcp chrome-devtools <tool>` oder nach `npm i -g chrome-devtools-mcp`) — der Nutzer führt Befehle wie `chrome-devtools lighthouse_audit --output-format=json` aus und übergibt die JSON-Ausgabe an den Agent
 
-**Quick mode** — default when none of the above are available. The agent scans source code for structural anti-patterns and labels every finding as `potential impact`.
+**Quick-Modus** — Standard, wenn nichts davon vorliegt. Der Agent durchsucht den Quellcode nach strukturellen Anti-Patterns und kennzeichnet jeden Befund als `potential impact`.
 
-## Run the audit
+## Audit durchführen
 
-Spawn the `web-performance-auditor` subagent. Pass it explicitly:
+Starte den Subagent `web-performance-auditor`. Übergib ihm explizit:
 
-- The files, components, or diff under review
-- Any artifact paths (Lighthouse JSON, PSI JSON, CrUX response, trace) or pasted JSON content
-- The target URL or page name when known
-- A note on which mode you expect (Quick or Deep), so the agent surfaces missing inputs if Deep was intended
+- Die Dateien, Komponenten oder den Diff, die geprüft werden sollen
+- Alle Artefaktpfade (Lighthouse-JSON, PSI-JSON, CrUX-Antwort, Trace) oder eingefügte JSON-Inhalte
+- Die Ziel-URL oder den Seitennamen, sofern bekannt
+- Einen Hinweis, welchen Modus du erwartest (Quick oder Deep), damit der Agent fehlende Eingaben meldet, falls Deep gemeint war
 
-The subagent returns a scorecard (only populated with sourced values), a ranked list of findings, positive observations, and proactive recommendations.
+Der Subagent liefert eine Scorecard (nur mit belegten Werten befüllt), eine nach Priorität sortierte Liste der Befunde, positive Beobachtungen und proaktive Empfehlungen.
 
-## Output
+## Ausgabe
 
-Return the full audit report to the user. No synthesis or merge step is needed — this is a single-persona command.
+Gib den vollständigen Audit-Report an den Nutzer zurück. Ein Zusammenführungs- oder Synthese-Schritt ist nicht nötig — dies ist ein Command mit einer einzigen Persona.

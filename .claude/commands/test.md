@@ -1,20 +1,20 @@
 ---
-description: Run TDD workflow — write failing tests, implement, verify. For bugs, use the Prove-It pattern.
+description: Führt den TDD-Workflow aus – fehlschlagende Tests schreiben, implementieren, verifizieren. Bei Bugs gilt das Prove-It-Muster.
 disable-model-invocation: true
 ---
 
-Invoke the agent-skills-de:test-driven-development skill.
+Rufe den Skill agent-skills-de:test-driven-development auf.
 
-For new features:
-1. Write tests that describe the expected behavior (they should FAIL)
-2. Implement the code to make them pass
-3. Refactor while keeping tests green
+Für neue Features:
+1. Schreibe Tests, die das erwartete Verhalten beschreiben (sie sollten FEHLSCHLAGEN)
+2. Implementiere den Code so, dass die Tests bestehen
+3. Refaktoriere, während die Tests grün bleiben
 
-For bug fixes (Prove-It pattern):
-1. Write a test that reproduces the bug (must FAIL)
-2. Confirm the test fails
-3. Implement the fix
-4. Confirm the test passes
-5. Run the full test suite for regressions
+Für Bugfixes (Prove-It-Muster):
+1. Schreibe einen Test, der den Bug reproduziert (muss FEHLSCHLAGEN)
+2. Bestätige, dass der Test fehlschlägt
+3. Implementiere den Fix
+4. Bestätige, dass der Test besteht
+5. Führe die gesamte Test-Suite aus, um Regressionen zu erkennen
 
-For browser-related issues, also invoke agent-skills-de:browser-testing-with-devtools to verify with Chrome DevTools MCP.
+Bei browserbezogenen Problemen rufe zusätzlich agent-skills-de:browser-testing-with-devtools auf, um mit dem Chrome DevTools MCP zu verifizieren.

@@ -1,82 +1,82 @@
 ---
 name: shipping-and-launch
-description: Prepares production launches. Use when preparing to deploy to production, or when asking what needs to be in place before shipping. Use when you need a pre-launch checklist, when setting up monitoring, when planning a staged rollout, or when you need a rollback strategy.
+description: Bereitet Produktions-Launches vor (Pre-Launch-Checkliste, Monitoring, gestaffelter Rollout, Rollback-Strategie). Verwenden, wenn ein Deployment in die Produktion vorbereitet wird oder wenn geklärt werden soll, was vor dem Shipping vorhanden sein muss. Verwenden bei Pre-Launch-Checkliste, Monitoring-Einrichtung, gestaffeltem Rollout oder Rollback-Strategie. Typische Formulierungen „bereite den Launch vor“, „was brauchen wir vor dem Go-live?“, „erstell eine Pre-Launch-Checkliste“, „plane den gestaffelten Rollout“, „schreib einen Rollback-Plan“.
 ---
 
 # Shipping and Launch
 
-## Overview
+## Überblick
 
-Ship with confidence. The goal is not just to deploy — it's to deploy safely, with monitoring in place, a rollback plan ready, and a clear understanding of what success looks like. Every launch should be reversible, observable, and incremental.
+Liefere mit Zuversicht aus. Das Ziel ist nicht nur zu deployen, sondern sicher zu deployen: mit eingerichtetem Monitoring, einem bereitliegenden Rollback-Plan und einem klaren Verständnis davon, wie Erfolg aussieht. Jeder Launch sollte umkehrbar, beobachtbar und inkrementell sein.
 
-## When to Use
+## Wann verwenden
 
-- Deploying a feature to production for the first time
-- Releasing a significant change to users
-- Migrating data or infrastructure
-- Opening a beta or early access program
-- Any deployment that carries risk (all of them)
+- Ein Feature zum ersten Mal in die Produktion deployen
+- Eine wesentliche Änderung für Nutzer veröffentlichen
+- Daten oder Infrastruktur migrieren
+- Ein Beta- oder Early-Access-Programm eröffnen
+- Jedes Deployment, das ein Risiko birgt (also alle)
 
-## The Pre-Launch Checklist
+## Die Pre-Launch-Checkliste
 
-### Code Quality
+### Codequalität
 
-- [ ] All tests pass (unit, integration, e2e)
-- [ ] Build succeeds with no warnings
-- [ ] Lint and type checking pass
-- [ ] Code reviewed and approved
-- [ ] No TODO comments that should be resolved before launch
-- [ ] No `console.log` debugging statements in production code
-- [ ] Error handling covers expected failure modes
+- [ ] Alle Tests bestehen (Unit, Integration, e2e)
+- [ ] Der Build läuft ohne Warnungen durch
+- [ ] Lint und Typprüfung bestehen
+- [ ] Code wurde geprüft und freigegeben
+- [ ] Keine TODO-Kommentare, die vor dem Launch erledigt werden sollten
+- [ ] Keine `console.log`-Debugging-Anweisungen im Produktionscode
+- [ ] Die Fehlerbehandlung deckt die erwarteten Fehlerfälle ab
 
-### Security
+### Sicherheit
 
-- [ ] No secrets in code or version control
-- [ ] The ecosystem's dependency audit (`npm audit`, `pip-audit`, `cargo audit`, ...) shows no critical or high vulnerabilities
-- [ ] Input validation on all user-facing endpoints
-- [ ] Authentication and authorization checks in place
-- [ ] Security headers configured (CSP, HSTS, etc.)
-- [ ] Rate limiting on authentication endpoints
-- [ ] CORS configured to specific origins (not wildcard)
+- [ ] Keine Secrets im Code oder in der Versionsverwaltung
+- [ ] Das Dependency-Audit des Ökosystems (`npm audit`, `pip-audit`, `cargo audit`, ...) zeigt keine kritischen oder hohen Schwachstellen
+- [ ] Eingabevalidierung an allen nutzerseitigen Endpunkten
+- [ ] Authentifizierungs- und Autorisierungsprüfungen sind vorhanden
+- [ ] Security-Header sind konfiguriert (CSP, HSTS usw.)
+- [ ] Rate Limiting an Authentifizierungs-Endpunkten
+- [ ] CORS ist auf konkrete Origins konfiguriert (kein Wildcard)
 
 ### Performance
 
-- [ ] Core Web Vitals within "Good" thresholds
-- [ ] No N+1 queries in critical paths
-- [ ] Images optimized (compression, responsive sizes, lazy loading)
-- [ ] Bundle size within budget
-- [ ] Database queries have appropriate indexes
-- [ ] Caching configured for static assets and repeated queries
+- [ ] Core Web Vitals innerhalb der „Good“-Schwellenwerte
+- [ ] Keine N+1-Queries in kritischen Pfaden
+- [ ] Bilder sind optimiert (Kompression, responsive Größen, Lazy Loading)
+- [ ] Bundle-Größe innerhalb des Budgets
+- [ ] Datenbankabfragen haben passende Indizes
+- [ ] Caching ist für statische Assets und wiederholte Abfragen konfiguriert
 
-### Accessibility
+### Barrierefreiheit
 
-- [ ] Keyboard navigation works for all interactive elements
-- [ ] Screen reader can convey page content and structure
-- [ ] Color contrast meets WCAG 2.1 AA (4.5:1 for text)
-- [ ] Focus management correct for modals and dynamic content
-- [ ] Error messages are descriptive and associated with form fields
-- [ ] No accessibility warnings in axe-core or Lighthouse
+- [ ] Tastaturnavigation funktioniert für alle interaktiven Elemente
+- [ ] Ein Screenreader kann Inhalt und Struktur der Seite vermitteln
+- [ ] Farbkontrast erfüllt WCAG 2.1 AA (4,5:1 für Text)
+- [ ] Fokusmanagement ist für Modals und dynamische Inhalte korrekt
+- [ ] Fehlermeldungen sind aussagekräftig und mit den Formularfeldern verknüpft
+- [ ] Keine Barrierefreiheits-Warnungen in axe-core oder Lighthouse
 
-### Infrastructure
+### Infrastruktur
 
-- [ ] Environment variables set in production
-- [ ] Database migrations applied (or ready to apply)
-- [ ] DNS and SSL configured
-- [ ] CDN configured for static assets
-- [ ] Logging and error reporting configured
-- [ ] Health check endpoint exists and responds
+- [ ] Umgebungsvariablen sind in der Produktion gesetzt
+- [ ] Datenbank-Migrationen sind angewendet (oder anwendungsbereit)
+- [ ] DNS und SSL sind konfiguriert
+- [ ] CDN ist für statische Assets konfiguriert
+- [ ] Logging und Error Reporting sind konfiguriert
+- [ ] Ein Health-Check-Endpunkt existiert und antwortet
 
-### Documentation
+### Dokumentation
 
-- [ ] README updated with any new setup requirements
-- [ ] API documentation current
-- [ ] ADRs written for any architectural decisions
-- [ ] Changelog updated
-- [ ] User-facing documentation updated (if applicable)
+- [ ] README um neue Setup-Anforderungen ergänzt
+- [ ] API-Dokumentation ist aktuell
+- [ ] ADRs für alle Architekturentscheidungen geschrieben
+- [ ] Changelog aktualisiert
+- [ ] Nutzerdokumentation aktualisiert (falls zutreffend)
 
-## Feature Flag Strategy
+## Feature-Flag-Strategie
 
-Ship behind feature flags to decouple deployment from release:
+Liefere hinter Feature-Flags aus, um Deployment und Release zu entkoppeln:
 
 ```typescript
 // Feature flag check
@@ -91,7 +91,7 @@ if (flags.taskSharing) {
 return null;
 ```
 
-**Feature flag lifecycle:**
+**Lebenszyklus eines Feature-Flags:**
 
 ```
 1. DEPLOY with flag OFF     → Code is in production but inactive
@@ -101,15 +101,15 @@ return null;
 5. CLEAN UP                 → Remove flag and dead code path after full rollout
 ```
 
-**Rules:**
-- Every feature flag has an owner and an expiration date
-- Clean up flags within 2 weeks of full rollout
-- Don't nest feature flags (creates exponential combinations)
-- Test both flag states (on and off) in CI
+**Regeln:**
+- Jedes Feature-Flag hat einen Verantwortlichen und ein Ablaufdatum
+- Räume Flags innerhalb von 2 Wochen nach dem vollständigen Rollout auf
+- Verschachtele Feature-Flags nicht (erzeugt exponentiell viele Kombinationen)
+- Teste beide Flag-Zustände (an und aus) in CI
 
-## Staged Rollout
+## Gestaffelter Rollout
 
-### The Rollout Sequence
+### Die Rollout-Abfolge
 
 ```
 1. DEPLOY to staging
@@ -139,29 +139,29 @@ return null;
    └── Clean up feature flag
 ```
 
-### Rollout Decision Thresholds
+### Schwellenwerte für Rollout-Entscheidungen
 
-Use these thresholds to decide whether to advance, hold, or roll back at each stage:
+Nutze diese Schwellenwerte, um in jeder Phase zu entscheiden, ob du fortfährst, anhältst oder zurückrollst:
 
-| Metric | Advance (green) | Hold and investigate (yellow) | Roll back (red) |
-|--------|-----------------|-------------------------------|-----------------|
-| Error rate | Within 10% of baseline | 10-100% above baseline | >2x baseline |
-| P95 latency | Within 20% of baseline | 20-50% above baseline | >50% above baseline |
-| Client JS errors | No new error types | New errors at <0.1% of sessions | New errors at >0.1% of sessions |
-| Business metrics | Neutral or positive | Decline <5% (may be noise) | Decline >5% |
+| Metrik | Fortfahren (grün) | Anhalten und untersuchen (gelb) | Zurückrollen (rot) |
+|--------|-------------------|---------------------------------|--------------------|
+| Fehlerrate | Innerhalb von 10 % der Baseline | 10–100 % über der Baseline | >2x Baseline |
+| P95-Latenz | Innerhalb von 20 % der Baseline | 20–50 % über der Baseline | >50 % über der Baseline |
+| Client-JS-Fehler | Keine neuen Fehlertypen | Neue Fehler bei <0,1 % der Sessions | Neue Fehler bei >0,1 % der Sessions |
+| Geschäftsmetriken | Neutral oder positiv | Rückgang <5 % (kann Rauschen sein) | Rückgang >5 % |
 
-### When to Roll Back
+### Wann du zurückrollst
 
-Roll back immediately if:
-- Error rate increases by more than 2x baseline
-- P95 latency increases by more than 50%
-- User-reported issues spike
-- Data integrity issues detected
-- Security vulnerability discovered
+Rolle sofort zurück, wenn:
+- die Fehlerrate um mehr als das 2-Fache der Baseline steigt
+- die P95-Latenz um mehr als 50 % steigt
+- von Nutzern gemeldete Issues sprunghaft zunehmen
+- Datenintegritätsprobleme erkannt werden
+- eine Sicherheitslücke entdeckt wird
 
-## Monitoring and Observability
+## Monitoring und Observability
 
-### What to Monitor
+### Was du überwachst
 
 ```
 Application metrics:
@@ -228,9 +228,9 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 });
 ```
 
-### Post-Launch Verification
+### Verifikation nach dem Launch
 
-In the first hour after launch:
+In der ersten Stunde nach dem Launch:
 
 ```
 1. Check health endpoint returns 200
@@ -241,9 +241,9 @@ In the first hour after launch:
 6. Confirm rollback mechanism works (dry run if possible)
 ```
 
-## Error Budget Release Gate
+## Error-Budget als Release-Gate
 
-Your service's error budget — the fraction of requests or time your SLO allows to fail — determines whether it's safe to ship. Use it as an objective gate — not a negotiation:
+Das Error-Budget deines Services – der Anteil an Requests oder Zeit, den dein SLO als fehlgeschlagen zulässt – bestimmt, ob Shipping sicher ist. Nutze es als objektives Gate, nicht als Verhandlungssache:
 
 ```
 Budget remaining > 20%  →  Ship normally; monitor closely
@@ -252,11 +252,11 @@ Budget exhausted        →  Freeze feature work; focus entirely on reliability
 Budget resets           →  Resume normal pace; bake in the fix that recovered it
 ```
 
-A high burn rate during a canary (consuming budget faster than the baseline pace) is a **hold** signal in the rollout thresholds table above — treat it the same as an elevated error rate.
+Eine hohe Burn Rate während eines Canary (das Budget wird schneller verbraucht als im Baseline-Tempo) ist in der obigen Tabelle der Rollout-Schwellenwerte ein **Anhalten**-Signal – behandle sie genauso wie eine erhöhte Fehlerrate.
 
-## Rollback Strategy
+## Rollback-Strategie
 
-Every deployment needs a rollback plan before it happens:
+Jedes Deployment braucht einen Rollback-Plan, bevor es stattfindet:
 
 ```markdown
 ## Rollback Plan for [Feature/Release]
@@ -282,55 +282,55 @@ Every deployment needs a rollback plan before it happens:
 - Redeploy previous version: < 5 minutes
 - Database rollback: < 15 minutes
 ```
-## See Also
+## Siehe auch
 
-- For the project-wide Definition of Done that every change must clear before this checklist, see `../../references/definition-of-done.md`
-- For security pre-launch checks, see `../../references/security-checklist.md`
-- For performance pre-launch checklist, see `../../references/performance-checklist.md`
-- For accessibility verification before launch, see `../../references/accessibility-checklist.md`
-- For the alerting rules and SLO-tied thresholds, see `observability-and-instrumentation`
+- Die projektweite Definition of Done, die jede Änderung vor dieser Checkliste erfüllen muss, findest du in `../../references/definition-of-done.md`
+- Sicherheitsprüfungen vor dem Launch findest du in `../../references/security-checklist.md`
+- Die Performance-Checkliste vor dem Launch findest du in `../../references/performance-checklist.md`
+- Die Verifikation der Barrierefreiheit vor dem Launch findest du in `../../references/accessibility-checklist.md`
+- Alerting-Regeln und SLO-gebundene Schwellenwerte findest du in `observability-and-instrumentation`
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Realität |
 |---|---|
-| "It works in staging, it'll work in production" | Production has different data, traffic patterns, and edge cases. Monitor after deploy. |
-| "We don't need feature flags for this" | Every feature benefits from a kill switch. Even "simple" changes can break things. |
-| "Monitoring is overhead" | Not having monitoring means you discover problems from user complaints instead of dashboards. |
-| "We'll add monitoring later" | Add it before launch. You can't debug what you can't see. |
-| "Rolling back is admitting failure" | Rolling back is responsible engineering. Shipping a broken feature is the failure. |
-| "The error rate looks fine, let's keep shipping" | Check the burn rate, not just the current error rate. Consuming budget faster than baseline is a hold signal even when individual thresholds are green. |
+| „Es funktioniert im Staging, also funktioniert es auch in der Produktion“ | Die Produktion hat andere Daten, Traffic-Muster und Randfälle. Überwache nach dem Deployment. |
+| „Dafür brauchen wir keine Feature-Flags“ | Jedes Feature profitiert von einem Kill-Switch. Selbst „einfache“ Änderungen können etwas kaputt machen. |
+| „Monitoring ist Overhead“ | Ohne Monitoring erfährst du von Problemen durch Nutzerbeschwerden statt durch Dashboards. |
+| „Monitoring ergänzen wir später“ | Richte es vor dem Launch ein. Du kannst nicht debuggen, was du nicht siehst. |
+| „Ein Rollback ist ein Eingeständnis des Scheiterns“ | Ein Rollback ist verantwortungsvolles Engineering. Das Scheitern ist, ein kaputtes Feature auszuliefern. |
+| „Die Fehlerrate sieht gut aus, liefern wir weiter aus“ | Prüfe die Burn Rate, nicht nur die aktuelle Fehlerrate. Ein schnellerer Budgetverbrauch als die Baseline ist ein Anhalten-Signal, auch wenn einzelne Schwellenwerte grün sind. |
 
-## Red Flags
+## Warnsignale
 
-- Deploying without a rollback plan
-- No monitoring or error reporting in production
-- Big-bang releases (everything at once, no staging)
-- Feature flags with no expiration or owner
-- No one monitoring the deploy for the first hour
-- Production environment configuration done by memory, not code
-- "It's Friday afternoon, let's ship it"
-- Error budget exhausted but feature work continues unchanged
+- Deployment ohne Rollback-Plan
+- Kein Monitoring oder Error Reporting in der Produktion
+- Big-Bang-Releases (alles auf einmal, kein Staging)
+- Feature-Flags ohne Ablaufdatum oder Verantwortlichen
+- Niemand überwacht das Deployment in der ersten Stunde
+- Konfiguration der Produktionsumgebung aus dem Gedächtnis statt als Code
+- „Es ist Freitagnachmittag, liefern wir es aus“
+- Error-Budget ist aufgebraucht, aber die Feature-Arbeit läuft unverändert weiter
 
-## Verification
+## Verifikation
 
-Before deploying:
+Vor dem Deployment:
 
-- [ ] Pre-launch checklist completed (all sections green)
-- [ ] Feature flag configured (if applicable)
-- [ ] Rollback plan documented
-- [ ] Monitoring dashboards set up
-- [ ] Team notified of deployment
+- [ ] Pre-Launch-Checkliste abgeschlossen (alle Abschnitte grün)
+- [ ] Feature-Flag konfiguriert (falls zutreffend)
+- [ ] Rollback-Plan dokumentiert
+- [ ] Monitoring-Dashboards eingerichtet
+- [ ] Team über das Deployment informiert
 
-After deploying:
+Nach dem Deployment:
 
-- [ ] Health check returns 200
-- [ ] Error rate is normal
-- [ ] Latency is normal
-- [ ] Critical user flow works
-- [ ] Logs are flowing
-- [ ] Rollback tested or verified ready
+- [ ] Health-Check liefert 200
+- [ ] Fehlerrate ist normal
+- [ ] Latenz ist normal
+- [ ] Kritischer Nutzerfluss funktioniert
+- [ ] Logs fließen
+- [ ] Rollback getestet oder als bereit verifiziert
 
-For every shipped service:
+Für jeden ausgelieferten Service:
 
-- [ ] Error budget policy in place: know what action to take when budget drops below 20% and when it's exhausted
+- [ ] Error-Budget-Policy ist vorhanden: Du weißt, welche Maßnahme greift, wenn das Budget unter 20 % fällt und wenn es aufgebraucht ist

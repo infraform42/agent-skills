@@ -30,8 +30,17 @@ git switch de && git merge main
 claude plugin validate .
 ```
 
-Konflikte in `description`-Zeilen, Manifesten oder Commands: Upstream-Fassung nehmen, dann `tools/fork_manifest.py` erneut ausführen.
+Konflikte in `description`-Zeilen, Manifesten oder Commands: Upstream-Fassung nehmen, dann `tools/fork_manifest.py` erneut ausführen. Danach geänderte Dateien neu übersetzen (nächster Abschnitt).
 
-## Offen
+## Übersetzung
 
-- Phase 2: Übersetzung ins Deutsche nach dem Muster von `infraform42/skills` (`tools/i18n.py`, `.i18n/translator-prompt.md`).
+Alle `SKILL.md`, Commands (`.claude/commands/*.md`) und Agents (`agents/*.md`) sind ins Deutsche übersetzt, nach dem Muster von `infraform42/skills`. Unterlagen von Skills (`references/`, `examples.md` usw.) bleiben englisch.
+
+```bash
+~/venvs/skills-i18n/bin/python -I tools/i18n.py stale   # neu oder veraltet gegenüber main
+tools/translate-stale.sh                                # übersetzt alles Offene (4 parallel), dann fork_manifest.py
+```
+
+- Übersetzt wird mit `claude -p` (Sonnet), Regeln und Glossar in `.i18n/translator-prompt.md`, Stand in `.i18n/translations.lock.json`.
+- `i18n.py` prüft Frontmatter, Codeblöcke und Inline-Code. Bei „Inline-Code verändert“ die Rohausgabe (`$TMPDIR/i18n_<pfad>`) korrigieren oder erneut übersetzen.
+- Ist eine `description` mit deutschen Triggern länger als 1024 Zeichen, eine feste Fassung in `.i18n/overrides.yaml` setzen.

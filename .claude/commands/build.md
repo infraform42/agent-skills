@@ -1,45 +1,45 @@
 ---
-description: Implement tasks incrementally — build, test, verify, commit. Add "auto" to run the whole plan in one approved pass.
+description: Implementiert Aufgaben inkrementell – bauen, testen, verifizieren, committen. Mit dem Zusatz "auto" läuft der gesamte Plan in einem einzigen freigegebenen Durchgang.
 disable-model-invocation: true
 ---
 
-Invoke the agent-skills-de:incremental-implementation skill alongside agent-skills-de:test-driven-development.
+Rufe den Skill agent-skills-de:incremental-implementation zusammen mit agent-skills-de:test-driven-development auf.
 
-## Modes
+## Modi
 
-- **`/build`** — implement the *next* pending task, then stop (careful, one slice at a time).
-- **`/build auto`** — generate the plan if needed, get a single approval, then implement *every* task without stopping between them.
+- **`/build`** — Implementiere die *nächste* offene Aufgabe und halte dann an (vorsichtig, jeweils eine Scheibe).
+- **`/build auto`** — Erzeuge bei Bedarf den Plan, hole eine einmalige Freigabe ein und implementiere dann *jede* Aufgabe, ohne zwischendurch anzuhalten.
 
-`$ARGUMENTS` selects the mode. Treat `auto` (canonical) or `all` as autonomous mode; anything else (or empty) is the default single-task mode. Note: autonomous mode is not faster *per task* — it runs the same test-driven loop — it only removes the human stepping *between* tasks.
+`$ARGUMENTS` wählt den Modus. Behandle `auto` (kanonisch) oder `all` als autonomen Modus; alles andere (oder leer) ist der Standardmodus mit einer einzelnen Aufgabe. Hinweis: Der autonome Modus ist nicht schneller *pro Aufgabe* – er durchläuft dieselbe testgetriebene Schleife –, er entfällt lediglich das manuelle Weiterschalten *zwischen* den Aufgaben.
 
-## Default: one task
+## Standard: eine Aufgabe
 
-Pick the next pending task from the plan. Then:
+Wähle die nächste offene Aufgabe aus dem Plan. Danach:
 
-1. Read the task's acceptance criteria
-2. Load relevant context (existing code, patterns, types)
-3. Write a failing test for the expected behavior (RED)
-4. Implement the minimum code to pass the test (GREEN)
-5. Run the full test suite to check for regressions
-6. Run the build to verify compilation
-7. Commit with a descriptive message
-8. Mark the task complete and stop
+1. Lies die Akzeptanzkriterien der Aufgabe
+2. Lade den relevanten Kontext (bestehender Code, Muster, Typen)
+3. Schreibe einen fehlschlagenden Test für das erwartete Verhalten (RED)
+4. Implementiere den minimalen Code, damit der Test besteht (GREEN)
+5. Führe die komplette Test-Suite aus, um Regressionen zu erkennen
+6. Führe den Build aus, um die Kompilierung zu verifizieren
+7. Committe mit einer aussagekräftigen Nachricht
+8. Markiere die Aufgabe als erledigt und halte an
 
-## Autonomous: the whole plan (`/build auto`)
+## Autonom: der gesamte Plan (`/build auto`)
 
-Use this once a spec exists and you want to collapse plan + build into one run. It removes the manual stepping between tasks — **not** the verification. Every task still earns a passing test and its own commit.
+Nutze das, sobald eine Spec existiert und du Planung und Umsetzung in einem Durchlauf zusammenfassen willst. Es entfällt das manuelle Weiterschalten zwischen den Aufgaben – **nicht** die Verifikation. Jede Aufgabe braucht weiterhin einen bestandenen Test und einen eigenen commit.
 
-1. **Require a spec.** Look only for a spec at a known path: `SPEC.md` at the repo root, `docs/SPEC.md`, or a file under `spec/`. A README or arbitrary doc does **not** count. If none exists, stop and tell the user to run `/spec` first — do not invent requirements.
-2. **Establish a clean baseline.** Run `git status --porcelain`. If there are uncommitted changes outside the expected planning artifacts (`SPEC.md`, `docs/SPEC.md`, `spec/*`, `tasks/plan.md`, `tasks/todo.md`), stop and ask the user to commit, stash, or confirm how to handle them. Autonomous per-task commits must not absorb unrelated local work, or the clean-rollback guarantee breaks.
-3. **Plan if needed.** If there is no `tasks/plan.md`, invoke agent-skills-de:planning-and-task-breakdown to generate one.
-4. **Single checkpoint.** Present the full plan and wait for an unambiguous affirmative (e.g. "approve", "go", "yes"). Treat hedged responses ("looks reasonable", "I guess") as **not** approved. This is the only human gate — after approval, run autonomously. If you generated `tasks/plan.md`, commit it as a single preparatory commit now so it doesn't bleed into the first task's commit.
-5. **Execute every task in dependency order.** Use each task's declared dependencies; if they aren't explicit, execute in the order the plan lists them. For each task, run the full default loop above (RED → GREEN → regression → build → commit → mark complete). Stage only the files that task touched plus its task-status update — never `git add -A` blindly — and make one commit per task so any point is a clean rollback.
-6. **Stop and ask the user** (do not push through) when:
-   - a test can't be made to pass or the build breaks without an obvious fix → follow agent-skills-de:debugging-and-error-recovery
-   - the spec is ambiguous, or a task needs a decision the spec doesn't cover
-   - a task is high-risk or irreversible — auth/permission changes, destructive data migrations, payments, deletions, deploys, anything touching secrets, **or anything you can't undo with `git revert`** → follow agent-skills-de:doubt-driven-development and get explicit sign-off before continuing
+1. **Spec voraussetzen.** Suche ausschließlich an bekannten Pfaden nach einer Spec: `SPEC.md` im Repo-Root, `docs/SPEC.md` oder eine Datei unter `spec/`. Eine README oder ein beliebiges Dokument zählt **nicht**. Existiert keine, brich ab und weise den Nutzer an, zuerst `/spec` auszuführen – erfinde keine Anforderungen.
+2. **Sauberen Ausgangszustand herstellen.** Führe `git status --porcelain` aus. Gibt es uncommittete Änderungen außerhalb der erwarteten Planungsartefakte (`SPEC.md`, `docs/SPEC.md`, `spec/*`, `tasks/plan.md`, `tasks/todo.md`), brich ab und bitte den Nutzer, zu committen, zu stashen oder zu bestätigen, wie damit umzugehen ist. Die autonomen commits pro Aufgabe dürfen keine unbeteiligte lokale Arbeit mitnehmen, sonst gilt die Garantie eines sauberen Rollbacks nicht mehr.
+3. **Bei Bedarf planen.** Existiert keine `tasks/plan.md`, rufe agent-skills-de:planning-and-task-breakdown auf, um eine zu erzeugen.
+4. **Einziger Checkpoint.** Lege den vollständigen Plan vor und warte auf eine eindeutige Zustimmung (z. B. „approve“, „go“, „yes“). Behandle zögerliche Antworten („sieht vernünftig aus“, „na gut“) als **nicht** freigegeben. Das ist die einzige menschliche Hürde – nach der Freigabe läuft alles autonom. Hast du `tasks/plan.md` erzeugt, committe sie jetzt als einen einzelnen vorbereitenden commit, damit sie nicht in den commit der ersten Aufgabe einfließt.
+5. **Jede Aufgabe in Abhängigkeitsreihenfolge ausführen.** Nutze die deklarierten Abhängigkeiten jeder Aufgabe; sind sie nicht explizit angegeben, arbeite in der Reihenfolge, in der der Plan die Aufgaben aufführt. Durchlaufe für jede Aufgabe die vollständige Standardschleife von oben (RED → GREEN → Regression → Build → commit → als erledigt markieren). Stage nur die Dateien, die diese Aufgabe berührt hat, plus ihr Statusupdate – niemals blind `git add -A` – und erstelle pro Aufgabe einen commit, damit jeder Punkt ein sauberer Rollback-Punkt ist.
+6. **Halte an und frage den Nutzer** (nicht einfach durchdrücken), wenn:
+   - ein Test nicht zum Bestehen gebracht werden kann oder der Build ohne naheliegende Lösung bricht → folge agent-skills-de:debugging-and-error-recovery
+   - die Spec mehrdeutig ist oder eine Aufgabe eine Entscheidung erfordert, die die Spec nicht abdeckt
+   - eine Aufgabe hochriskant oder irreversibel ist – Änderungen an Auth/Berechtigungen, destruktive Daten-Migrationen, Zahlungen, Löschungen, Deployments, alles, was Secrets berührt, **oder alles, was du nicht mit `git revert` rückgängig machen kannst** → folge agent-skills-de:doubt-driven-development und hole eine ausdrückliche Freigabe ein, bevor du fortfährst
 
-   After the user resolves a blocker, they re-invoke `/build auto` — it resumes from the next pending task.
-7. **Summarize at the end:** tasks completed, tests added, commits made, and anything skipped, flagged, or left for the user.
+   Nachdem der Nutzer ein Hindernis gelöst hat, ruft er `/build auto` erneut auf – der Lauf setzt bei der nächsten offenen Aufgabe fort.
+7. **Am Ende zusammenfassen:** erledigte Aufgaben, hinzugefügte Tests, erstellte commits und alles, was übersprungen, markiert oder dem Nutzer überlassen wurde.
 
-If any step fails, follow the agent-skills-de:debugging-and-error-recovery skill.
+Schlägt ein Schritt fehl, folge dem Skill agent-skills-de:debugging-and-error-recovery.

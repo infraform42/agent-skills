@@ -1,42 +1,42 @@
 ---
 name: deprecation-and-migration
-description: Manages deprecation and migration. Use when removing old systems, APIs, or features. Use when migrating users from one implementation to another. Use when migrating a database schema in production, such as renaming or dropping a column without downtime (expand/contract). Use when deciding whether to maintain or sunset existing code.
+description: "Steuert Abkündigung (Deprecation) und Migration: Entfernen alter Systeme, APIs oder Features sowie das sichere Umziehen von Nutzern auf eine neue Implementierung. Verwenden, wenn alte Systeme, APIs oder Features entfernt werden, wenn Nutzer von einer Implementierung auf eine andere migriert werden, wenn ein Datenbankschema in Produktion migriert wird (z. B. Spalte umbenennen oder löschen ohne Downtime, expand/contract) oder wenn entschieden werden muss, ob bestehender Code weiter gepflegt oder abgekündigt wird. „kündige die alte API ab“, „plane die Migration auf das neue System“, „benenne die Spalte ohne Downtime um“, „sollen wir das Legacy-System weiter pflegen?“, „entferne den alten Code sauber“"
 ---
 
-# Deprecation and Migration
+# Abkündigung und Migration
 
-## Overview
+## Überblick
 
-Code is a liability, not an asset. Every line of code has ongoing maintenance cost — bugs to fix, dependencies to update, security patches to apply, and new engineers to onboard. Deprecation is the discipline of removing code that no longer earns its keep, and migration is the process of moving users safely from the old to the new.
+Code ist eine Verbindlichkeit, kein Vermögenswert. Jede Codezeile verursacht laufende Wartungskosten: Bugs müssen behoben, Abhängigkeiten aktualisiert, Sicherheitspatches eingespielt und neue Entwickler eingearbeitet werden. Abkündigung (Deprecation) ist die Disziplin, Code zu entfernen, der seinen Unterhalt nicht mehr verdient; Migration ist der Prozess, Nutzer sicher vom Alten zum Neuen zu bringen.
 
-Most engineering organizations are good at building things. Few are good at removing them. This skill addresses that gap.
+Die meisten Engineering-Organisationen sind gut darin, Dinge zu bauen. Wenige sind gut darin, sie wieder zu entfernen. Dieser Skill schließt diese Lücke.
 
-## When to Use
+## Wann verwenden
 
-- Replacing an old system, API, or library with a new one
-- Sunsetting a feature that's no longer needed
-- Consolidating duplicate implementations
-- Removing dead code that nobody owns but everybody depends on
-- Planning the lifecycle of a new system (deprecation planning starts at design time)
-- Deciding whether to maintain a legacy system or invest in migration
+- Ein altes System, eine alte API oder Bibliothek durch eine neue ersetzen
+- Ein nicht mehr benötigtes Feature einstellen
+- Doppelte Implementierungen konsolidieren
+- Toten Code entfernen, der niemandem gehört, von dem aber alle abhängen
+- Den Lebenszyklus eines neuen Systems planen (die Abkündigungsplanung beginnt beim Design)
+- Entscheiden, ob ein Legacy-System weiter gepflegt wird oder ob sich eine Migration lohnt
 
-## Core Principles
+## Grundprinzipien
 
-### Code Is a Liability
+### Code ist eine Verbindlichkeit
 
-Every line of code has ongoing cost: it needs tests, documentation, security patches, dependency updates, and mental overhead for anyone working nearby. The value of code is the functionality it provides, not the code itself. When the same functionality can be provided with less code, less complexity, or better abstractions — the old code should go.
+Jede Codezeile verursacht laufende Kosten: Sie braucht Tests, Dokumentation, Sicherheitspatches, Abhängigkeits-Updates und kognitiven Aufwand für jeden, der in der Nähe arbeitet. Der Wert von Code ist die Funktionalität, die er bietet, nicht der Code selbst. Lässt sich dieselbe Funktionalität mit weniger Code, weniger Komplexität oder besseren Abstraktionen bereitstellen, sollte der alte Code weg.
 
-### Hyrum's Law Makes Removal Hard
+### Hyrums Gesetz macht das Entfernen schwer
 
-With enough users, every observable behavior becomes depended on — including bugs, timing quirks, and undocumented side effects. This is why deprecation requires active migration, not just announcement. Users can't "just switch" when they depend on behaviors the replacement doesn't replicate.
+Mit genügend Nutzern wird von jedem beobachtbaren Verhalten irgendjemand abhängig – einschließlich Bugs, Timing-Eigenheiten und undokumentierter Nebeneffekte. Deshalb erfordert eine Abkündigung aktive Migration und nicht nur eine Ankündigung. Nutzer können nicht „einfach wechseln“, wenn sie von Verhalten abhängen, das der Ersatz nicht nachbildet.
 
-### Deprecation Planning Starts at Design Time
+### Die Abkündigungsplanung beginnt beim Design
 
-When building something new, ask: "How would we remove this in 3 years?" Systems designed with clean interfaces, feature flags, and minimal surface area are easier to deprecate than systems that leak implementation details everywhere.
+Frage beim Bau von etwas Neuem: „Wie würden wir das in 3 Jahren wieder entfernen?“ Systeme mit sauberen Schnittstellen, Feature-Flags und minimaler Oberfläche lassen sich leichter abkündigen als Systeme, die Implementierungsdetails überall durchsickern lassen.
 
-## The Deprecation Decision
+## Die Abkündigungsentscheidung
 
-Before deprecating anything, answer these questions:
+Beantworte vor jeder Abkündigung diese Fragen:
 
 ```
 1. Does this system still provide unique value?
@@ -55,26 +55,26 @@ Before deprecating anything, answer these questions:
    → Security risk, engineer time, opportunity cost of complexity.
 ```
 
-## Compulsory vs Advisory Deprecation
+## Verpflichtende vs. empfehlende Abkündigung
 
-| Type | When to Use | Mechanism |
+| Typ | Wann verwenden | Mechanismus |
 |------|-------------|-----------|
-| **Advisory** | Migration is optional, old system is stable | Warnings, documentation, nudges. Users migrate on their own timeline. |
-| **Compulsory** | Old system has security issues, blocks progress, or maintenance cost is unsustainable | Hard deadline. Old system will be removed by date X. Provide migration tooling. |
+| **Empfehlend (Advisory)** | Die Migration ist optional, das alte System ist stabil | Warnungen, Dokumentation, sanfte Hinweise. Nutzer migrieren in ihrem eigenen Tempo. |
+| **Verpflichtend (Compulsory)** | Das alte System hat Sicherheitsprobleme, blockiert den Fortschritt oder die Wartungskosten sind nicht tragbar | Harte Frist. Das alte System wird zum Datum X entfernt. Migrationswerkzeuge bereitstellen. |
 
-**Default to advisory.** Use compulsory only when the maintenance cost or risk justifies forcing migration. Compulsory deprecation requires providing migration tooling, documentation, and support — you can't just announce a deadline.
+**Standardmäßig empfehlend vorgehen.** Verpflichtend nur, wenn Wartungskosten oder Risiko die erzwungene Migration rechtfertigen. Eine verpflichtende Abkündigung erfordert Migrationswerkzeuge, Dokumentation und Support – eine bloße Fristankündigung reicht nicht.
 
-## The Migration Process
+## Der Migrationsprozess
 
-### Step 1: Build the Replacement
+### Schritt 1: Den Ersatz bauen
 
-Don't deprecate without a working alternative. The replacement must:
+Kündige nichts ab, ohne eine funktionierende Alternative zu haben. Der Ersatz muss:
 
-- Cover all critical use cases of the old system
-- Have documentation and migration guides
-- Be proven in production (not just "theoretically better")
+- Alle kritischen Anwendungsfälle des alten Systems abdecken
+- Dokumentation und Migrationsleitfäden haben
+- Sich in Produktion bewährt haben (nicht nur „theoretisch besser“ sein)
 
-### Step 2: Announce and Document
+### Schritt 2: Ankündigen und dokumentieren
 
 ```markdown
 ## Deprecation Notice: OldService
@@ -91,9 +91,9 @@ Don't deprecate without a working alternative. The replacement must:
 3. Run the migration verification script: `npx migrate-check`
 ```
 
-### Step 3: Migrate Incrementally
+### Schritt 3: Schrittweise migrieren
 
-Migrate consumers one at a time, not all at once. For each consumer:
+Migriere Konsumenten einzeln, nicht alle auf einmal. Für jeden Konsumenten:
 
 ```
 1. Identify all touchpoints with the deprecated system
@@ -103,11 +103,11 @@ Migrate consumers one at a time, not all at once. For each consumer:
 5. Confirm no regressions
 ```
 
-**The Churn Rule:** If you own the infrastructure being deprecated, you are responsible for migrating your users — or providing backward-compatible updates that require no migration. Don't announce deprecation and leave users to figure it out.
+**Die Churn-Regel:** Wenn dir die Infrastruktur gehört, die abgekündigt wird, bist du dafür verantwortlich, deine Nutzer zu migrieren – oder abwärtskompatible Updates bereitzustellen, die keine Migration erfordern. Kündige nicht an und überlasse die Nutzer dann sich selbst.
 
-### Step 4: Remove the Old System
+### Schritt 4: Das alte System entfernen
 
-Only after all consumers have migrated:
+Erst nachdem alle Konsumenten migriert sind:
 
 ```
 1. Verify zero active usage (metrics, logs, dependency analysis)
@@ -117,11 +117,11 @@ Only after all consumers have migrated:
 5. Celebrate — removing code is an achievement
 ```
 
-## Migration Patterns
+## Migrationsmuster
 
-### Strangler Pattern
+### Strangler-Muster
 
-Run old and new systems in parallel. Route traffic incrementally from old to new. When the old system handles 0% of traffic, remove it.
+Betreibe altes und neues System parallel. Leite den Traffic schrittweise vom alten zum neuen System um. Sobald das alte System 0 % des Traffics verarbeitet, entferne es.
 
 ```
 Phase 1: New system handles 0%, old handles 100%
@@ -131,9 +131,9 @@ Phase 4: New system handles 100%, old system idle
 Phase 5: Remove old system
 ```
 
-### Adapter Pattern
+### Adapter-Muster
 
-Create an adapter that translates calls from the old interface to the new implementation. Consumers keep using the old interface while you migrate the backend.
+Erstelle einen Adapter, der Aufrufe der alten Schnittstelle in die neue Implementierung übersetzt. Konsumenten nutzen weiter die alte Schnittstelle, während du das Backend migrierst.
 
 ```typescript
 // Adapter: old interface, new implementation
@@ -153,9 +153,9 @@ class LegacyTaskService implements OldTaskAPI {
 }
 ```
 
-### Feature Flag Migration
+### Feature-Flag-Migration
 
-Use feature flags to switch consumers from old to new system one at a time:
+Nutze Feature-Flags, um Konsumenten einzeln vom alten auf das neue System umzuschalten:
 
 ```typescript
 function getTaskService(userId: string): TaskService {
@@ -166,9 +166,9 @@ function getTaskService(userId: string): TaskService {
 }
 ```
 
-### Database Schema Migrations (Expand/Contract)
+### Datenbankschema-Migrationen (Expand/Contract)
 
-A schema change is the riskiest migration because the data is the one thing you cannot roll back by reverting a deploy. The failure mode is coupling the schema change to the code change: rename a column in the same release that starts using the new name, and during the rollout window — when old and new code run at once — one of them is querying a column that doesn't exist. The fix is to **never change a column in place**. Migrate in additive phases so old and new code are both valid at every step.
+Eine Schemaänderung ist die riskanteste Migration, weil sich Daten als Einziges nicht durch das Zurücksetzen eines Deployments per Rollback wiederherstellen lassen. Der typische Fehler ist, die Schemaänderung an die Codeänderung zu koppeln: Wer eine Spalte im selben Release umbenennt, in dem der neue Name verwendet wird, hat im Rollout-Fenster – wenn alter und neuer Code gleichzeitig laufen – immer eine Seite, die eine nicht existierende Spalte abfragt. Die Lösung: **Ändere eine Spalte nie an Ort und Stelle.** Migriere in additiven Phasen, sodass alter und neuer Code in jedem Schritt gültig sind.
 
 ```
 EXPAND ──────────────→ MIGRATE ──────────────→ CONTRACT
@@ -177,76 +177,76 @@ nullable, alongside    dual-write old+new from  old column, drop it in
 the old one            the app                  a later, separate deploy
 ```
 
-**Worked example — renaming `name` to `full_name`:**
+**Durchgespieltes Beispiel – `name` in `full_name` umbenennen:**
 
-1. **Expand.** Add `full_name` as nullable. Deploy. (Old code ignores it; nothing breaks.)
-2. **Dual-write.** App writes both `name` and `full_name` on every insert/update. Deploy.
-3. **Backfill.** Copy `name → full_name` for existing rows, in batches, so you don't lock the table.
-4. **Switch reads.** Point the app at `full_name`, keep writing both. Deploy and bake.
-5. **Contract.** Stop writing `name`, then — in a *separate, later* deploy — drop the column.
+1. **Expand.** Füge `full_name` als nullable hinzu. Deploye. (Alter Code ignoriert sie; nichts geht kaputt.)
+2. **Dual-write.** Die App schreibt bei jedem Insert/Update sowohl `name` als auch `full_name`. Deploye.
+3. **Backfill.** Kopiere `name → full_name` für bestehende Zeilen in Batches, damit die Tabelle nicht gesperrt wird.
+4. **Lesezugriffe umstellen.** Richte die App auf `full_name` aus, schreibe weiterhin beides. Deploye und lass es sich bewähren.
+5. **Contract.** Höre auf, `name` zu schreiben, und lösche die Spalte dann – in einem *separaten, späteren* Deployment.
 
-Each step is independently deployable and reversible: if step 4 misbehaves, roll the code back and `full_name` is still being populated. Treat each phase as a thin vertical slice — see the `incremental-implementation` skill.
+Jeder Schritt ist einzeln deploybar und umkehrbar: Verhält sich Schritt 4 falsch, setzt du den Code zurück, und `full_name` wird weiterhin befüllt. Behandle jede Phase als dünne vertikale Scheibe – siehe den Skill `incremental-implementation`.
 
-**Rules:**
-- **Additive first, destructive last and alone.** Adds (new nullable column, new table, new index) are safe in any deploy; drops and renames get their own deploy *after* no code references the old shape.
-- **Every migration has a tested down path.** A migration you can't reverse is a deploy you can't roll back. Write and run the `down` before merging.
-- **Backfill in batches, off the hot path.** A single `UPDATE` over millions of rows locks the table; chunk it and throttle.
-- **Build large indexes without blocking writes** (e.g. Postgres `CREATE INDEX CONCURRENTLY`).
-- **Decouple from code by feature flag** when the cutover is risky, exactly as in the Feature Flag Migration pattern above.
+**Regeln:**
+- **Additiv zuerst, destruktiv zuletzt und allein.** Hinzufügungen (neue nullable Spalte, neue Tabelle, neuer Index) sind in jedem Deployment sicher; Drops und Umbenennungen bekommen ein eigenes Deployment, *nachdem* kein Code mehr auf die alte Struktur verweist.
+- **Jede Migration hat einen getesteten Down-Pfad.** Eine Migration, die du nicht umkehren kannst, ist ein Deployment, das du nicht per Rollback zurücknehmen kannst. Schreibe und führe das `down` aus, bevor du mergst.
+- **Backfill in Batches, abseits des Hot Path.** Ein einzelnes `UPDATE` über Millionen Zeilen sperrt die Tabelle; zerlege es in Chunks und drossele es.
+- **Große Indizes bauen, ohne Schreibzugriffe zu blockieren** (z. B. Postgres `CREATE INDEX CONCURRENTLY`).
+- **Entkopple per Feature-Flag vom Code**, wenn der Cutover riskant ist – genau wie im obigen Muster Feature-Flag-Migration.
 
-## Zombie Code
+## Zombie-Code
 
-Zombie code is code that nobody owns but everybody depends on. It's not actively maintained, has no clear owner, and accumulates security vulnerabilities and compatibility issues. Signs:
+Zombie-Code ist Code, der niemandem gehört, von dem aber alle abhängen. Er wird nicht aktiv gepflegt, hat keinen klaren Verantwortlichen und sammelt Sicherheitslücken und Kompatibilitätsprobleme an. Anzeichen:
 
-- No commits in 6+ months but active consumers exist
-- No assigned maintainer or team
-- Failing tests that nobody fixes
-- Dependencies with known vulnerabilities that nobody updates
-- Documentation that references systems that no longer exist
+- Seit über 6 Monaten keine Commits, aber es gibt aktive Konsumenten
+- Kein zugewiesener Maintainer oder Team
+- Fehlschlagende Tests, die niemand repariert
+- Abhängigkeiten mit bekannten Schwachstellen, die niemand aktualisiert
+- Dokumentation, die auf nicht mehr existierende Systeme verweist
 
-**Response:** Either assign an owner and maintain it properly, or deprecate it with a concrete migration plan. Zombie code cannot stay in limbo — it either gets investment or removal.
+**Reaktion:** Weise entweder einen Verantwortlichen zu und pflege den Code ordentlich, oder kündige ihn mit einem konkreten Migrationsplan ab. Zombie-Code darf nicht im Schwebezustand bleiben – er bekommt entweder Investitionen oder wird entfernt.
 
-## Common Rationalizations
+## Typische Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Realität |
 |---|---|
-| "It still works, why remove it?" | Working code that nobody maintains accumulates security debt and complexity. Maintenance cost grows silently. |
-| "Someone might need it later" | If it's needed later, it can be rebuilt. Keeping unused code "just in case" costs more than rebuilding. |
-| "The migration is too expensive" | Compare migration cost to ongoing maintenance cost over 2-3 years. Migration is usually cheaper long-term. |
-| "We'll deprecate it after we finish the new system" | Deprecation planning starts at design time. By the time the new system is done, you'll have new priorities. Plan now. |
-| "Users will migrate on their own" | They won't. Provide tooling, documentation, and incentives — or do the migration yourself (the Churn Rule). |
-| "We can maintain both systems indefinitely" | Two systems doing the same thing is double the maintenance, testing, documentation, and onboarding cost. |
-| "Just rename the column, it's one line" | During the rollout, old and new code run together — one will query a column that no longer exists. Expand/contract, never rename in place. |
-| "I'll add the column and drop the old one in the same migration" | That couples a safe add to a destructive drop. Drops get their own deploy, after no code references the old shape. |
-| "We'll write the rollback if we need it" | A migration with no down path is a deploy you can't reverse. Write and run the `down` before merging. |
+| „Es funktioniert noch, warum entfernen?“ | Funktionierender Code, den niemand pflegt, sammelt Sicherheitsschulden und Komplexität an. Die Wartungskosten wachsen unbemerkt. |
+| „Jemand könnte es später noch brauchen“ | Wird es später gebraucht, lässt es sich neu bauen. Ungenutzten Code „für alle Fälle“ zu behalten kostet mehr als ein Neubau. |
+| „Die Migration ist zu teuer“ | Vergleiche die Migrationskosten mit den laufenden Wartungskosten über 2–3 Jahre. Langfristig ist die Migration meist günstiger. |
+| „Wir kündigen es ab, wenn das neue System fertig ist“ | Die Abkündigungsplanung beginnt beim Design. Bis das neue System fertig ist, gibt es neue Prioritäten. Plane jetzt. |
+| „Die Nutzer migrieren von selbst“ | Tun sie nicht. Stelle Werkzeuge, Dokumentation und Anreize bereit – oder erledige die Migration selbst (die Churn-Regel). |
+| „Wir können beide Systeme unbegrenzt weiterbetreiben“ | Zwei Systeme für dieselbe Aufgabe bedeuten doppelte Kosten für Wartung, Tests, Dokumentation und Einarbeitung. |
+| „Benenn die Spalte einfach um, das ist eine Zeile“ | Während des Rollouts laufen alter und neuer Code gleichzeitig – einer fragt eine nicht mehr existierende Spalte ab. Expand/Contract, niemals an Ort und Stelle umbenennen. |
+| „Ich füge die Spalte hinzu und lösche die alte in derselben Migration“ | Das koppelt ein sicheres Hinzufügen an ein destruktives Löschen. Drops bekommen ein eigenes Deployment, nachdem kein Code mehr auf die alte Struktur verweist. |
+| „Den Rollback schreiben wir, falls wir ihn brauchen“ | Eine Migration ohne Down-Pfad ist ein Deployment, das du nicht zurücknehmen kannst. Schreibe und führe das `down` aus, bevor du mergst. |
 
-## Red Flags
+## Warnsignale
 
-- Deprecated systems with no replacement available
-- Deprecation announcements with no migration tooling or documentation
-- "Soft" deprecation that's been advisory for years with no progress
-- Zombie code with no owner and active consumers
-- New features added to a deprecated system (invest in the replacement instead)
-- Deprecation without measuring current usage
-- Removing code without verifying zero active consumers
-- A schema change and the code that depends on it shipped in the same deploy
-- A column renamed or dropped in place rather than via expand/contract
-- A migration merged with no tested down path, or a backfill that locks the table
+- Abgekündigte Systeme ohne verfügbaren Ersatz
+- Abkündigungsankündigungen ohne Migrationswerkzeuge oder Dokumentation
+- „Weiche“ Abkündigung, die seit Jahren nur empfehlend ist und keine Fortschritte macht
+- Zombie-Code ohne Verantwortlichen und mit aktiven Konsumenten
+- Neue Features, die zu einem abgekündigten System hinzugefügt werden (investiere stattdessen in den Ersatz)
+- Abkündigung ohne Messung der aktuellen Nutzung
+- Code entfernen, ohne zu verifizieren, dass es keine aktiven Konsumenten mehr gibt
+- Eine Schemaänderung und der davon abhängige Code werden im selben Deployment ausgeliefert
+- Eine Spalte wird an Ort und Stelle umbenannt oder gelöscht statt per Expand/Contract
+- Eine Migration wird ohne getesteten Down-Pfad gemergt, oder ein Backfill sperrt die Tabelle
 
-## Verification
+## Verifikation
 
-After completing a deprecation:
+Nach Abschluss einer Abkündigung:
 
-- [ ] Replacement is production-proven and covers all critical use cases
-- [ ] Migration guide exists with concrete steps and examples
-- [ ] All active consumers have been migrated (verified by metrics/logs)
-- [ ] Old code, tests, documentation, and configuration are fully removed
-- [ ] No references to the deprecated system remain in the codebase
-- [ ] Deprecation notices are removed (they served their purpose)
+- [ ] Der Ersatz hat sich in Produktion bewährt und deckt alle kritischen Anwendungsfälle ab
+- [ ] Ein Migrationsleitfaden mit konkreten Schritten und Beispielen existiert
+- [ ] Alle aktiven Konsumenten wurden migriert (verifiziert über Metriken/Logs)
+- [ ] Alter Code, Tests, Dokumentation und Konfiguration sind vollständig entfernt
+- [ ] Im Codebestand verweist nichts mehr auf das abgekündigte System
+- [ ] Die Abkündigungshinweise sind entfernt (sie haben ihren Zweck erfüllt)
 
-After a database schema migration:
+Nach einer Datenbankschema-Migration:
 
-- [ ] The change ships in additive phases (expand → backfill → contract), not a single in-place edit
-- [ ] Old and new code are both valid against the schema at every deploy step
-- [ ] Each migration has a tested down path; backfills run in throttled batches
-- [ ] Destructive steps (drop/rename) ship in their own deploy after no code references the old shape
+- [ ] Die Änderung wird in additiven Phasen ausgeliefert (expand → backfill → contract), nicht als einzelne Änderung an Ort und Stelle
+- [ ] Alter und neuer Code sind in jedem Deployment-Schritt gegen das Schema gültig
+- [ ] Jede Migration hat einen getesteten Down-Pfad; Backfills laufen in gedrosselten Batches
+- [ ] Destruktive Schritte (Drop/Rename) werden in einem eigenen Deployment ausgeliefert, nachdem kein Code mehr auf die alte Struktur verweist

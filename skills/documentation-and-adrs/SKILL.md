@@ -1,51 +1,51 @@
 ---
 name: documentation-and-adrs
-description: Records decisions and documentation. Use when you need to document an architecture decision (ADR) or the reasoning behind a design choice, when changing public APIs, shipping features, or when you need to record context that future engineers and agents will need to understand the codebase.
+description: Hält Entscheidungen und Dokumentation fest. Verwenden, wenn eine Architekturentscheidung (ADR) oder die Begründung hinter einer Designentscheidung dokumentiert werden soll, bei Änderungen an öffentlichen APIs, beim Ausliefern von Features oder wenn Kontext festgehalten werden muss, den künftige Entwickler und Agents zum Verständnis der Codebasis brauchen. Typische Anfragen sind „schreib einen ADR dazu“, „dokumentiere diese Architekturentscheidung“, „halte fest, warum wir das so gebaut haben“, „aktualisiere die README und das Changelog“ oder „dokumentiere die öffentliche API“.
 ---
 
 # Documentation and ADRs
 
-## Overview
+## Überblick
 
-Document decisions, not just code. The most valuable documentation captures the *why* — the context, constraints, and trade-offs that led to a decision. Code shows *what* was built; documentation explains *why it was built this way* and *what alternatives were considered*. This context is essential for future humans and agents working in the codebase.
+Dokumentiere Entscheidungen, nicht nur Code. Die wertvollste Dokumentation hält das *Warum* fest: den Kontext, die Constraints und die Trade-offs, die zu einer Entscheidung geführt haben. Code zeigt, *was* gebaut wurde; Dokumentation erklärt, *warum es so gebaut wurde* und *welche Alternativen erwogen wurden*. Dieser Kontext ist unverzichtbar für künftige Menschen und Agents, die in der Codebasis arbeiten.
 
-## When to Use
+## Wann verwenden
 
-- Making a significant architectural decision
-- Choosing between competing approaches
-- Adding or changing a public API
-- Shipping a feature that changes user-facing behavior
-- Onboarding new team members (or agents) to the project
-- When you find yourself explaining the same thing repeatedly
+- Bei einer wichtigen Architekturentscheidung
+- Bei der Wahl zwischen konkurrierenden Ansätzen
+- Beim Hinzufügen oder Ändern einer öffentlichen API
+- Beim Ausliefern eines Features, das für Nutzer sichtbares Verhalten ändert
+- Beim Onboarding neuer Teammitglieder (oder Agents) ins Projekt
+- Wenn du merkst, dass du dasselbe immer wieder erklärst
 
-**When NOT to use:** Don't document obvious code. Don't add comments that restate what the code already says. Don't write docs for throwaway prototypes.
+**Wann NICHT verwenden:** Dokumentiere keinen offensichtlichen Code. Schreibe keine Kommentare, die nur wiederholen, was der Code ohnehin sagt. Schreibe keine Doku für Wegwerf-Prototypen.
 
 ## Architecture Decision Records (ADRs)
 
-ADRs capture the reasoning behind significant technical decisions. They're the highest-value documentation you can write.
+ADRs halten die Überlegungen hinter wichtigen technischen Entscheidungen fest. Sie sind die wertvollste Dokumentation, die du schreiben kannst.
 
-### When to Write an ADR
+### Wann ein ADR zu schreiben ist
 
-- Choosing a framework, library, or major dependency
-- Designing a data model or database schema
-- Selecting an authentication strategy
-- Deciding on an API architecture (REST vs. GraphQL vs. tRPC)
-- Choosing between build tools, hosting platforms, or infrastructure
-- Any decision that would be expensive to reverse
+- Wahl eines Frameworks, einer Bibliothek oder einer größeren Abhängigkeit
+- Entwurf eines Datenmodells oder Datenbankschemas
+- Auswahl einer Authentifizierungsstrategie
+- Entscheidung über eine API-Architektur (REST vs. GraphQL vs. tRPC)
+- Wahl zwischen Build-Tools, Hosting-Plattformen oder Infrastruktur
+- Jede Entscheidung, die sich nur teuer rückgängig machen ließe
 
-### Match the existing convention first
+### Zuerst die bestehende Konvention übernehmen
 
-Before creating an ADR, inspect the available repository context for an established convention — existing ADRs, project instructions, and ADR-related configuration or tooling (e.g. an `.adr-dir` file). An established convention overrides the defaults below. Match:
+Prüfe vor dem Anlegen eines ADR den verfügbaren Repository-Kontext auf eine etablierte Konvention: vorhandene ADRs, Projektanweisungen sowie ADR-bezogene Konfiguration oder Tooling (z. B. eine `.adr-dir`-Datei). Eine etablierte Konvention hat Vorrang vor den Standardvorgaben unten. Übernimm:
 
-- **Location and format** — e.g. `docs/adr/*.md`, `Documentation/Decisions/*.rst`, a MADR layout, or an `adr-tools` setup. Match the existing directory, file extension, and markup (Markdown vs reStructuredText).
-- **Numbering and naming** — continue the existing sequence and filename pattern (`ADR-004-Title.rst`, `0004-title.md`, …); don't restart at 001 or introduce a second scheme.
-- **Section headings** — reuse the project's heading set rather than imposing this template's.
+- **Ablageort und Format**, z. B. `docs/adr/*.md`, `Documentation/Decisions/*.rst`, ein MADR-Layout oder ein `adr-tools`-Setup. Übernimm das vorhandene Verzeichnis, die Dateiendung und die Auszeichnungssprache (Markdown vs. reStructuredText).
+- **Nummerierung und Benennung**: Setze die bestehende Reihenfolge und das Dateinamensmuster fort (`ADR-004-Title.rst`, `0004-title.md`, …); fange nicht wieder bei 001 an und führe kein zweites Schema ein.
+- **Abschnittsüberschriften**: Verwende die Überschriften des Projekts, statt ihm die Vorlage hier aufzuzwingen.
 
-If the available evidence conflicts, surface the conflict rather than silently introducing another scheme. Only when no convention can be established do you apply the default below.
+Widersprechen sich die verfügbaren Hinweise, mache den Widerspruch sichtbar, statt stillschweigend ein weiteres Schema einzuführen. Nur wenn sich keine Konvention feststellen lässt, wendest du die Standardvorlage unten an.
 
-### ADR Template
+### ADR-Vorlage
 
-Store ADRs in `docs/decisions/` with sequential numbering (unless the project already uses another location — see above):
+Lege ADRs in `docs/decisions/` mit fortlaufender Nummerierung ab (sofern das Projekt nicht bereits einen anderen Ablageort nutzt, siehe oben):
 
 ```markdown
 # ADR-001: Use PostgreSQL for primary database
@@ -90,20 +90,20 @@ Use PostgreSQL with Prisma ORM.
 - Hosting on managed service (Supabase, Neon, or RDS)
 ```
 
-### ADR Lifecycle
+### ADR-Lebenszyklus
 
 ```
 PROPOSED → ACCEPTED → (SUPERSEDED or DEPRECATED)
 ```
 
-- **Don't delete old ADRs.** They capture historical context.
-- When a decision changes, write a new ADR that references and supersedes the old one.
+- **Lösche alte ADRs nicht.** Sie halten den historischen Kontext fest.
+- Ändert sich eine Entscheidung, schreibe ein neues ADR, das auf das alte verweist und es ablöst.
 
-## Inline Documentation
+## Inline-Dokumentation
 
-### When to Comment
+### Wann kommentieren
 
-Comment the *why*, not the *what*:
+Kommentiere das *Warum*, nicht das *Was*:
 
 ```typescript
 // BAD: Restates the code
@@ -120,7 +120,7 @@ if (now - windowStart > WINDOW_SIZE_MS) {
 }
 ```
 
-### When NOT to Comment
+### Wann NICHT kommentieren
 
 ```typescript
 // Don't comment self-explanatory code
@@ -135,7 +135,7 @@ function calculateTotal(items: CartItem[]): number {
 // const oldImplementation = () => { ... }  ← Delete it, git has history
 ```
 
-### Document Known Gotchas
+### Bekannte Stolperfallen dokumentieren
 
 ```typescript
 /**
@@ -150,11 +150,11 @@ export function initializeTheme(theme: Theme): void {
 }
 ```
 
-## API Documentation
+## API-Dokumentation
 
-For public APIs (REST, GraphQL, library interfaces):
+Für öffentliche APIs (REST, GraphQL, Bibliotheksschnittstellen):
 
-### Inline with Types (Preferred for TypeScript)
+### Inline mit Typen (bevorzugt für TypeScript)
 
 ```typescript
 /**
@@ -174,7 +174,7 @@ export async function createTask(input: CreateTaskInput): Promise<Task> {
 }
 ```
 
-### OpenAPI / Swagger for REST APIs
+### OpenAPI / Swagger für REST-APIs
 
 ```yaml
 paths:
@@ -198,9 +198,9 @@ paths:
           description: Validation error
 ```
 
-## README Structure
+## README-Struktur
 
-Every project should have a README that covers:
+Jedes Projekt sollte eine README haben, die Folgendes abdeckt:
 
 ```markdown
 # Project Name
@@ -229,9 +229,9 @@ Link to ADRs for details.
 How to contribute, coding standards, PR process.
 ```
 
-## Changelog Maintenance
+## Changelog pflegen
 
-For shipped features:
+Für ausgelieferte Features:
 
 ```markdown
 # Changelog
@@ -248,51 +248,51 @@ For shipped features:
 - Task list now loads 50 items per page (was 20) for better UX (#126)
 ```
 
-## Documentation for Agents
+## Dokumentation für Agents
 
-Special consideration for AI agent context:
+Besonderheiten für den Kontext von KI-Agents:
 
-- **CLAUDE.md / rules files** — Document project conventions so agents follow them
-- **Spec files** — Keep specs updated so agents build the right thing
-- **ADRs** — Help agents understand why past decisions were made (prevents re-deciding)
-- **Inline gotchas** — Prevent agents from falling into known traps
+- **CLAUDE.md / Rules-Dateien**: Dokumentiere Projektkonventionen, damit Agents ihnen folgen
+- **Spec-Dateien**: Halte Specs aktuell, damit Agents das Richtige bauen
+- **ADRs**: Helfen Agents zu verstehen, warum frühere Entscheidungen getroffen wurden (verhindert, dass sie neu entschieden werden)
+- **Inline-Stolperfallen**: Bewahren Agents davor, in bekannte Fallen zu tappen
 
-## Prose Review
+## Prosa-Review
 
-After checking the technical content, review the prose for the people who will use it. Clearer wording must not change the decision or its limits.
+Prüfe nach der technischen Kontrolle den Text im Hinblick auf die Menschen, die ihn nutzen werden. Klarere Formulierungen dürfen die Entscheidung und ihre Grenzen nicht verändern.
 
-1. Mark the details that must survive the edit: names, numbers and units, commands, paths, links, conditions, trade-offs, and uncertainty. Check them against the available code and decision context; flag anything you cannot substantiate.
-2. Replace stock introductions, promotional adjectives, and repeated summaries with the concrete information the reader needs. Do not replace an unsupported claim with an invented example or a stronger guarantee. Keep necessary technical repetition and the project's established terminology.
-3. Compare the edited document with the original and its sources. Restore any lost qualifier or caveat, verify command and code examples still work as documented, and explain any unresolved factual question rather than polishing it away.
+1. Markiere die Details, die die Überarbeitung überstehen müssen: Namen, Zahlen und Einheiten, Befehle, Pfade, Links, Bedingungen, Trade-offs und Unsicherheiten. Prüfe sie gegen den verfügbaren Code und Entscheidungskontext; markiere alles, was du nicht belegen kannst.
+2. Ersetze Standardfloskeln zur Einleitung, werbende Adjektive und wiederholte Zusammenfassungen durch die konkreten Informationen, die der Leser braucht. Ersetze eine unbelegte Behauptung nicht durch ein erfundenes Beispiel oder eine stärkere Garantie. Behalte notwendige technische Wiederholungen und die etablierte Terminologie des Projekts bei.
+3. Vergleiche das überarbeitete Dokument mit dem Original und seinen Quellen. Stelle jede verlorene Einschränkung oder jeden verlorenen Vorbehalt wieder her, prüfe, dass Befehls- und Codebeispiele weiterhin wie dokumentiert funktionieren, und benenne offene Sachfragen, statt sie glattzuschleifen.
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Realität |
 |---|---|
-| "The code is self-documenting" | Code shows what. It doesn't show why, what alternatives were rejected, or what constraints apply. |
-| "We'll write docs when the API stabilizes" | APIs stabilize faster when you document them. The doc is the first test of the design. |
-| "Nobody reads docs" | Agents do. Future engineers do. Your 3-months-later self does. |
-| "ADRs are overhead" | A 10-minute ADR prevents a 2-hour debate about the same decision six months later. |
-| "Comments get outdated" | Comments on *why* are stable. Comments on *what* get outdated — that's why you only write the former. |
+| „Der Code ist selbsterklärend“ | Code zeigt, was passiert. Er zeigt nicht, warum, welche Alternativen verworfen wurden oder welche Constraints gelten. |
+| „Wir schreiben die Doku, wenn die API stabil ist“ | APIs stabilisieren sich schneller, wenn du sie dokumentierst. Die Doku ist der erste Test des Designs. |
+| „Niemand liest Doku“ | Agents tun es. Künftige Entwickler tun es. Du selbst in drei Monaten tust es. |
+| „ADRs sind Overhead“ | Ein ADR in 10 Minuten erspart eine zweistündige Debatte über dieselbe Entscheidung sechs Monate später. |
+| „Kommentare veralten“ | Kommentare zum *Warum* bleiben stabil. Kommentare zum *Was* veralten – deshalb schreibst du nur die ersteren. |
 
-## Red Flags
+## Warnsignale
 
-- Architectural decisions with no written rationale
-- Public APIs with no documentation or types
-- README that doesn't explain how to run the project
-- Commented-out code instead of deletion
-- TODO comments that have been there for weeks
-- No ADRs in a project with significant architectural choices
-- Documentation that restates the code instead of explaining intent
+- Architekturentscheidungen ohne schriftliche Begründung
+- Öffentliche APIs ohne Dokumentation oder Typen
+- Eine README, die nicht erklärt, wie das Projekt gestartet wird
+- Auskommentierter Code statt Löschung
+- TODO-Kommentare, die seit Wochen dort stehen
+- Keine ADRs in einem Projekt mit wesentlichen Architekturentscheidungen
+- Dokumentation, die den Code wiederholt, statt die Absicht zu erklären
 
-## Verification
+## Verifikation
 
-After documenting:
+Nach dem Dokumentieren:
 
-- [ ] ADRs exist for all significant architectural decisions
-- [ ] README covers quick start, commands, and architecture overview
-- [ ] API functions have parameter and return type documentation
-- [ ] Known gotchas are documented inline where they matter
-- [ ] No commented-out code remains
-- [ ] Rules files (CLAUDE.md etc.) are current and accurate
-- [ ] Prose edits preserve source details, decision trade-offs, and qualifiers without adding unsupported guarantees
+- [ ] Für alle wichtigen Architekturentscheidungen existieren ADRs
+- [ ] Die README deckt Quick Start, Befehle und Architekturüberblick ab
+- [ ] API-Funktionen haben eine Dokumentation von Parametern und Rückgabetypen
+- [ ] Bekannte Stolperfallen sind inline dort dokumentiert, wo sie relevant sind
+- [ ] Es bleibt kein auskommentierter Code zurück
+- [ ] Rules-Dateien (CLAUDE.md usw.) sind aktuell und korrekt
+- [ ] Prosa-Änderungen bewahren Details der Quelle, Trade-offs der Entscheidung und Einschränkungen, ohne unbelegte Garantien hinzuzufügen

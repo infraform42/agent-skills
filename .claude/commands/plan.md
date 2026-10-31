@@ -1,19 +1,19 @@
 ---
-description: Break work into small verifiable tasks with acceptance criteria and dependency ordering
+description: Zerlegt Arbeit in kleine, verifizierbare Aufgaben mit Akzeptanzkriterien und Abhängigkeitsreihenfolge
 disable-model-invocation: true
 ---
 
-Invoke the agent-skills-de:planning-and-task-breakdown skill.
+Rufe den Skill agent-skills-de:planning-and-task-breakdown auf.
 
-Read the existing spec (SPEC.md or equivalent) and the relevant codebase sections. Then:
+Lies die vorhandene Spec (SPEC.md oder Äquivalent) und die relevanten Abschnitte der Codebasis. Danach:
 
-1. Enter plan mode — read only, no code changes
-2. Identify the dependency graph between components
-3. Slice work vertically (one complete path per task, not horizontal layers)
-4. Write tasks with acceptance criteria and verification steps
-5. Add checkpoints between phases
-6. Present the plan for human review
+1. Wechsle in den Plan Mode — nur lesen, keine Codeänderungen
+2. Ermittle den Abhängigkeitsgraphen zwischen den Komponenten
+3. Zerlege die Arbeit vertikal in Scheiben (ein vollständiger Pfad pro Aufgabe, keine horizontalen Schichten)
+4. Schreibe Aufgaben mit Akzeptanzkriterien und Verifikationsschritten
+5. Füge Checkpoints zwischen den Phasen ein
+6. Lege den Plan zur menschlichen Prüfung vor
 
-Save the plan to tasks/plan.md and task list to tasks/todo.md.
+Speichere den Plan in tasks/plan.md und die Aufgabenliste in tasks/todo.md.
 
-If tasks/plan.md or tasks/todo.md already exists with unchecked tasks for different work, stop and ask before writing — never silently overwrite an incomplete plan.
+Falls tasks/plan.md oder tasks/todo.md bereits mit offenen Aufgaben für andere Arbeit existiert, halte an und frage nach, bevor du schreibst — überschreibe einen unvollständigen Plan niemals stillschweigend.

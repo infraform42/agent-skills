@@ -1,18 +1,18 @@
 ---
-description: Start spec-driven development — write a structured specification before writing code
+description: Startet spec-driven development – schreibt eine strukturierte Spezifikation, bevor Code entsteht
 disable-model-invocation: true
 ---
 
-Invoke the agent-skills-de:spec-driven-development skill.
+Rufe den Skill agent-skills-de:spec-driven-development auf.
 
-Begin by understanding what the user wants to build. Ask clarifying questions about:
-1. The objective and target users
-2. Core features and acceptance criteria
-3. Tech stack preferences and constraints
-4. Known boundaries (what to always do, ask first about, and never do)
+Beginne damit, zu verstehen, was der Nutzer bauen möchte. Stelle Rückfragen zu:
+1. Ziel und Zielgruppe der Nutzer
+2. Kernfunktionen und Akzeptanzkriterien
+3. Präferenzen und Constraints beim Tech-Stack
+4. Bekannte Grenzen (was immer zu tun ist, wobei zuerst nachgefragt werden soll und was nie getan werden darf)
 
-Then generate a structured spec covering all six core areas: objective, commands, project structure, code style, testing strategy, and boundaries.
+Erstelle dann eine strukturierte Spec, die alle sechs Kernbereiche abdeckt: Ziel, Befehle, Projektstruktur, Code-Stil, Teststrategie und Grenzen.
 
-If the request bundles several independently testable capabilities, first propose a capability map (module ids, dependency direction, build order) per the skill's Phase 0 and get it approved, then spec each module in dependency order.
+Bündelt die Anfrage mehrere unabhängig testbare Fähigkeiten, schlage zuerst gemäß Phase 0 des Skills eine Capability Map vor (Modul-IDs, Abhängigkeitsrichtung, Build-Reihenfolge) und lasse sie freigeben. Schreibe anschließend für jedes Modul in Abhängigkeitsreihenfolge eine eigene Spec.
 
-Save the spec as SPEC.md in the project root and confirm with the user before proceeding.
+Speichere die Spec als SPEC.md im Projektstamm und lass sie vom Nutzer bestätigen, bevor du fortfährst.

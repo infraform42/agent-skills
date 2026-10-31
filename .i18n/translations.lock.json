@@ -1,0 +1,193 @@
+{
+  ".claude/commands/build.md": {
+    "source_sha256": "48419917ab1c05b79894b4ce1769acc37afda1d552432b2b0020344c7f558248",
+    "translated_at": "2026-10-31T18:42:50+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  ".claude/commands/code-simplify.md": {
+    "source_sha256": "364854b841135f59065e2b81d5eefe8ec6166d25e3c4e906683688b1d001df49",
+    "translated_at": "2026-10-31T18:42:41+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  ".claude/commands/constraints.md": {
+    "source_sha256": "fc4f472b2f4c2725a28a2c805cdcfc02a51a383b631b0455bbc4936093fb725a",
+    "translated_at": "2026-10-31T18:42:46+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  ".claude/commands/plan.md": {
+    "source_sha256": "e7694b2c86603d732b919f1fc88b9617f652d95bf830799ef1b641d38e50d2fe",
+    "translated_at": "2026-10-31T18:42:41+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  ".claude/commands/review.md": {
+    "source_sha256": "1db63de098a1500f9e2e80c902a52b73a501630bd9ed44880b1318f25c607461",
+    "translated_at": "2026-10-31T18:42:45+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  ".claude/commands/ship.md": {
+    "source_sha256": "16c632ef577f1942e7f819c944b1c60c18b3302430428912f22b7e6b12bff3ec",
+    "translated_at": "2026-10-31T18:42:55+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  ".claude/commands/spec.md": {
+    "source_sha256": "811fdf8e98e727bdba40ad8a8cde8259a32c90e90190dabcf5fb04e6f60feb49",
+    "translated_at": "2026-10-31T18:42:50+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  ".claude/commands/test.md": {
+    "source_sha256": "6655d78484ff0457ce3f249ecf30448dd42b3ea3529e89399c2c789fd0f52f51",
+    "translated_at": "2026-10-31T18:42:50+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  ".claude/commands/webperf.md": {
+    "source_sha256": "59bcea23bc9e2956cb0d4b314064b7091e11fad48dfdc48cb4e56545fd6f24db",
+    "translated_at": "2026-10-31T18:42:57+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "agents/code-reviewer.md": {
+    "source_sha256": "4efbd53e08e57291cc2869865be809897fbe598767600118ec687d00a557fff4",
+    "translated_at": "2026-10-31T18:43:01+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "agents/security-auditor.md": {
+    "source_sha256": "66a3f68f1c691b600ddb44e88afb138e239d0572df37be84e1f9a427c887dd0a",
+    "translated_at": "2026-10-31T18:43:05+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "agents/test-engineer.md": {
+    "source_sha256": "a7a0b33ec3294da8fb4ee02ed28c665056bafa48982930fe551dcfadda9117af",
+    "translated_at": "2026-10-31T18:43:05+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "agents/web-performance-auditor.md": {
+    "source_sha256": "0928b1cf8103262a364bce0c1fc689a918852e2275441f1b2e687adfa1e607e9",
+    "translated_at": "2026-10-31T18:43:31+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/api-and-interface-design/SKILL.md": {
+    "source_sha256": "cc5e2166c484b2c297e8253f56e7525e5031f81d66101ca4e760ef378ea6bad0",
+    "translated_at": "2026-10-31T18:43:47+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/browser-testing-with-devtools/SKILL.md": {
+    "source_sha256": "e28dd45416e6df93f0db6fffeb3aa2477a0e48a22f8e05fd5bb1892484115bb6",
+    "translated_at": "2026-10-31T18:43:43+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/ci-cd-and-automation/SKILL.md": {
+    "source_sha256": "5e0e55c059670a7838dc9d58dc20a3a645c0d43c974416490112af7de522df95",
+    "translated_at": "2026-10-31T18:43:39+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/code-review-and-quality/SKILL.md": {
+    "source_sha256": "2db1e850379f255fd3091ef278cde24cd6c7d2ba23e360cc52ea522c40d4396e",
+    "translated_at": "2026-10-31T18:44:31+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/code-simplification/SKILL.md": {
+    "source_sha256": "e13b433345e6bf425c3625442ac1b3507b371c18d7ea3e3db822da7a7f742a29",
+    "translated_at": "2026-10-31T18:44:21+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/constraint-driven-development/SKILL.md": {
+    "source_sha256": "5a690018d415fa972d1ecc85aed943a4f86b0d3c2305eea84f286ff391422008",
+    "translated_at": "2026-10-31T18:49:56+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/context-engineering/SKILL.md": {
+    "source_sha256": "5ee2929d3aded01587aa24fc9907693c8820f87f807ea0c52a263af718b62d0b",
+    "translated_at": "2026-10-31T18:44:29+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/debugging-and-error-recovery/SKILL.md": {
+    "source_sha256": "01cff31fbd8796b444225f8a8386219792c25cebb5d4d76df664afd1d13ed610",
+    "translated_at": "2026-10-31T18:44:47+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/deprecation-and-migration/SKILL.md": {
+    "source_sha256": "1896d7db836fc067e2856739664db9ff5bb642526fdff2126d08ec0d588da4b7",
+    "translated_at": "2026-10-31T18:45:04+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/documentation-and-adrs/SKILL.md": {
+    "source_sha256": "6fccf3088d5042a3c889faa25113ffa47b9f7f999f4fc9e527d5e5226888442f",
+    "translated_at": "2026-10-31T18:45:02+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/doubt-driven-development/SKILL.md": {
+    "source_sha256": "7a7d53d9d2b93ca7af8d882718753dc7887716f143e7937ecbc381f26416bda7",
+    "translated_at": "2026-10-31T18:45:47+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/frontend-ui-engineering/SKILL.md": {
+    "source_sha256": "93a0ebffbb6075340d85255ae50724bc5e5e19b0fcbf2ae5d5857b9c5ddf9498",
+    "translated_at": "2026-10-31T18:45:34+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/git-workflow-and-versioning/SKILL.md": {
+    "source_sha256": "d77c955f57cfafde73efb7641ed9a478ffaa0f61c0f31bd9fe87317702f1b60d",
+    "translated_at": "2026-10-31T18:45:48+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/idea-refine/SKILL.md": {
+    "source_sha256": "c226c1cd369bef2671073f5fd1f4108731691f725ef28f8c8c01d247c214d0c3",
+    "translated_at": "2026-10-31T18:45:34+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/incremental-implementation/SKILL.md": {
+    "source_sha256": "df66536610071727feae1ca95f3c391c248ad828041750ccd3699cce763aa00b",
+    "translated_at": "2026-10-31T18:46:01+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/interview-me/SKILL.md": {
+    "source_sha256": "ace4b675999bb504593d572e0f73f3d7e803ad6fddf318445598c82c11939db2",
+    "translated_at": "2026-10-31T18:46:18+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/observability-and-instrumentation/SKILL.md": {
+    "source_sha256": "e7fcb0820306d46268de9594d676ad98e35040858926c412b7000faa52a61f87",
+    "translated_at": "2026-10-31T18:46:32+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/performance-optimization/SKILL.md": {
+    "source_sha256": "82af71540457cf853893685211f64509cd1e781c0de09d0186f16960f2d6eeba",
+    "translated_at": "2026-10-31T18:46:44+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/planning-and-task-breakdown/SKILL.md": {
+    "source_sha256": "ed0f90cc5951ddd4bcab7f871f64efec93a49af9279ef93bc470da77ad8da3f7",
+    "translated_at": "2026-10-31T18:46:31+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/security-and-hardening/SKILL.md": {
+    "note": "Inline-Code max × instances manuell zurückgesetzt",
+    "source_sha256": "358566859a3d791c474eb9fa36939b45875c7480d7d4650eaa092dceae2c1c37",
+    "translated_at": "2026-10-31T18:51:24+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/shipping-and-launch/SKILL.md": {
+    "source_sha256": "92fec446ec4e947a7b8aac88b851aa5743ff8cb39d5987fb53df08ba8a160d64",
+    "translated_at": "2026-10-31T18:47:04+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/source-driven-development/SKILL.md": {
+    "source_sha256": "df38a852658679a67c7a9e4840160570c95094a13a63307e834045ddbf8aa287",
+    "translated_at": "2026-10-31T18:47:00+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/spec-driven-development/SKILL.md": {
+    "source_sha256": "b9d05b4259c14550bbffbaafd8201492129926d37ede716db352c6e4f91b404d",
+    "translated_at": "2026-10-31T18:47:25+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/test-driven-development/SKILL.md": {
+    "source_sha256": "8fcaa57cf445ca6111fd20d2321bcfc0f424db7cfe526836db7b9bf8828fee39",
+    "translated_at": "2026-10-31T18:47:42+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  },
+  "skills/using-agent-skills/SKILL.md": {
+    "source_sha256": "30787ef2c77bf1a4729fffed0f6523ba6fcbe81bdc436b36371b78c21394d3c3",
+    "translated_at": "2026-10-31T18:47:30+00:00",
+    "upstream_commit": "8bfcc1f9916f2eea55494d8c1fa7f4bde867dd9e"
+  }
+}

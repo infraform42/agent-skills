@@ -5,23 +5,23 @@ description: "Spec vor dem Code (SPEC.md) aus agent-skills. Nur verwenden, wenn 
 
 # Spec-Driven Development
 
-## Overview
+## Überblick
 
-Write a structured specification before writing any code. The spec is the shared source of truth between you and the human engineer — it defines what we're building, why, and how we'll know it's done. Code without a spec is guessing.
+Schreibe eine strukturierte Spezifikation, bevor du Code schreibst. Die Spec ist die gemeinsame Single Source of Truth zwischen dir und dem menschlichen Entwickler — sie legt fest, was wir bauen, warum wir es bauen und woran wir erkennen, dass es fertig ist. Code ohne Spec ist Raten.
 
-## When to Use
+## Wann verwenden
 
-- Starting a new project or feature
-- Requirements are ambiguous or incomplete
-- The change touches multiple files or modules
-- You're about to make an architectural decision
-- The task would take more than 30 minutes to implement
+- Ein neues Projekt oder Feature beginnt
+- Anforderungen sind mehrdeutig oder unvollständig
+- Die Änderung betrifft mehrere Dateien oder Module
+- Du stehst vor einer Architekturentscheidung
+- Die Umsetzung würde länger als 30 Minuten dauern
 
-**When NOT to use:** Single-line fixes, typo corrections, or changes where requirements are unambiguous and self-contained.
+**Wann NICHT verwenden:** Einzeilige Fixes, Tippfehlerkorrekturen oder Änderungen, deren Anforderungen eindeutig und in sich abgeschlossen sind.
 
-## The Gated Workflow
+## Der Workflow mit Gates
 
-Spec-driven development has four phases, preceded by a scope check (Phase 0) that activates only when one request bundles several independently testable capabilities. Do not advance to the next phase until the current one is validated.
+Spec-Driven Development besteht aus vier Phasen, denen ein Scope-Check (Phase 0) vorangeht, der nur greift, wenn eine einzelne Anfrage mehrere unabhängig testbare Fähigkeiten bündelt. Gehe erst zur nächsten Phase über, wenn die aktuelle validiert ist.
 
 ```
 SPECIFY ──→ PLAN ──→ TASKS ──→ IMPLEMENT
@@ -31,17 +31,17 @@ SPECIFY ──→ PLAN ──→ TASKS ──→ IMPLEMENT
  reviews    reviews  reviews    reviews
 ```
 
-### Phase 0: Scope Check
+### Phase 0: Scope-Check
 
-Most requests describe one capability. If this one does, skip this phase and go straight to Specify — Phase 0 exists for the exception, not the rule, and it puts no hierarchy on single-capability features.
+Die meisten Anfragen beschreiben eine einzige Fähigkeit. Trifft das hier zu, überspringe diese Phase und gehe direkt zu Specify — Phase 0 existiert für die Ausnahme, nicht für die Regel, und sie führt keine Hierarchie für Features mit nur einer Fähigkeit ein.
 
-**Detection.** Decompose before specifying when a single requirement bundles several independently testable capabilities:
+**Erkennung.** Zerlege vor dem Spezifizieren, wenn eine einzelne Anforderung mehrere unabhängig testbare Fähigkeiten bündelt:
 
-- The requirement names distinct capabilities with their own consumers or data (e.g. identity, billing, notifications, reporting)
-- Acceptance criteria cluster into groups that could ship and be verified separately
-- One capability could be cut or replaced without rewriting the others' requirements
+- Die Anforderung nennt unterschiedliche Fähigkeiten mit jeweils eigenen Konsumenten oder Daten (z. B. Identität, Abrechnung, Benachrichtigungen, Reporting)
+- Akzeptanzkriterien bilden Gruppen, die getrennt ausgeliefert und verifiziert werden könnten
+- Eine Fähigkeit könnte gestrichen oder ersetzt werden, ohne die Anforderungen der anderen umzuschreiben
 
-**Propose a capability map before writing any spec.** Small and reviewable — a module table plus a build order, not a project plan:
+**Schlage eine Capability Map vor, bevor du eine Spec schreibst.** Klein und reviewbar — eine Modultabelle plus Build-Reihenfolge, kein Projektplan:
 
 ```markdown
 # Capability Map: [Initiative Name]
@@ -56,19 +56,19 @@ Most requests describe one capability. If this one does, skip this phase and go 
 Build order: identity → billing, notifications → reporting
 ```
 
-- **Stable module ids.** Kebab-case, chosen once, never renamed mid-initiative. Specs, plans, and downstream commands select work by these ids instead of guessing which spec is active.
-- **Dependency direction, no cycles.** Arrows point one way. If two modules each need the other, they are one module.
-- **Interfaces live at the boundary.** The map records that `billing` depends on `identity`; the contract between them belongs in the provider module's spec (see `api-and-interface-design` for designing it).
+- **Stabile Modul-IDs.** Kebab-Case, einmal gewählt, mitten in der Initiative nie umbenannt. Specs, Pläne und nachgelagerte Commands wählen Arbeit anhand dieser IDs aus, statt zu raten, welche Spec gerade aktiv ist.
+- **Abhängigkeitsrichtung ohne Zyklen.** Pfeile zeigen nur in eine Richtung. Braucht jedes von zwei Modulen das andere, sind es ein Modul.
+- **Schnittstellen liegen an der Grenze.** Die Map hält fest, dass `billing` von `identity` abhängt; der Vertrag zwischen beiden gehört in die Spec des bereitstellenden Moduls (siehe `api-and-interface-design` für den Entwurf).
 
-**The map is gated like every phase.** The human reviews module boundaries, dependency direction, and build order before any module spec is written. Getting the map wrong is expensive; reviewing ten lines is not.
+**Die Map hat ein Gate wie jede Phase.** Der Mensch prüft Modulgrenzen, Abhängigkeitsrichtung und Build-Reihenfolge, bevor eine Modul-Spec geschrieben wird. Eine falsche Map ist teuer; zehn Zeilen zu prüfen ist es nicht.
 
-**Then recurse per module.** Run Specify → Plan → Tasks → Implement for each module in dependency order. Each module gets its own spec, scoped to that module's objective, boundaries, and success criteria. Save the approved map at the project root and each module's spec alongside it, named by module id (`SPEC-identity.md`, `SPEC-billing.md`) — the map, not filename guessing, is the index of what exists.
+**Danach rekursiv pro Modul.** Durchlaufe Specify → Plan → Tasks → Implement für jedes Modul in Abhängigkeitsreihenfolge. Jedes Modul bekommt eine eigene Spec, zugeschnitten auf Ziel, Grenzen und Erfolgskriterien dieses Moduls. Speichere die freigegebene Map im Projekt-Root und die Spec jedes Moduls daneben, benannt nach der Modul-ID (`SPEC-identity.md`, `SPEC-billing.md`) — die Map, nicht das Erraten von Dateinamen, ist der Index dessen, was existiert.
 
 ### Phase 1: Specify
 
-Start with a high-level vision. Ask the human clarifying questions until requirements are concrete.
+Beginne mit einer übergeordneten Vision. Stelle dem Menschen Rückfragen, bis die Anforderungen konkret sind.
 
-**Surface assumptions immediately.** Before writing any spec content, list what you're assuming:
+**Lege Annahmen sofort offen.** Liste vor jedem Spec-Inhalt auf, was du annimmst:
 
 ```
 ASSUMPTIONS I'M MAKING:
@@ -79,13 +79,13 @@ ASSUMPTIONS I'M MAKING:
 → Correct me now or I'll proceed with these.
 ```
 
-Don't silently fill in ambiguous requirements. The spec's entire purpose is to surface misunderstandings *before* code gets written — assumptions are the most dangerous form of misunderstanding.
+Fülle mehrdeutige Anforderungen nicht stillschweigend auf. Der ganze Zweck der Spec ist, Missverständnisse aufzudecken, *bevor* Code entsteht — Annahmen sind die gefährlichste Form des Missverständnisses.
 
-**Write a spec document covering these six core areas:**
+**Schreibe ein Spec-Dokument, das diese sechs Kernbereiche abdeckt:**
 
-1. **Objective** — What are we building and why? Who is the user? What does success look like?
+1. **Objective** — Was bauen wir und warum? Wer ist der Nutzer? Wie sieht Erfolg aus?
 
-2. **Commands** — Full executable commands with flags, not just tool names.
+2. **Commands** — Vollständige ausführbare Befehle mit Flags, nicht nur Tool-Namen.
    ```
    Build: npm run build
    Test: npm test -- --coverage
@@ -93,7 +93,7 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
    Dev: npm run dev
    ```
 
-3. **Project Structure** — Where source code lives, where tests go, where docs belong.
+3. **Project Structure** — Wo der Quellcode liegt, wohin Tests gehören, wo Dokumentation hingehört.
    ```
    src/           → Application source code
    src/components → React components
@@ -103,16 +103,16 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
    docs/          → Documentation
    ```
 
-4. **Code Style** — One real code snippet showing your style beats three paragraphs describing it. Include naming conventions, formatting rules, and examples of good output.
+4. **Code Style** — Ein echtes Code-Snippet, das deinen Stil zeigt, schlägt drei Absätze Beschreibung. Nimm Namenskonventionen, Formatierungsregeln und Beispiele für gute Ausgabe auf.
 
-5. **Testing Strategy** — What framework, where tests live, coverage expectations, which test levels for which concerns.
+5. **Testing Strategy** — Welches Framework, wo Tests liegen, Erwartungen an die Abdeckung, welche Teststufen für welche Belange.
 
-6. **Boundaries** — Three-tier system:
-   - **Always do:** Run tests before commits, follow naming conventions, validate inputs
-   - **Ask first:** Database schema changes, adding dependencies, changing CI config
-   - **Never do:** Commit secrets, edit vendor directories, remove failing tests without approval
+6. **Boundaries** — Dreistufiges System:
+   - **Always do:** Tests vor Commits ausführen, Namenskonventionen einhalten, Eingaben validieren
+   - **Ask first:** Datenbankschema-Änderungen, neue Abhängigkeiten, Änderungen an der CI-Konfiguration
+   - **Never do:** Secrets committen, Vendor-Verzeichnisse bearbeiten, fehlschlagende Tests ohne Freigabe entfernen
 
-**Spec template:**
+**Spec-Template:**
 
 ```markdown
 # Spec: [Project/Feature Name]
@@ -147,13 +147,9 @@ Don't silently fill in ambiguous requirements. The spec's entire purpose is to s
 [Anything unresolved that needs human input]
 ```
 
-**External spec tools:** This workflow is format-agnostic. If the project
-already uses OpenSpec or another specification system, keep that system's
-artifact format and storage conventions instead of creating a duplicate
-`SPEC.md`. This skill owns the clarification, content, and approval gates; the
-external tool owns how the approved spec is represented.
+**Externe Spec-Tools:** Dieser Workflow ist formatagnostisch. Nutzt das Projekt bereits OpenSpec oder ein anderes Spezifikationssystem, behalte dessen Artefaktformat und Ablagekonventionen bei, statt eine doppelte `SPEC.md` anzulegen. Dieser Skill verantwortet die Gates für Klärung, Inhalt und Freigabe; das externe Tool verantwortet, wie die freigegebene Spec dargestellt wird.
 
-**Reframe instructions as success criteria.** When receiving vague requirements, translate them into concrete conditions:
+**Formuliere Anweisungen als Erfolgskriterien um.** Übersetze vage Anforderungen in konkrete Bedingungen:
 
 ```
 REQUIREMENT: "Make the dashboard faster"
@@ -165,43 +161,43 @@ REFRAMED SUCCESS CRITERIA:
 → Are these the right targets?
 ```
 
-This lets you loop, retry, and problem-solve toward a clear goal rather than guessing what "faster" means.
+So kannst du iterieren, es erneut versuchen und gezielt auf ein klares Ziel hin Probleme lösen, statt zu raten, was „schneller“ bedeutet.
 
-**Stop after writing the spec (CRITICAL).** Once the spec is saved:
+**Halte nach dem Schreiben der Spec an (KRITISCH).** Sobald die Spec gespeichert ist:
 
-1. Summarize it and list any Open Questions.
-2. Ask the human to approve it or request changes.
-3. **STOP YOUR TURN IMMEDIATELY.** Do NOT start Phase 2, invoke `planning-and-task-breakdown`, or write code in this turn. Planning starts only after the human approves the spec in a later turn.
+1. Fasse sie zusammen und liste alle Open Questions auf.
+2. Bitte den Menschen, sie freizugeben oder Änderungen anzufordern.
+3. **BEENDE DEINEN ZUG SOFORT.** Starte in diesem Zug NICHT Phase 2, rufe NICHT `planning-and-task-breakdown` auf und schreibe KEINEN Code. Die Planung beginnt erst, nachdem der Mensch die Spec in einem späteren Zug freigegeben hat.
 
 ### Phase 2: Plan
 
-With the validated spec, generate a technical implementation plan:
+Erstelle mit der validierten Spec einen technischen Umsetzungsplan:
 
-1. Identify the major components and their dependencies
-2. Determine the implementation order (what must be built first)
-3. Note risks and mitigation strategies
-4. Identify what can be built in parallel vs. what must be sequential
-5. Define verification checkpoints between phases
+1. Identifiziere die wichtigsten Komponenten und ihre Abhängigkeiten
+2. Lege die Umsetzungsreihenfolge fest (was zuerst gebaut werden muss)
+3. Halte Risiken und Gegenmaßnahmen fest
+4. Bestimme, was parallel gebaut werden kann und was sequenziell sein muss
+5. Definiere Verifikations-Checkpoints zwischen den Phasen
 
-> Follow `planning-and-task-breakdown` for the dependency-graph mapping and vertical-slicing mechanics behind these steps; it is the canonical source. The bullets above are a lightweight summary; if they ever diverge, `planning-and-task-breakdown` takes precedence.
+> Folge `planning-and-task-breakdown` für das Abbilden des Abhängigkeitsgraphen und die Mechanik des vertikalen Schneidens hinter diesen Schritten; dort liegt die maßgebliche Quelle. Die obigen Punkte sind eine knappe Zusammenfassung; weichen sie jemals ab, hat `planning-and-task-breakdown` Vorrang.
 >
-> **Output convention:** Save the plan to `tasks/plan.md` and record the task list in the task list target defined by `planning-and-task-breakdown` (default `tasks/todo.md`; projects may designate an external tracker instead). Create `tasks/` if it does not exist. Downstream commands (`/build`, etc.) expect these defaults.
+> **Ausgabekonvention:** Speichere den Plan in `tasks/plan.md` und trage die Aufgabenliste in das Ziel für Aufgabenlisten ein, das `planning-and-task-breakdown` definiert (Standard `tasks/todo.md`; Projekte können stattdessen einen externen Tracker festlegen). Lege `tasks/` an, falls es nicht existiert. Nachgelagerte Commands (`/build` usw.) erwarten diese Standardwerte.
 
-The plan should be reviewable: the human should be able to read it and say "yes, that's the right approach" or "no, change X."
+Der Plan sollte reviewbar sein: Der Mensch sollte ihn lesen und sagen können „Ja, das ist der richtige Ansatz“ oder „Nein, ändere X.“
 
 ### Phase 3: Tasks
 
-Break the plan into discrete, implementable tasks:
+Zerlege den Plan in einzelne, umsetzbare Aufgaben:
 
-- Each task should be completable in a single focused session
-- Each task has explicit acceptance criteria
-- Each task includes a verification step (test, build, manual check)
-- Tasks are ordered by dependency, not by perceived importance
-- No task should require changing more than ~5 files
+- Jede Aufgabe sollte in einer einzigen fokussierten Sitzung abschließbar sein
+- Jede Aufgabe hat explizite Akzeptanzkriterien
+- Jede Aufgabe enthält einen Verifikationsschritt (Test, Build, manuelle Prüfung)
+- Aufgaben sind nach Abhängigkeit geordnet, nicht nach gefühlter Wichtigkeit
+- Keine Aufgabe sollte Änderungen an mehr als ~5 Dateien erfordern
 
-> Follow `planning-and-task-breakdown` for the full task-sizing and dependency-ordering mechanics; it is the canonical source. The template below is a lightweight inline form; if they ever diverge, `planning-and-task-breakdown` takes precedence.
+> Folge `planning-and-task-breakdown` für die vollständige Mechanik zu Aufgabengröße und Abhängigkeitsreihenfolge; dort liegt die maßgebliche Quelle. Das Template unten ist eine knappe Inline-Form; weichen sie jemals ab, hat `planning-and-task-breakdown` Vorrang.
 
-**Task template:**
+**Aufgaben-Template:**
 ```markdown
 - [ ] Task: [Description]
   - Acceptance: [What must be true when done]
@@ -211,49 +207,49 @@ Break the plan into discrete, implementable tasks:
 
 ### Phase 4: Implement
 
-Execute tasks one at a time following `skills/incremental-implementation/SKILL.md` (`incremental-implementation`) and `skills/test-driven-development/SKILL.md` (`test-driven-development`). Use `skills/context-engineering/SKILL.md` (`context-engineering`) to load the right spec sections and source files at each step rather than flooding the agent with the entire spec.
+Arbeite die Aufgaben nacheinander ab und folge dabei `skills/incremental-implementation/SKILL.md` (`incremental-implementation`) und `skills/test-driven-development/SKILL.md` (`test-driven-development`). Nutze `skills/context-engineering/SKILL.md` (`context-engineering`), um in jedem Schritt die passenden Spec-Abschnitte und Quelldateien zu laden, statt den Agenten mit der gesamten Spec zu überfluten.
 
-## Keeping the Spec Alive
+## Die Spec lebendig halten
 
-The spec is a living document, not a one-time artifact:
+Die Spec ist ein lebendiges Dokument, kein einmaliges Artefakt:
 
-- **Update when decisions change** — If you discover the data model needs to change, update the spec first, then implement.
-- **Update when scope changes** — Features added or cut should be reflected in the spec.
-- **Commit the spec** — The spec belongs in version control alongside the code.
-- **Reference the spec in PRs** — Link back to the spec section that each PR implements.
+- **Aktualisiere sie, wenn sich Entscheidungen ändern** — Stellst du fest, dass sich das Datenmodell ändern muss, aktualisiere zuerst die Spec und setze dann um.
+- **Aktualisiere sie, wenn sich der Scope ändert** — Hinzugefügte oder gestrichene Features gehören in die Spec.
+- **Committe die Spec** — Die Spec gehört zusammen mit dem Code in die Versionskontrolle.
+- **Verweise in PRs auf die Spec** — Verlinke auf den Spec-Abschnitt, den der jeweilige PR umsetzt.
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Realität |
 |---|---|
-| "This is simple, I don't need a spec" | Simple tasks don't need *long* specs, but they still need acceptance criteria. A two-line spec is fine. |
-| "I'll write the spec after I code it" | That's documentation, not specification. The spec's value is in forcing clarity *before* code. |
-| "The spec will slow us down" | A 15-minute spec prevents hours of rework. Waterfall in 15 minutes beats debugging in 15 hours. |
-| "Requirements will change anyway" | That's why the spec is a living document. An outdated spec is still better than no spec. |
-| "The user knows what they want" | Even clear requests have implicit assumptions. The spec surfaces those assumptions. |
-| "It's one big feature; splitting it is overhead" | If acceptance criteria cluster into independently testable groups, a monolithic spec forces every downstream task to reason over the whole contract. A ten-line capability map is the cheap alternative. |
-| "I'll decompose during planning" | Planning slices tasks within a spec. By then the oversized artifact already exists — module boundaries and dependency direction must be decided before the spec is written, not after. |
+| „Das ist simpel, ich brauche keine Spec“ | Simple Aufgaben brauchen keine *langen* Specs, aber trotzdem Akzeptanzkriterien. Eine Spec mit zwei Zeilen ist in Ordnung. |
+| „Die Spec schreibe ich, nachdem ich es programmiert habe“ | Das ist Dokumentation, keine Spezifikation. Der Wert der Spec liegt darin, Klarheit *vor* dem Code zu erzwingen. |
+| „Die Spec bremst uns aus“ | Eine Spec in 15 Minuten erspart Stunden an Nacharbeit. Wasserfall in 15 Minuten schlägt Debugging in 15 Stunden. |
+| „Die Anforderungen ändern sich sowieso“ | Genau deshalb ist die Spec ein lebendiges Dokument. Eine veraltete Spec ist trotzdem besser als keine. |
+| „Der Nutzer weiß, was er will“ | Auch klare Anfragen enthalten implizite Annahmen. Die Spec macht diese Annahmen sichtbar. |
+| „Es ist ein großes Feature; Aufteilen ist Overhead“ | Bilden die Akzeptanzkriterien unabhängig testbare Gruppen, zwingt eine monolithische Spec jede nachgelagerte Aufgabe, über den gesamten Vertrag nachzudenken. Eine zehnzeilige Capability Map ist die günstige Alternative. |
+| „Ich zerlege das später in der Planung“ | Die Planung schneidet Aufgaben innerhalb einer Spec. Dann existiert das überdimensionierte Artefakt bereits — Modulgrenzen und Abhängigkeitsrichtung müssen entschieden werden, bevor die Spec geschrieben wird, nicht danach. |
 
-## Red Flags
+## Warnsignale
 
-- Starting to write code without any written requirements
-- Asking "should I just start building?" before clarifying what "done" means
-- Implementing features not mentioned in any spec or task list
-- Making architectural decisions without documenting them
-- Skipping the spec because "it's obvious what to build"
-- Writing the spec and starting the plan or code in the same turn
-- One spec whose requirements span several independently testable capabilities
-- Module boundaries or build order decided implicitly during implementation because no capability map was approved up front
+- Du fängst an, Code zu schreiben, ohne schriftliche Anforderungen
+- Du fragst „Soll ich einfach anfangen zu bauen?“, bevor geklärt ist, was „fertig“ heißt
+- Du setzt Features um, die in keiner Spec oder Aufgabenliste stehen
+- Du triffst Architekturentscheidungen, ohne sie zu dokumentieren
+- Du überspringst die Spec, weil „offensichtlich ist, was zu bauen ist“
+- Du schreibst die Spec und startest im selben Zug Plan oder Code
+- Eine einzelne Spec, deren Anforderungen mehrere unabhängig testbare Fähigkeiten umfassen
+- Modulgrenzen oder Build-Reihenfolge werden implizit während der Umsetzung entschieden, weil vorab keine Capability Map freigegeben wurde
 
-## Verification
+## Verifikation
 
-Before proceeding to implementation, confirm:
+Bestätige vor dem Übergang zur Umsetzung:
 
-- [ ] The spec covers all six core areas
-- [ ] The human has reviewed and approved the spec
-- [ ] The turn ended after saving the spec; approval came in a later turn
-- [ ] Success criteria are specific and testable
-- [ ] Boundaries (Always/Ask First/Never) are defined
-- [ ] The spec is saved to a file in the repository
-- [ ] If the request bundles several independently testable capabilities, a capability map (module ids, dependency direction, build order) was approved before any module spec was written
-- [ ] Every module spec traces to a module id in the approved map
+- [ ] Die Spec deckt alle sechs Kernbereiche ab
+- [ ] Der Mensch hat die Spec geprüft und freigegeben
+- [ ] Der Zug endete nach dem Speichern der Spec; die Freigabe kam in einem späteren Zug
+- [ ] Erfolgskriterien sind spezifisch und testbar
+- [ ] Boundaries (Always/Ask First/Never) sind definiert
+- [ ] Die Spec ist in einer Datei im Repository gespeichert
+- [ ] Bündelt die Anfrage mehrere unabhängig testbare Fähigkeiten, wurde eine Capability Map (Modul-IDs, Abhängigkeitsrichtung, Build-Reihenfolge) freigegeben, bevor eine Modul-Spec geschrieben wurde
+- [ ] Jede Modul-Spec lässt sich auf eine Modul-ID in der freigegebenen Map zurückführen

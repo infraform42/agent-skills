@@ -3,106 +3,106 @@ name: code-review-and-quality
 description: "Fünf-Achsen-Code-Review aus agent-skills (Korrektheit, Lesbarkeit, Architektur, Sicherheit, Performance). Nur verwenden, wenn der Nutzer /agent-skills-de:review aufruft oder diesen Skill ausdrücklich nennt. Für Reviews im Alltag gilt der Skill code-review."
 ---
 
-# Code Review and Quality
+# Code Review und Qualität
 
-## Overview
+## Überblick
 
-Multi-dimensional code review with quality gates. Every change gets reviewed before merge — no exceptions. Review covers five axes: correctness, readability, architecture, security, and performance.
+Mehrdimensionales Code-Review mit Quality Gates. Jede Änderung wird vor dem Merge geprüft – keine Ausnahmen. Das Review deckt fünf Achsen ab: Korrektheit, Lesbarkeit, Architektur, Security und Performance.
 
-**The approval standard:** Approve a change when it definitely improves overall code health, even if it isn't perfect. Perfect code doesn't exist — the goal is continuous improvement. Don't block a change because it isn't exactly how you would have written it. If it improves the codebase and follows the project's conventions, approve it.
+**Der Freigabemaßstab:** Gib eine Änderung frei, wenn sie die Gesamtqualität des Codes eindeutig verbessert, auch wenn sie nicht perfekt ist. Perfekten Code gibt es nicht – das Ziel ist kontinuierliche Verbesserung. Blockiere eine Änderung nicht, nur weil sie nicht genau so geschrieben ist, wie du sie geschrieben hättest. Wenn sie die Codebasis verbessert und den Konventionen des Projekts folgt, gib sie frei.
 
-## When to Use
+## Wann verwenden
 
-- Before merging any PR or change
-- After completing a feature implementation
-- When another agent or model produced code you need to evaluate
-- When refactoring existing code
-- After any bug fix (review both the fix and the regression test)
+- Vor dem Merge jedes PR oder jeder Änderung
+- Nach Abschluss einer Feature-Implementierung
+- Wenn ein anderer Agent oder ein anderes Modell Code erzeugt hat, den du bewerten musst
+- Beim Refaktorieren von bestehendem Code
+- Nach jedem Bugfix (prüfe sowohl den Fix als auch den Regressionstest)
 
-## The Five-Axis Review
+## Das Fünf-Achsen-Review
 
-Every review evaluates code across these dimensions:
+Jedes Review bewertet den Code anhand dieser Dimensionen:
 
-### 1. Correctness
+### 1. Korrektheit
 
-Does the code do what it claims to do?
+Tut der Code, was er vorgibt zu tun?
 
-- Does it match the spec or task requirements?
-- Are edge cases handled (null, empty, boundary values)?
-- Are error paths handled (not just the happy path)?
-- Does it pass all tests? Are the tests actually testing the right things?
-- Are there off-by-one errors, race conditions, or state inconsistencies?
+- Entspricht er der Spec bzw. den Anforderungen der Aufgabe?
+- Sind Grenzfälle behandelt (null, leer, Grenzwerte)?
+- Sind Fehlerpfade behandelt (nicht nur der Happy Path)?
+- Bestehen alle Tests? Testen die Tests tatsächlich das Richtige?
+- Gibt es Off-by-one-Fehler, Race Conditions oder Zustandsinkonsistenzen?
 
-### 2. Readability & Simplicity
+### 2. Lesbarkeit & Einfachheit
 
-Can another engineer (or agent) understand this code without the author explaining it?
+Kann ein anderer Engineer (oder Agent) diesen Code verstehen, ohne dass der Autor ihn erklärt?
 
-- Are names descriptive and consistent with project conventions? (No `temp`, `data`, `result` without context)
-- Is the control flow straightforward (avoid nested ternaries, deep callbacks)?
-- Is the code organized logically (related code grouped, clear module boundaries)?
-- Are there any "clever" tricks that should be simplified?
-- **Could this be done in fewer lines?** (1000 lines where 100 suffice is a failure)
-- **Are abstractions earning their complexity?** (Don't generalize until the third use case)
-- Would comments help clarify non-obvious intent? (But don't comment obvious code.)
-- Are there dead code artifacts: no-op variables (`_unused`), backwards-compat shims, or `// removed` comments?
-- **Is a new conditional bolted onto an unrelated flow?** That's a design smell, not a nit — push the logic into its own helper, state, or policy instead of tangling an existing path.
-- **Do repeated conditionals on the same shape appear?** They signal a missing model or dispatcher. A "temporary" branch is usually permanent debt.
+- Sind Namen aussagekräftig und konsistent mit den Projektkonventionen? (Kein `temp`, `data`, `result` ohne Kontext)
+- Ist der Kontrollfluss geradlinig (verschachtelte Ternaries und tiefe Callbacks vermeiden)?
+- Ist der Code logisch organisiert (zusammengehöriger Code gruppiert, klare Modulgrenzen)?
+- Gibt es „clevere“ Tricks, die vereinfacht werden sollten?
+- **Ginge das in weniger Zeilen?** (1000 Zeilen, wo 100 genügen, sind ein Versagen)
+- **Rechtfertigen die Abstraktionen ihre Komplexität?** (Verallgemeinere nicht vor dem dritten Anwendungsfall)
+- Würden Kommentare helfen, nicht offensichtliche Absichten zu klären? (Kommentiere aber keinen offensichtlichen Code.)
+- Gibt es Überreste von totem Code: No-op-Variablen (`_unused`), Abwärtskompatibilitäts-Shims oder `// removed`-Kommentare?
+- **Wird eine neue Bedingung an einen unzusammenhängenden Ablauf angeflanscht?** Das ist ein Design-Smell, kein Nit – verlagere die Logik in einen eigenen Helper, Zustand oder eine eigene Policy, statt einen bestehenden Pfad zu verwirren.
+- **Tauchen wiederholte Bedingungen auf derselben Struktur auf?** Sie deuten auf ein fehlendes Modell oder einen fehlenden Dispatcher hin. Ein „temporärer“ Zweig ist meist dauerhafte Schuld.
 
-### 3. Architecture
+### 3. Architektur
 
-Does the change fit the system's design?
+Passt die Änderung zum Design des Systems?
 
-- Does it follow existing patterns or introduce a new one? If new, is it justified?
-- Does it maintain clean module boundaries?
-- Is there code duplication that should be shared?
-- Are dependencies flowing in the right direction (no circular dependencies)?
-- Is the abstraction level appropriate (not over-engineered, not too coupled)?
-- **Does this refactor reduce complexity or just relocate it?** Count the concepts a reader must hold to follow the change. If a "cleaner" version leaves that count unchanged, it isn't cleaner — prefer the restructuring that makes whole branches, modes, or layers disappear over one that re-centralizes the same logic. Prefer deleting an abstraction to polishing it.
-- **Is feature-specific logic leaking into a shared or general-purpose module?** Keep logic in its owning layer, reuse the existing canonical helper instead of a near-duplicate, and don't normalize architectural drift.
-- **Are type boundaries explicit?** Question gratuitous `any`/`unknown`/optional/casts and silent fallbacks that paper over an unclear invariant — making the boundary explicit often makes the surrounding control flow simpler.
+- Folgt sie bestehenden Mustern oder führt sie ein neues ein? Falls neu: Ist das begründet?
+- Bleiben saubere Modulgrenzen erhalten?
+- Gibt es Code-Duplikation, die geteilt werden sollte?
+- Fließen Abhängigkeiten in die richtige Richtung (keine zirkulären Abhängigkeiten)?
+- Ist das Abstraktionsniveau angemessen (nicht überengineered, nicht zu stark gekoppelt)?
+- **Reduziert dieses Refactoring die Komplexität oder verlagert es sie nur?** Zähle die Konzepte, die ein Leser im Kopf behalten muss, um der Änderung zu folgen. Bleibt diese Zahl bei einer „saubereren“ Version gleich, ist sie nicht sauberer – bevorzuge die Umstrukturierung, die ganze Zweige, Modi oder Schichten verschwinden lässt, gegenüber einer, die dieselbe Logik nur neu zentralisiert. Lösche lieber eine Abstraktion, als sie zu polieren.
+- **Sickert featurespezifische Logik in ein geteiltes oder allgemeines Modul?** Halte Logik in der Schicht, der sie gehört, verwende den bestehenden kanonischen Helper statt eines Beinahe-Duplikats und normalisiere keine architektonische Drift.
+- **Sind Typgrenzen explizit?** Hinterfrage unnötiges `any`/`unknown`/Optional/Casts und stille Fallbacks, die eine unklare Invariante übertünchen – eine explizite Grenze vereinfacht oft den umgebenden Kontrollfluss.
 
 ### 4. Security
 
-For detailed security guidance, see `security-and-hardening`. Does the change introduce vulnerabilities?
+Detaillierte Security-Hinweise findest du in `security-and-hardening`. Führt die Änderung Schwachstellen ein?
 
-- Is user input validated and sanitized?
-- Are secrets kept out of code, logs, and version control?
-- Is authentication/authorization checked where needed?
-- Are SQL queries parameterized (no string concatenation)?
-- Are outputs encoded to prevent XSS?
-- Are dependencies from trusted sources with no known vulnerabilities?
-- Is data from external sources (APIs, logs, user content, config files) treated as untrusted?
-- Are external data flows validated at system boundaries before use in logic or rendering?
+- Werden Nutzereingaben validiert und bereinigt?
+- Bleiben Secrets aus Code, Logs und Versionskontrolle heraus?
+- Werden Authentifizierung/Autorisierung dort geprüft, wo nötig?
+- Sind SQL-Abfragen parametrisiert (keine String-Konkatenation)?
+- Werden Ausgaben kodiert, um XSS zu verhindern?
+- Stammen Abhängigkeiten aus vertrauenswürdigen Quellen und haben keine bekannten Schwachstellen?
+- Werden Daten aus externen Quellen (APIs, Logs, Nutzerinhalte, Konfigurationsdateien) als nicht vertrauenswürdig behandelt?
+- Werden externe Datenflüsse an Systemgrenzen validiert, bevor sie in Logik oder Rendering verwendet werden?
 
 ### 5. Performance
 
-For detailed profiling and optimization, see `performance-optimization`. Does the change introduce performance problems?
+Detailliertes Profiling und Optimierung findest du in `performance-optimization`. Führt die Änderung Performance-Probleme ein?
 
-- Any N+1 query patterns?
-- Any unbounded loops or unconstrained data fetching?
-- Any synchronous operations that should be async?
-- Any unnecessary re-renders in UI components?
-- Any missing pagination on list endpoints?
-- Any large objects created in hot paths?
+- Gibt es N+1-Query-Muster?
+- Gibt es unbegrenzte Schleifen oder unbeschränktes Laden von Daten?
+- Gibt es synchrone Operationen, die asynchron sein sollten?
+- Gibt es unnötige Re-Renders in UI-Komponenten?
+- Fehlt Pagination bei Listen-Endpunkten?
+- Werden große Objekte in Hot Paths erzeugt?
 
-## Structural Remedies
+## Strukturelle Abhilfen
 
-When you flag a structural problem, propose the move — not just the problem. A review that only says "this is complex" leaves the author guessing. Reach for a named restructuring:
+Wenn du ein strukturelles Problem markierst, schlage den Umbau vor – nicht nur das Problem. Ein Review, das nur sagt „das ist komplex“, lässt den Autor im Ungewissen. Greife zu einer benannten Umstrukturierung:
 
-- **Replace a chain of conditionals** with a typed model or an explicit dispatcher.
-- **Collapse duplicate branches** into a single clearer flow.
-- **Separate orchestration from business logic** so each reads on its own.
-- **Move feature-specific logic** out of a shared module into the package that owns the concept.
-- **Reuse the canonical helper** instead of a bespoke near-duplicate.
-- **Make a type boundary explicit** so downstream branching disappears.
-- **Delete a pass-through wrapper** that adds indirection without clarifying the API.
-- **Extract a helper, or split a large file** into focused modules.
+- **Ersetze eine Kette von Bedingungen** durch ein typisiertes Modell oder einen expliziten Dispatcher.
+- **Fasse doppelte Zweige** zu einem einzigen, klareren Ablauf zusammen.
+- **Trenne Orchestrierung von Geschäftslogik**, sodass sich beide für sich lesen lassen.
+- **Verschiebe featurespezifische Logik** aus einem geteilten Modul in das Paket, dem das Konzept gehört.
+- **Verwende den kanonischen Helper** statt eines maßgeschneiderten Beinahe-Duplikats.
+- **Mache eine Typgrenze explizit**, damit nachgelagerte Verzweigungen entfallen.
+- **Lösche einen Pass-through-Wrapper**, der Indirektion hinzufügt, ohne die API zu klären.
+- **Extrahiere einen Helper oder teile eine große Datei** in fokussierte Module auf.
 
-Prefer the remedy that removes moving pieces over one that spreads the same complexity around.
+Bevorzuge die Abhilfe, die bewegliche Teile entfernt, gegenüber einer, die dieselbe Komplexität nur verteilt.
 
-## Change Sizing
+## Änderungsgröße
 
-Small, focused changes are easier to review, faster to merge, and safer to deploy. Target these sizes:
+Kleine, fokussierte Änderungen sind leichter zu prüfen, schneller zu mergen und sicherer auszurollen. Ziele für die Größen:
 
 ```
 ~100 lines changed   → Good. Reviewable in one sitting.
@@ -110,38 +110,38 @@ Small, focused changes are easier to review, faster to merge, and safer to deplo
 ~1000 lines changed  → Too large. Split it.
 ```
 
-**Watch file size, not just diff size.** A small diff can still push a file past a healthy boundary — around 1000 *total* lines in a single file (distinct from the ~1000 *changed*-lines threshold above) is a common inspection signal, not a hard cap. When a change materially grows an already-large file, ask whether to extract helpers, subcomponents, or modules *first*, before piling more on. Decompose, then add.
+**Achte auf die Dateigröße, nicht nur auf die Diff-Größe.** Ein kleiner Diff kann eine Datei dennoch über eine gesunde Grenze schieben – rund 1000 *Gesamt*zeilen in einer einzelnen Datei (nicht zu verwechseln mit der Schwelle von ~1000 *geänderten* Zeilen oben) sind ein gängiges Prüfsignal, keine harte Obergrenze. Wenn eine Änderung eine ohnehin große Datei spürbar vergrößert, frage dich, ob du *zuerst* Helper, Teilkomponenten oder Module extrahieren solltest, bevor du noch mehr daraufpackst. Erst zerlegen, dann hinzufügen.
 
-**What counts as "one change":** A single self-contained modification that addresses one thing, includes related tests, and keeps the system functional after submission. One part of a feature — not the whole feature.
+**Was als „eine Änderung“ zählt:** Eine einzelne, in sich geschlossene Modifikation, die eine Sache adressiert, zugehörige Tests enthält und das System nach dem Einreichen funktionsfähig hält. Ein Teil eines Features – nicht das ganze Feature.
 
-**Splitting strategies when a change is too large:**
+**Strategien zum Aufteilen, wenn eine Änderung zu groß ist:**
 
-| Strategy | How | When |
+| Strategie | Vorgehen | Wann |
 |----------|-----|------|
-| **Stack** | Submit a small change, start the next one based on it | Sequential dependencies |
-| **By file group** | Separate changes for groups needing different reviewers | Cross-cutting concerns |
-| **Horizontal** | Create shared code/stubs first, then consumers | Layered architecture |
-| **Vertical** | Break into smaller full-stack slices of the feature | Feature work |
+| **Stack** | Eine kleine Änderung einreichen, die nächste darauf aufbauend beginnen | Sequenzielle Abhängigkeiten |
+| **Nach Dateigruppe** | Getrennte Änderungen für Gruppen, die unterschiedliche Reviewer brauchen | Querschnittsthemen |
+| **Horizontal** | Zuerst geteilten Code/Stubs erstellen, dann die Konsumenten | Geschichtete Architektur |
+| **Vertikal** | In kleinere Full-Stack-Scheiben des Features aufteilen | Feature-Arbeit |
 
-**When large changes are acceptable:** Complete file deletions and automated refactoring where the reviewer only needs to verify intent, not every line.
+**Wann große Änderungen akzeptabel sind:** Vollständige Dateilöschungen und automatisiertes Refaktorieren, bei denen der Reviewer nur die Absicht prüfen muss, nicht jede Zeile.
 
-**Separate refactoring from feature work.** A change that refactors existing code and adds new behavior is two changes — submit them separately. Small cleanups (variable renaming) can be included at reviewer discretion.
+**Trenne Refaktorieren von Feature-Arbeit.** Eine Änderung, die bestehenden Code refaktoriert und neues Verhalten hinzufügt, sind zwei Änderungen – reiche sie getrennt ein. Kleine Aufräumarbeiten (Variablen umbenennen) können nach Ermessen des Reviewers enthalten sein.
 
-## Change Descriptions
+## Änderungsbeschreibungen
 
-Every change needs a description that stands alone in version control history.
+Jede Änderung braucht eine Beschreibung, die in der Versionsverwaltungshistorie für sich allein steht.
 
-**First line:** Short, imperative, standalone. "Delete the FizzBuzz RPC" not "Deleting the FizzBuzz RPC." Must be informative enough that someone searching history can understand the change without reading the diff.
+**Erste Zeile:** Kurz, im Imperativ, eigenständig. „Delete the FizzBuzz RPC“ statt „Deleting the FizzBuzz RPC.“ Sie muss aussagekräftig genug sein, dass jemand, der die Historie durchsucht, die Änderung versteht, ohne den Diff zu lesen.
 
-**Body:** What is changing and why. Include context, decisions, and reasoning not visible in the code itself. Link to bug numbers, benchmark results, or design docs where relevant. Acknowledge approach shortcomings when they exist.
+**Body:** Was sich ändert und warum. Nimm Kontext, Entscheidungen und Begründungen auf, die im Code selbst nicht sichtbar sind. Verlinke Bug-Nummern, Benchmark-Ergebnisse oder Design-Dokumente, wo relevant. Benenne Schwächen des Ansatzes, wenn es sie gibt.
 
-**Anti-patterns:** "Fix bug," "Fix build," "Add patch," "Moving code from A to B," "Phase 1," "Add convenience functions."
+**Anti-Patterns:** „Fix bug“, „Fix build“, „Add patch“, „Moving code from A to B“, „Phase 1“, „Add convenience functions“.
 
-## Review Process
+## Review-Ablauf
 
-### Step 1: Understand the Context
+### Schritt 1: Den Kontext verstehen
 
-Before looking at code, understand the intent:
+Verstehe die Absicht, bevor du den Code ansiehst:
 
 ```
 - What is this change trying to accomplish?
@@ -149,9 +149,9 @@ Before looking at code, understand the intent:
 - What is the expected behavior change?
 ```
 
-### Step 2: Review the Tests First
+### Schritt 2: Zuerst die Tests prüfen
 
-Tests reveal intent and coverage:
+Tests offenbaren Absicht und Abdeckung:
 
 ```
 - Do tests exist for the change?
@@ -161,11 +161,11 @@ Tests reveal intent and coverage:
 - Would the tests catch a regression if the code changed?
 ```
 
-Answer the last question by experiment, not by reading. Invert one condition the change adds (drop a negation, swap `&&` for `||`), run the suite, then restore the file from a copy. A mutation that stays green is a finding: name the test case that is missing. For a project-wide mutation score, see `constraint-driven-development`.
+Beantworte die letzte Frage per Experiment, nicht durch Lesen. Invertiere eine Bedingung, die die Änderung hinzufügt (Negation weglassen, `&&` gegen `||` tauschen), führe die Suite aus und stelle die Datei danach aus einer Kopie wieder her. Eine Mutation, die grün bleibt, ist ein Befund: Benenne den fehlenden Testfall. Für einen projektweiten Mutation Score siehe `constraint-driven-development`.
 
-### Step 3: Review the Implementation
+### Schritt 3: Die Implementierung prüfen
 
-Walk through the code with the five axes in mind:
+Gehe den Code mit den fünf Achsen im Kopf durch:
 
 ```
 For each file changed:
@@ -176,25 +176,25 @@ For each file changed:
 5. Performance: Any bottlenecks?
 ```
 
-### Step 4: Categorize Findings
+### Schritt 4: Befunde kategorisieren
 
-Label every comment with its severity so the author knows what's required vs optional:
+Versieh jeden Kommentar mit seinem Schweregrad, damit der Autor weiß, was verpflichtend und was optional ist:
 
-| Prefix | Meaning | Author Action |
+| Präfix | Bedeutung | Aktion des Autors |
 |--------|---------|---------------|
-| *(no prefix)* | Required change | Must address before merge |
-| **Critical:** | Blocks merge | Security vulnerability, data loss, broken functionality |
-| **Nit:** | Minor, optional | Author may ignore — formatting, style preferences |
-| **Optional:** / **Consider:** | Suggestion | Worth considering but not required |
-| **FYI** | Informational only | No action needed — context for future reference |
+| *(kein Präfix)* | Erforderliche Änderung | Muss vor dem Merge behoben werden |
+| **Critical:** | Blockiert den Merge | Sicherheitslücke, Datenverlust, defekte Funktionalität |
+| **Nit:** | Geringfügig, optional | Autor darf ignorieren – Formatierung, Stilvorlieben |
+| **Optional:** / **Consider:** | Vorschlag | Erwägenswert, aber nicht erforderlich |
+| **FYI** | Nur zur Information | Keine Aktion nötig – Kontext für später |
 
-This prevents authors from treating all feedback as mandatory and wasting time on optional suggestions.
+So behandeln Autoren nicht jedes Feedback als verpflichtend und verschwenden keine Zeit mit optionalen Vorschlägen.
 
-**Lead with what matters.** Order findings by leverage: correctness and security first, then structural regressions and missed simplifications, then everything else. Don't bury a real issue under cosmetic nits — a few high-conviction comments beat a long list. If you have one structural problem and ten nits, the structural problem *is* the review.
+**Beginne mit dem, was zählt.** Ordne die Befunde nach Hebelwirkung: zuerst Korrektheit und Security, dann strukturelle Regressionen und verpasste Vereinfachungen, dann alles andere. Begrabe ein echtes Problem nicht unter kosmetischen Nits – wenige Kommentare mit hoher Überzeugung schlagen eine lange Liste. Wenn du ein strukturelles Problem und zehn Nits hast, *ist* das strukturelle Problem das Review.
 
-### Step 5: Verify the Verification
+### Schritt 5: Die Verifikation verifizieren
 
-Check the author's verification story:
+Prüfe die Verifikationsgeschichte des Autors:
 
 ```
 - What tests were run?
@@ -204,9 +204,9 @@ Check the author's verification story:
 - Is there a before/after comparison?
 ```
 
-## Multi-Model Review Pattern
+## Multi-Modell-Review-Muster
 
-Use different models for different review perspectives:
+Nutze unterschiedliche Modelle für unterschiedliche Review-Perspektiven:
 
 ```
 Model A writes the code
@@ -221,24 +221,24 @@ Model A addresses the feedback
 Human makes the final call
 ```
 
-This catches issues that a single model might miss — different models have different blind spots.
+So werden Probleme gefunden, die einem einzelnen Modell entgehen könnten – verschiedene Modelle haben unterschiedliche blinde Flecken.
 
-**Example prompt for a review agent:**
+**Beispiel-Prompt für einen Review-Agenten:**
 ```
 Review this code change for correctness, security, and adherence to
 our project conventions. The spec says [X]. The change should [Y].
 Flag any issues as Critical, Required, Optional, or Nit.
 ```
 
-## Dead Code Hygiene
+## Hygiene bei totem Code
 
-After any refactoring or implementation change, check for orphaned code:
+Prüfe nach jedem Refaktorieren oder jeder Implementierungsänderung auf verwaisten Code:
 
-1. Identify code that is now unreachable or unused
-2. List it explicitly
-3. **Ask before deleting:** "Should I remove these now-unused elements: [list]?"
+1. Identifiziere Code, der jetzt unerreichbar oder ungenutzt ist
+2. Liste ihn explizit auf
+3. **Frage vor dem Löschen:** „Soll ich diese jetzt ungenutzten Elemente entfernen: [Liste]?“
 
-Don't leave dead code lying around — it confuses future readers and agents. But don't silently delete things you're not sure about. When in doubt, ask.
+Lass keinen toten Code herumliegen – er verwirrt künftige Leser und Agenten. Lösche aber nichts stillschweigend, bei dem du dir nicht sicher bist. Im Zweifel frage nach.
 
 ```
 DEAD CODE IDENTIFIED:
@@ -248,60 +248,60 @@ DEAD CODE IDENTIFIED:
 → Safe to remove these?
 ```
 
-## Review Speed
+## Review-Geschwindigkeit
 
-Slow reviews block entire teams. The cost of context-switching to review is less than the waiting cost imposed on others.
+Langsame Reviews blockieren ganze Teams. Die Kosten des Kontextwechsels für ein Review sind geringer als die Wartekosten, die anderen entstehen.
 
-- **Respond within one business day** — this is the maximum, not the target
-- **Ideal cadence:** Respond shortly after a review request arrives, unless deep in focused coding. A typical change should complete multiple review rounds in a single day
-- **Prioritize fast individual responses** over quick final approval. Quick feedback reduces frustration even if multiple rounds are needed
-- **Large changes:** Ask the author to split them rather than reviewing one massive changeset
+- **Antworte innerhalb eines Werktags** – das ist das Maximum, nicht das Ziel
+- **Idealer Rhythmus:** Antworte kurz nach Eingang einer Review-Anfrage, außer du steckst tief in konzentrierter Programmierarbeit. Eine typische Änderung sollte mehrere Review-Runden an einem Tag abschließen
+- **Priorisiere schnelle Einzelantworten** vor schneller finaler Freigabe. Schnelles Feedback verringert Frust, auch wenn mehrere Runden nötig sind
+- **Große Änderungen:** Bitte den Autor, sie aufzuteilen, statt einen riesigen Changeset zu prüfen
 
-## Handling Disagreements
+## Umgang mit Meinungsverschiedenheiten
 
-When resolving review disputes, apply this hierarchy:
+Wende bei der Klärung von Review-Streitfragen diese Hierarchie an:
 
-1. **Technical facts and data** override opinions and preferences
-2. **Style guides** are the absolute authority on style matters
-3. **Software design** must be evaluated on engineering principles, not personal preference
-4. **Codebase consistency** is acceptable if it doesn't degrade overall health
+1. **Technische Fakten und Daten** haben Vorrang vor Meinungen und Vorlieben
+2. **Style Guides** sind die absolute Autorität in Stilfragen
+3. **Software-Design** muss nach Engineering-Prinzipien bewertet werden, nicht nach persönlicher Vorliebe
+4. **Konsistenz der Codebasis** ist akzeptabel, wenn sie die Gesamtqualität nicht verschlechtert
 
-**Don't accept "I'll clean it up later."** Experience shows deferred cleanup rarely happens. Require cleanup before submission unless it's a genuine emergency. If surrounding issues can't be addressed in this change, require filing a bug with self-assignment.
+**Akzeptiere kein „Ich räume das später auf.“** Die Erfahrung zeigt, dass aufgeschobenes Aufräumen selten passiert. Verlange das Aufräumen vor dem Einreichen, außer es handelt sich um einen echten Notfall. Wenn umliegende Probleme in dieser Änderung nicht behoben werden können, verlange, dass ein Bug angelegt und sich selbst zugewiesen wird.
 
-## Honesty in Review
+## Ehrlichkeit im Review
 
-When reviewing code — whether written by you, another agent, or a human:
+Beim Review von Code – egal ob von dir, einem anderen Agenten oder einem Menschen geschrieben:
 
-- **Don't rubber-stamp.** "LGTM" without evidence of review helps no one.
-- **Don't soften real issues.** "This might be a minor concern" when it's a bug that will hit production is dishonest.
-- **Quantify problems when possible.** "This N+1 query will add ~50ms per item in the list" is better than "this could be slow."
-- **Push back on approaches with clear problems.** Sycophancy is a failure mode in reviews. If the implementation has issues, say so directly and propose alternatives.
-- **Accept override gracefully.** If the author has full context and disagrees, defer to their judgment. Comment on code, not people — reframe personal critiques to focus on the code itself.
+- **Stempel nicht ab.** „LGTM“ ohne Nachweis eines Reviews hilft niemandem.
+- **Schwäche echte Probleme nicht ab.** „Das könnte ein kleines Problem sein“, wenn es ein Bug ist, der in Produktion auftreten wird, ist unehrlich.
+- **Beziffere Probleme, wenn möglich.** „Diese N+1-Query fügt pro Listeneintrag ~50 ms hinzu“ ist besser als „das könnte langsam sein“.
+- **Widersprich Ansätzen mit klaren Problemen.** Anbiederung ist ein Fehlermodus in Reviews. Hat die Implementierung Probleme, sag es direkt und schlage Alternativen vor.
+- **Akzeptiere ein Überstimmen mit Anstand.** Wenn der Autor den vollen Kontext hat und anderer Meinung ist, folge seinem Urteil. Kommentiere den Code, nicht die Person – formuliere persönliche Kritik so um, dass sie sich auf den Code bezieht.
 
-## Dependency Discipline
+## Disziplin bei Abhängigkeiten
 
-Part of code review is dependency review:
+Zum Code-Review gehört auch das Review von Abhängigkeiten:
 
-**Before adding any dependency:**
-1. Does the existing stack solve this? (Often it does.)
-2. How large is the dependency? (Check bundle impact.)
-3. Is it actively maintained? (Check last commit, open issues.)
-4. Does it have known vulnerabilities? (`npm audit`)
-5. What's the license? (Must be compatible with the project.)
+**Bevor du eine Abhängigkeit hinzufügst:**
+1. Löst der bestehende Stack das Problem? (Oft ist das der Fall.)
+2. Wie groß ist die Abhängigkeit? (Prüfe den Bundle-Einfluss.)
+3. Wird sie aktiv gepflegt? (Prüfe letzten Commit, offene Issues.)
+4. Hat sie bekannte Schwachstellen? (`npm audit`)
+5. Welche Lizenz hat sie? (Muss mit dem Projekt kompatibel sein.)
 
-**Rule:** Prefer standard library and existing utilities over new dependencies. Every dependency is a liability.
+**Regel:** Bevorzuge die Standardbibliothek und bestehende Utilities gegenüber neuen Abhängigkeiten. Jede Abhängigkeit ist eine Belastung.
 
-**Upgrading an existing dependency** is a code change like any other, and the riskiest upgrades are the ones merged in bulk with a message like "bump deps." Review them with the same discipline:
+**Das Upgrade einer bestehenden Abhängigkeit** ist eine Codeänderung wie jede andere, und die riskantesten Upgrades sind die, die gebündelt mit einer Nachricht wie „bump deps“ gemergt werden. Prüfe sie mit derselben Disziplin:
 
-1. **Read the changelog, not just the version number.** Semver is a promise the maintainer may not have kept — a "patch" can carry a behavioral change. For a major bump, read the migration notes and find what breaks.
-2. **One dependency per change.** Upgrade and merge them individually (or in small related groups). When a bulk bump breaks the build, you've lost which package did it; a single-package change makes the cause obvious and the revert clean.
-3. **Let the tests decide.** The upgrade is verified by a green suite before *and* after, not by "it installed." If coverage around the dependency's behavior is thin, that gap is the real finding — add a test first.
-4. **Mind the transitive graph.** Most installed packages are ones nobody chose directly. Review the lockfile diff, not just `package.json`; a single direct bump can pull in dozens of indirect changes.
-5. **Keep the lockfile honest.** Commit it, review its diff, and never hand-edit it. The lockfile is the thing that actually pins what ships.
+1. **Lies das Changelog, nicht nur die Versionsnummer.** Semver ist ein Versprechen, das der Maintainer vielleicht nicht gehalten hat – ein „Patch“ kann eine Verhaltensänderung enthalten. Lies bei einem Major-Bump die Migrationshinweise und finde heraus, was bricht.
+2. **Eine Abhängigkeit pro Änderung.** Aktualisiere und merge sie einzeln (oder in kleinen zusammengehörigen Gruppen). Bricht ein gebündelter Bump den Build, weißt du nicht mehr, welches Paket es war; eine Änderung mit einem einzelnen Paket macht die Ursache offensichtlich und den Revert sauber.
+3. **Lass die Tests entscheiden.** Das Upgrade wird durch eine grüne Suite *vor* und *nach* dem Update verifiziert, nicht dadurch, dass „es installiert wurde“. Ist die Abdeckung des Verhaltens der Abhängigkeit dünn, ist diese Lücke der eigentliche Befund – schreibe zuerst einen Test.
+4. **Beachte den transitiven Graphen.** Die meisten installierten Pakete hat niemand direkt gewählt. Prüfe den Lockfile-Diff, nicht nur `package.json`; ein einzelner direkter Bump kann Dutzende indirekter Änderungen nach sich ziehen.
+5. **Halte das Lockfile ehrlich.** Committe es, prüfe seinen Diff und bearbeite es nie von Hand. Das Lockfile legt tatsächlich fest, was ausgeliefert wird.
 
-For triaging `npm audit` findings and supply-chain risk (typosquatting, compromised maintainers), follow the `security-and-hardening` skill — this section covers the upgrade *workflow*, that one covers the security verdict.
+Für die Triage von `npm audit`-Befunden und Supply-Chain-Risiken (Typosquatting, kompromittierte Maintainer) folge dem Skill `security-and-hardening` – dieser Abschnitt behandelt den *Workflow* des Upgrades, jener das Security-Urteil.
 
-## The Review Checklist
+## Die Review-Checkliste
 
 ```markdown
 ## Review: [PR/Change title]
@@ -348,51 +348,51 @@ For triaging `npm audit` findings and supply-chain risk (typosquatting, compromi
 - [ ] **Approve** — Ready to merge
 - [ ] **Request changes** — Issues must be addressed
 ```
-## See Also
+## Siehe auch
 
-- For detailed security review guidance, see `../../references/security-checklist.md`
-- For performance review checks, see `../../references/performance-checklist.md`
+- Für detaillierte Hinweise zum Security-Review siehe `../../references/security-checklist.md`
+- Für Performance-Prüfpunkte im Review siehe `../../references/performance-checklist.md`
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Realität |
 |---|---|
-| "It works, that's good enough" | Working code that's unreadable, insecure, or architecturally wrong creates debt that compounds. |
-| "I wrote it, so I know it's correct" | Authors are blind to their own assumptions. Every change benefits from another set of eyes. |
-| "We'll clean it up later" | Later never comes. The review is the quality gate — use it. Require cleanup before merge, not after. |
-| "AI-generated code is probably fine" | AI code needs more scrutiny, not less. It's confident and plausible, even when wrong. |
-| "The tests pass, so it's good" | Tests are necessary but not sufficient. They don't catch architecture problems, security issues, or readability concerns. |
-| "The refactor makes it cleaner" | Relocating complexity isn't reducing it. If the reader still holds the same number of concepts, the structure didn't improve — look for the version where branches disappear. |
-| "It's only a small addition to this file" | Small diffs still push files past a healthy size and bolt branches onto unrelated flows. Judge the resulting structure, not the diff size. |
-| "It's just a version bump" | A bump is a behavior change you didn't write. Read the changelog; semver doesn't guarantee no breakage. |
-| "I'll upgrade everything in one PR to save time" | A bulk bump that breaks the build hides which package did it. One dependency per change keeps the cause and the revert clean. |
+| „Es funktioniert, das reicht“ | Funktionierender Code, der unlesbar, unsicher oder architektonisch falsch ist, erzeugt Schulden, die sich aufsummieren. |
+| „Ich habe es geschrieben, also weiß ich, dass es korrekt ist“ | Autoren sind blind für ihre eigenen Annahmen. Jede Änderung profitiert von einem zweiten Paar Augen. |
+| „Wir räumen das später auf“ | Später kommt nie. Das Review ist das Quality Gate – nutze es. Verlange das Aufräumen vor dem Merge, nicht danach. |
+| „KI-generierter Code ist wahrscheinlich in Ordnung“ | KI-Code braucht mehr Prüfung, nicht weniger. Er wirkt selbstsicher und plausibel, auch wenn er falsch ist. |
+| „Die Tests laufen durch, also ist es gut“ | Tests sind notwendig, aber nicht hinreichend. Sie fangen keine Architekturprobleme, Security-Probleme oder Lesbarkeitsmängel ab. |
+| „Das Refactoring macht es sauberer“ | Komplexität zu verlagern heißt nicht, sie zu reduzieren. Muss der Leser noch dieselbe Zahl an Konzepten im Kopf behalten, hat sich die Struktur nicht verbessert – suche die Version, in der Zweige verschwinden. |
+| „Es ist nur eine kleine Ergänzung in dieser Datei“ | Auch kleine Diffs schieben Dateien über eine gesunde Größe und flanschen Zweige an unzusammenhängende Abläufe an. Beurteile die resultierende Struktur, nicht die Diff-Größe. |
+| „Es ist nur ein Versions-Bump“ | Ein Bump ist eine Verhaltensänderung, die du nicht geschrieben hast. Lies das Changelog; Semver garantiert keine Bruchfreiheit. |
+| „Ich aktualisiere alles in einem PR, um Zeit zu sparen“ | Ein gebündelter Bump, der den Build bricht, verbirgt, welches Paket es war. Eine Abhängigkeit pro Änderung hält Ursache und Revert sauber. |
 
-## Red Flags
+## Warnsignale
 
-- PRs merged without any review
-- Review that only checks if tests pass (ignoring other axes)
-- "LGTM" without evidence of actual review
-- Security-sensitive changes without security-focused review
-- Large PRs that are "too big to review properly" (split them)
-- No regression tests with bug fix PRs
-- Review comments without severity labels — makes it unclear what's required vs optional
-- Accepting "I'll fix it later" — it never happens
-- A refactor that moves code around without reducing the number of concepts a reader must hold
-- A change that grows an already-large file instead of decomposing it
-- New conditionals scattered into unrelated code paths (a missing abstraction)
-- A bespoke helper that duplicates an existing canonical one, or feature logic placed in a shared module
-- A bulk "bump dependencies" PR with no changelog review and no per-package isolation
-- A lockfile change that's hand-edited, uncommitted, or merged without reviewing its diff
+- PRs, die ganz ohne Review gemergt werden
+- Review, das nur prüft, ob die Tests durchlaufen (und die anderen Achsen ignoriert)
+- „LGTM“ ohne Nachweis eines tatsächlichen Reviews
+- Sicherheitsrelevante Änderungen ohne sicherheitsfokussiertes Review
+- Große PRs, die „zu groß für ein ordentliches Review“ sind (aufteilen)
+- Keine Regressionstests bei Bugfix-PRs
+- Review-Kommentare ohne Schweregrad-Labels – unklar, was erforderlich und was optional ist
+- „Ich fixe es später“ zu akzeptieren – es passiert nie
+- Ein Refactoring, das Code verschiebt, ohne die Zahl der Konzepte zu verringern, die ein Leser im Kopf behalten muss
+- Eine Änderung, die eine ohnehin große Datei vergrößert, statt sie zu zerlegen
+- Neue Bedingungen, die in unzusammenhängende Codepfade gestreut werden (eine fehlende Abstraktion)
+- Ein maßgeschneiderter Helper, der einen bestehenden kanonischen dupliziert, oder featurespezifische Logik in einem geteilten Modul
+- Ein gebündelter PR „Abhängigkeiten aktualisieren“ ohne Changelog-Review und ohne Isolierung pro Paket
+- Eine Lockfile-Änderung, die von Hand bearbeitet, nicht committet oder ohne Prüfung ihres Diffs gemergt wurde
 
-## Verification
+## Verifikation
 
-After review is complete:
+Nach Abschluss des Reviews:
 
-- [ ] All Critical issues are resolved
-- [ ] All Required (no-prefix) changes are resolved or explicitly deferred with justification
-- [ ] Tests pass
-- [ ] Build succeeds
-- [ ] The verification story is documented (what changed, how it was verified)
-- [ ] Dependency upgrades were reviewed against their changelog, isolated per package, and verified by a green suite with the lockfile diff reviewed
+- [ ] Alle Critical-Issues sind behoben
+- [ ] Alle Required-Änderungen (ohne Präfix) sind behoben oder mit Begründung ausdrücklich zurückgestellt
+- [ ] Tests bestehen
+- [ ] Build ist erfolgreich
+- [ ] Die Verifikationsgeschichte ist dokumentiert (was sich geändert hat, wie es verifiziert wurde)
+- [ ] Abhängigkeits-Upgrades wurden gegen ihr Changelog geprüft, pro Paket isoliert und durch eine grüne Suite verifiziert, wobei der Lockfile-Diff geprüft wurde
 
-**Presumptive blockers:** surface and propose the simpler design for each of these; escalate to Required only when the change actively makes structure worse: a refactor that relocates complexity instead of reducing it; a change that pushes a file past the size boundary with no decomposition; feature logic added to a shared module; a near-duplicate of an existing canonical helper; a silent fallback that hides an unclear invariant.
+**Vermutliche Blocker:** Benenne jeweils das Problem und schlage das einfachere Design vor; eskaliere nur dann zu Required, wenn die Änderung die Struktur aktiv verschlechtert: ein Refactoring, das Komplexität verlagert statt reduziert; eine Änderung, die eine Datei ohne Zerlegung über die Größengrenze schiebt; featurespezifische Logik, die einem geteilten Modul hinzugefügt wird; ein Beinahe-Duplikat eines bestehenden kanonischen Helpers; ein stiller Fallback, der eine unklare Invariante verbirgt.

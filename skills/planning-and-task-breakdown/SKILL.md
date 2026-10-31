@@ -3,38 +3,38 @@ name: planning-and-task-breakdown
 description: "Zerlegt eine Spec in geordnete Aufgaben (tasks/plan.md) aus agent-skills. Nur verwenden, wenn der Nutzer /agent-skills-de:plan oder /agent-skills-de:build aufruft oder diesen Skill ausdrücklich nennt. Für Ticket-Zerlegung im Alltag gilt der Skill to-tickets."
 ---
 
-# Planning and Task Breakdown
+# Planung und Aufgabenzerlegung
 
-## Overview
+## Überblick
 
-Decompose work into small, verifiable tasks with explicit acceptance criteria. Good task breakdown is the difference between an agent that completes work reliably and one that produces a tangled mess. Every task should be small enough to implement, test, and verify in a single focused session.
+Zerlege Arbeit in kleine, verifizierbare Aufgaben mit expliziten Akzeptanzkriterien. Eine gute Aufgabenzerlegung entscheidet darüber, ob ein Agent Arbeit zuverlässig abschließt oder ein verworrenes Chaos produziert. Jede Aufgabe sollte klein genug sein, um sie in einer einzigen fokussierten Session umzusetzen, zu testen und zu verifizieren.
 
-## When to Use
+## Wann verwenden
 
-- You have a spec and need to break it into implementable units
-- A task feels too large or vague to start
-- Work needs to be parallelized across multiple agents or sessions
-- You need to communicate scope to a human
-- The implementation order isn't obvious
+- Du hast eine Spec und musst sie in umsetzbare Einheiten zerlegen
+- Eine Aufgabe wirkt zu groß oder zu vage, um sie anzugehen
+- Arbeit muss auf mehrere Agenten oder Sessions parallelisiert werden
+- Du musst den Umfang an einen Menschen kommunizieren
+- Die Reihenfolge der Umsetzung ist nicht offensichtlich
 
-**When NOT to use:** Single-file changes with obvious scope, or when the spec already contains well-defined tasks.
+**Wann NICHT verwenden:** Änderungen an einer einzelnen Datei mit offensichtlichem Umfang oder wenn die Spec bereits klar definierte Aufgaben enthält.
 
-## The Planning Process
+## Der Planungsprozess
 
-### Step 1: Enter Plan Mode
+### Schritt 1: Plan Mode betreten
 
-Before writing any code, operate in read-only mode:
+Arbeite vor dem Schreiben von Code im schreibgeschützten Modus:
 
-- Read the spec and relevant codebase sections
-- Identify existing patterns and conventions
-- Map dependencies between components
-- Note risks and unknowns
+- Lies die Spec und die relevanten Teile der Codebasis
+- Identifiziere bestehende Muster und Konventionen
+- Erfasse die Abhängigkeiten zwischen Komponenten
+- Halte Risiken und Unbekannte fest
 
-**Do NOT write code during planning.** The output is a plan document saved to `tasks/plan.md` and a task list recorded in the task list target (see Output Files; default `tasks/todo.md`), not implementation.
+**Schreibe während der Planung KEINEN Code.** Das Ergebnis ist ein Plan-Dokument, gespeichert in `tasks/plan.md`, und eine Aufgabenliste, festgehalten im Ziel der Aufgabenliste (siehe Ausgabedateien; Standard `tasks/todo.md`) – keine Implementierung.
 
-### Step 2: Identify the Dependency Graph
+### Schritt 2: Den Abhängigkeitsgraphen ermitteln
 
-Map what depends on what:
+Erfasse, was wovon abhängt:
 
 ```
 Database schema
@@ -52,13 +52,13 @@ Database schema
     └── Seed data / migrations
 ```
 
-Implementation order follows the dependency graph bottom-up: build foundations first.
+Die Reihenfolge der Umsetzung folgt dem Abhängigkeitsgraphen von unten nach oben: Baue zuerst die Fundamente.
 
-### Step 3: Slice Vertically
+### Schritt 3: Vertikal in Scheiben schneiden
 
-Instead of building all the database, then all the API, then all the UI — build one complete feature path at a time:
+Baue nicht erst die komplette Datenbank, dann die komplette API, dann die komplette UI, sondern jeweils einen vollständigen Feature-Pfad nach dem anderen:
 
-**Bad (horizontal slicing):**
+**Schlecht (horizontales Schneiden):**
 ```
 Task 1: Build entire database schema
 Task 2: Build all API endpoints
@@ -66,7 +66,7 @@ Task 3: Build all UI components
 Task 4: Connect everything
 ```
 
-**Good (vertical slicing):**
+**Gut (vertikales Schneiden):**
 ```
 Task 1: User can create an account (schema + API + UI for registration)
 Task 2: User can log in (auth schema + API + UI for login)
@@ -74,11 +74,11 @@ Task 3: User can create a task (task schema + API + UI for creation)
 Task 4: User can view task list (query + API + UI for list view)
 ```
 
-Each vertical slice delivers working, testable functionality.
+Jede vertikale Scheibe liefert funktionierende, testbare Funktionalität.
 
-### Step 4: Write Tasks
+### Schritt 4: Aufgaben schreiben
 
-Each task follows this structure, whether it lands in the markdown task list or as an item in an external tracker (see Output Files):
+Jede Aufgabe folgt dieser Struktur, egal ob sie in der Markdown-Aufgabenliste landet oder als Eintrag in einem externen Tracker (siehe Ausgabedateien):
 
 ```markdown
 ## Task [N]: [Short descriptive title]
@@ -103,16 +103,16 @@ Each task follows this structure, whether it lands in the markdown task list or 
 **Estimated scope:** [Small: 1-2 files | Medium: 3-5 files | Large: 5+ files]
 ```
 
-### Step 5: Order and Checkpoint
+### Schritt 5: Ordnen und Checkpoints setzen
 
-Arrange tasks so that:
+Ordne die Aufgaben so, dass:
 
-1. Dependencies are satisfied (build foundation first)
-2. Each task leaves the system in a working state
-3. Verification checkpoints occur after every 2-3 tasks
-4. High-risk tasks are early (fail fast)
+1. Abhängigkeiten erfüllt sind (zuerst das Fundament bauen)
+2. Jede Aufgabe das System in einem lauffähigen Zustand hinterlässt
+3. Verifikations-Checkpoints nach jeweils 2–3 Aufgaben stattfinden
+4. Risikoreiche Aufgaben früh kommen (fail fast)
 
-Add explicit checkpoints to the task list target:
+Füge dem Ziel der Aufgabenliste explizite Checkpoints hinzu:
 
 ```markdown
 ## Checkpoint: After Tasks 1-3
@@ -122,48 +122,48 @@ Add explicit checkpoints to the task list target:
 - [ ] Review with human before proceeding
 ```
 
-## Task Sizing Guidelines
+## Richtlinien zur Aufgabengröße
 
-| Size | Files | Scope | Example |
+| Größe | Dateien | Umfang | Beispiel |
 |------|-------|-------|---------|
-| **XS** | 1 | Single function or config change | Add a validation rule |
-| **S** | 1-2 | One component or endpoint | Add a new API endpoint |
-| **M** | 3-5 | One feature slice | User registration flow |
-| **L** | 5-8 | Multi-component feature | Search with filtering and pagination |
-| **XL** | 8+ | **Too large — break it down further** | — |
+| **XS** | 1 | Einzelne Funktion oder Konfigurationsänderung | Eine Validierungsregel hinzufügen |
+| **S** | 1-2 | Eine Komponente oder ein Endpoint | Einen neuen API-Endpoint hinzufügen |
+| **M** | 3-5 | Eine Feature-Scheibe | Registrierungsablauf für Nutzer |
+| **L** | 5-8 | Feature mit mehreren Komponenten | Suche mit Filterung und Paginierung |
+| **XL** | 8+ | **Zu groß – weiter zerlegen** | — |
 
-If a task is L or larger, it should be broken into smaller tasks. An agent performs best on S and M tasks.
+Ist eine Aufgabe L oder größer, zerlege sie in kleinere Aufgaben. Ein Agent arbeitet am besten mit S- und M-Aufgaben.
 
-**When to break a task down further:**
-- It would take more than one focused session (roughly 2+ hours of agent work)
-- You cannot describe the acceptance criteria in 3 or fewer bullet points
-- It touches two or more independent subsystems (e.g., auth and billing)
-- You find yourself writing "and" in the task title (a sign it is two tasks)
+**Wann du eine Aufgabe weiter zerlegen solltest:**
+- Sie würde mehr als eine fokussierte Session dauern (grob 2+ Stunden Agentenarbeit)
+- Du kannst die Akzeptanzkriterien nicht in 3 oder weniger Stichpunkten beschreiben
+- Sie berührt zwei oder mehr unabhängige Subsysteme (z. B. Auth und Billing)
+- Du schreibst „und“ in den Aufgabentitel (ein Zeichen für zwei Aufgaben)
 
-## Output Files
+## Ausgabedateien
 
-- **Plan document:** Save the implementation plan to `tasks/plan.md`. This is always a markdown file — design decisions, risks, and open questions don't map cleanly onto individual tracker issues.
-- **Task list:** Record each task in the **task list target** (defined below).
+- **Plan-Dokument:** Speichere den Implementierungsplan in `tasks/plan.md`. Das ist immer eine Markdown-Datei – Designentscheidungen, Risiken und offene Fragen lassen sich nicht sauber auf einzelne Tracker-Issues abbilden.
+- **Aufgabenliste:** Halte jede Aufgabe im **Ziel der Aufgabenliste** (unten definiert) fest.
 
-Create the `tasks/` directory if it does not exist.
+Lege das Verzeichnis `tasks/` an, falls es nicht existiert.
 
-**Never overwrite an incomplete plan.** Before writing `tasks/plan.md` or `tasks/todo.md`, check whether they already exist and still contain unchecked tasks:
+**Überschreibe nie einen unvollständigen Plan.** Prüfe vor dem Schreiben von `tasks/plan.md` oder `tasks/todo.md`, ob sie bereits existieren und noch unabgehakte Aufgaben enthalten:
 
-- Same work being replanned (the user asked to revise or extend this plan) → update the existing files in place.
-- Different work → **stop and ask.** The unchecked tasks may be mid-build in another session. Do not delete, overwrite, or rename the existing files on your own; present the conflict and let the user decide (finish the old plan first, explicitly discard it, or tell you where the new plan should go).
+- Dieselbe Arbeit wird neu geplant (der Nutzer hat darum gebeten, diesen Plan zu überarbeiten oder zu erweitern) → aktualisiere die bestehenden Dateien direkt.
+- Andere Arbeit → **halte an und frage nach.** Die unabgehakten Aufgaben könnten gerade in einer anderen Session in Umsetzung sein. Lösche, überschreibe oder benenne die bestehenden Dateien nicht eigenmächtig um; lege den Konflikt dar und lass den Nutzer entscheiden (erst den alten Plan abschließen, ihn ausdrücklich verwerfen oder dir sagen, wo der neue Plan liegen soll).
 
-The same rule applies to an external task list target: never bulk-close or delete another plan's open tracker items to make room for new ones.
+Dieselbe Regel gilt für ein externes Ziel der Aufgabenliste: Schließe oder lösche nie in großen Mengen offene Tracker-Einträge eines anderen Plans, um Platz für neue zu schaffen.
 
-### Task List Target
+### Ziel der Aufgabenliste
 
-The task list target is where tasks and checkpoints are recorded. It is defined once, here; every other reference in this skill defers to it.
+Das Ziel der Aufgabenliste ist der Ort, an dem Aufgaben und Checkpoints festgehalten werden. Es wird einmalig hier definiert; jeder andere Verweis in diesem Skill bezieht sich darauf.
 
-- **Default: a checklist-style markdown file at `tasks/todo.md`.** This is the convention the `/build` command and other downstream tooling expect. Use it unless the project says otherwise.
-- **External tracker:** if the project's agent rules (`CLAUDE.md`, `AGENTS.md`, etc.) or the user designate an issue tracker (e.g. GitHub Issues, Jira, Linear, `bd`/beads), create one tracker item per task instead of writing `tasks/todo.md`. Map the Step 4 structure onto the tracker's fields: acceptance criteria and verification steps in the item body, dependencies via the tracker's linking mechanism (`bd dep add`, "blocked by", etc.). Record Step 5 checkpoints as tracker items too, or as a checklist in the plan document if the tracker has no natural equivalent.
+- **Standard: eine Markdown-Datei im Checklisten-Stil unter `tasks/todo.md`.** Das ist die Konvention, die der `/build`-Command und andere nachgelagerte Tools erwarten. Verwende sie, solange das Projekt nichts anderes vorgibt.
+- **Externer Tracker:** Wenn die Agent-Regeln des Projekts (`CLAUDE.md`, `AGENTS.md` usw.) oder der Nutzer einen Issue-Tracker festlegen (z. B. GitHub Issues, Jira, Linear, `bd`/beads), lege stattdessen pro Aufgabe einen Tracker-Eintrag an, statt `tasks/todo.md` zu schreiben. Bilde die Struktur aus Schritt 4 auf die Felder des Trackers ab: Akzeptanzkriterien und Verifikationsschritte im Text des Eintrags, Abhängigkeiten über den Verknüpfungsmechanismus des Trackers (`bd dep add`, „blocked by“ usw.). Halte die Checkpoints aus Schritt 5 ebenfalls als Tracker-Einträge fest, oder als Checkliste im Plan-Dokument, falls der Tracker kein natürliches Äquivalent bietet.
 
-When using an external tracker, note it in `tasks/plan.md` (e.g. "Tasks tracked in Linear project FOO") so downstream steps and future sessions know where to look, and keep the plan document's Task List section as an ordered index of tracker item IDs or links rather than a duplicate checklist.
+Wenn du einen externen Tracker verwendest, vermerke das in `tasks/plan.md` (z. B. „Tasks tracked in Linear project FOO“), damit nachgelagerte Schritte und künftige Sessions wissen, wo sie nachsehen müssen, und führe den Abschnitt „Task List“ des Plan-Dokuments als geordneten Index der Tracker-IDs oder -Links statt als doppelte Checkliste.
 
-## Plan Document Template
+## Vorlage für das Plan-Dokument
 
 ```markdown
 # Implementation Plan: [Feature/Project Name]
@@ -208,50 +208,50 @@ When using an external tracker, note it in `tasks/plan.md` (e.g. "Tasks tracked 
 - [Question needing human input]
 ```
 
-When tasks live in an external tracker, keep the Task List section above as an ordered index of tracker item IDs or links instead of a duplicate checklist.
+Wenn die Aufgaben in einem externen Tracker liegen, führe den obigen Abschnitt „Task List“ als geordneten Index der Tracker-IDs oder -Links statt als doppelte Checkliste.
 
-## Parallelization Opportunities
+## Möglichkeiten zur Parallelisierung
 
-When multiple agents or sessions are available:
+Wenn mehrere Agenten oder Sessions zur Verfügung stehen:
 
-- **Safe to parallelize:** Independent feature slices, tests for already-implemented features, documentation
-- **Must be sequential:** Database migrations, shared state changes, dependency chains
-- **Needs coordination:** Features that share an API contract (define the contract first, then parallelize)
+- **Sicher parallelisierbar:** Unabhängige Feature-Scheiben, Tests für bereits implementierte Features, Dokumentation
+- **Muss sequenziell erfolgen:** Datenbank-Migrationen, Änderungen an geteiltem State, Abhängigkeitsketten
+- **Erfordert Abstimmung:** Features, die sich einen API-Vertrag teilen (zuerst den Vertrag definieren, dann parallelisieren)
 
-## Common Rationalizations
+## Typische Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Realität |
 |---|---|
-| "I'll figure it out as I go" | That's how you end up with a tangled mess and rework. 10 minutes of planning saves hours. |
-| "The tasks are obvious" | Write them down anyway. Explicit tasks surface hidden dependencies and forgotten edge cases. |
-| "Planning is overhead" | Planning is the task. Implementation without a plan is just typing. |
-| "I can hold it all in my head" | Context windows are finite. Written plans survive session boundaries and compaction. |
-| "The old `tasks/plan.md` is stale, I'll just replace it" | Unchecked tasks may be mid-build in another session. Overwriting them destroys work state that exists nowhere else. Stop and ask. |
+| „Ich finde das beim Umsetzen schon heraus“ | So landest du bei einem verworrenen Chaos und Nacharbeit. 10 Minuten Planung sparen Stunden. |
+| „Die Aufgaben sind offensichtlich“ | Schreib sie trotzdem auf. Explizite Aufgaben bringen versteckte Abhängigkeiten und vergessene Randfälle ans Licht. |
+| „Planung ist Overhead“ | Die Planung ist die Aufgabe. Implementierung ohne Plan ist nur Tippen. |
+| „Ich kann alles im Kopf behalten“ | Kontextfenster sind endlich. Schriftliche Pläne überstehen Session-Grenzen und Compaction. |
+| „Der alte `tasks/plan.md` ist veraltet, ich ersetze ihn einfach“ | Unabgehakte Aufgaben könnten gerade in einer anderen Session in Umsetzung sein. Das Überschreiben zerstört Arbeitsstand, der sonst nirgends existiert. Halte an und frage nach. |
 
-## Red Flags
+## Warnsignale
 
-- Starting implementation without a written task list
-- Overwriting a `tasks/plan.md` or `tasks/todo.md` that still has unchecked tasks for different work, without asking
-- Writing `tasks/todo.md` when the project has designated an external tracker (or scattering tasks across both)
-- Tasks that say "implement the feature" without acceptance criteria
-- No verification steps in the plan
-- All tasks are XL-sized
-- No checkpoints between tasks
-- Dependency order isn't considered
+- Die Umsetzung beginnt ohne schriftliche Aufgabenliste
+- Ein `tasks/plan.md` oder `tasks/todo.md` mit noch unabgehakten Aufgaben für andere Arbeit wird überschrieben, ohne nachzufragen
+- `tasks/todo.md` wird geschrieben, obwohl das Projekt einen externen Tracker festgelegt hat (oder Aufgaben werden auf beide verteilt)
+- Aufgaben lauten „implement the feature“, ohne Akzeptanzkriterien
+- Keine Verifikationsschritte im Plan
+- Alle Aufgaben haben XL-Größe
+- Keine Checkpoints zwischen den Aufgaben
+- Die Reihenfolge der Abhängigkeiten wurde nicht berücksichtigt
 
-## Verification
+## Verifikation
 
-Before starting implementation, confirm:
+Bestätige vor Beginn der Umsetzung:
 
-- [ ] Every task has acceptance criteria
-- [ ] Every task has a verification step
-- [ ] Task dependencies are identified and ordered correctly
-- [ ] Tasks are recorded in the task list target (default `tasks/todo.md`)
-- [ ] No pre-existing incomplete plan was overwritten without explicit user confirmation
-- [ ] No task touches more than ~5 files
-- [ ] Checkpoints exist between major phases
-- [ ] The human has reviewed and approved the plan
+- [ ] Jede Aufgabe hat Akzeptanzkriterien
+- [ ] Jede Aufgabe hat einen Verifikationsschritt
+- [ ] Aufgabenabhängigkeiten sind identifiziert und korrekt geordnet
+- [ ] Aufgaben sind im Ziel der Aufgabenliste festgehalten (Standard `tasks/todo.md`)
+- [ ] Kein bestehender unvollständiger Plan wurde ohne ausdrückliche Bestätigung des Nutzers überschrieben
+- [ ] Keine Aufgabe berührt mehr als ca. 5 Dateien
+- [ ] Zwischen den großen Phasen gibt es Checkpoints
+- [ ] Der Mensch hat den Plan geprüft und freigegeben
 
-## See Also
+## Siehe auch
 
-Acceptance criteria are per-task and answer "did we build the right thing?". They sit on top of the project-wide Definition of Done, the standing bar every task clears before it counts as done. See `../../references/definition-of-done.md`.
+Akzeptanzkriterien gelten pro Aufgabe und beantworten die Frage „Haben wir das Richtige gebaut?“. Sie setzen auf der projektweiten Definition of Done auf, dem festen Maßstab, den jede Aufgabe erfüllen muss, bevor sie als erledigt gilt. Siehe `../../references/definition-of-done.md`.

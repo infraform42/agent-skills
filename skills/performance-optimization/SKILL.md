@@ -1,33 +1,33 @@
 ---
 name: performance-optimization
-description: Optimizes application performance across frontend, backend, queries, and databases. Use when performance requirements exist, when you suspect performance regressions, when Core Web Vitals or load times need improvement, when N+1 query patterns need fixing, or when profiling reveals bottlenecks.
+description: Optimiert die Performance von Anwendungen in Frontend, Backend, Abfragen und Datenbanken. Verwenden, wenn Performance-Anforderungen bestehen, wenn Performance-Regressionen vermutet werden, wenn Core Web Vitals oder Ladezeiten verbessert werden müssen, wenn N+1-Query-Muster behoben werden müssen oder wenn Profiling Engpässe aufdeckt. Typische Auslöser sind „mach die Seite schneller“, „die API ist zu langsam“, „finde den Performance-Engpass“, „behebe die N+1-Queries“ oder „verbessere den LCP-Wert“.
 ---
 
 # Performance Optimization
 
-## Overview
+## Überblick
 
-Measure before optimizing. Performance work without measurement is guessing — and guessing leads to premature optimization that adds complexity without improving what matters. Profile first, identify the actual bottleneck, fix it, measure again. Optimize only what measurements prove matters.
+Miss, bevor du optimierst. Performance-Arbeit ohne Messung ist Raten, und Raten führt zu vorzeitiger Optimierung, die Komplexität hinzufügt, ohne das zu verbessern, worauf es ankommt. Profiliere zuerst, identifiziere den tatsächlichen Engpass, behebe ihn, miss erneut. Optimiere nur, was Messungen als relevant belegen.
 
-## When to Use
+## Wann verwenden
 
-- Performance requirements exist in the spec (load time budgets, response time SLAs)
-- Users or monitoring report slow behavior
-- Core Web Vitals scores are below thresholds
-- You suspect a change introduced a regression
-- Building features that handle large datasets or high traffic
+- Performance-Anforderungen existieren in der Spec (Ladezeit-Budgets, Antwortzeit-SLAs)
+- Nutzer oder Monitoring melden langsames Verhalten
+- Core-Web-Vitals-Werte liegen unter den Schwellenwerten
+- Du vermutest, dass eine Änderung eine Regression eingeführt hat
+- Du baust Features, die große Datenmengen oder hohen Traffic verarbeiten
 
-**When NOT to use:** Don't optimize before you have evidence of a problem. Premature optimization adds complexity that costs more than the performance it gains.
+**Wann NICHT verwenden:** Optimiere nicht, bevor du Belege für ein Problem hast. Vorzeitige Optimierung fügt Komplexität hinzu, die mehr kostet, als die Performance einbringt.
 
-## Core Web Vitals Targets
+## Core-Web-Vitals-Ziele
 
-| Metric | Good | Needs Improvement | Poor |
+| Metrik | Gut | Verbesserungsbedarf | Schlecht |
 |--------|------|-------------------|------|
 | **LCP** (Largest Contentful Paint) | ≤ 2.5s | ≤ 4.0s | > 4.0s |
 | **INP** (Interaction to Next Paint) | ≤ 200ms | ≤ 500ms | > 500ms |
 | **CLS** (Cumulative Layout Shift) | ≤ 0.1 | ≤ 0.25 | > 0.25 |
 
-## The Optimization Workflow
+## Der Optimierungs-Workflow
 
 ```
 1. MEASURE  → Establish baseline with real data
@@ -37,12 +37,12 @@ Measure before optimizing. Performance work without measurement is guessing — 
 5. GUARD    → Add monitoring or tests to prevent regression
 ```
 
-### Step 1: Measure
+### Schritt 1: Messen
 
-Two complementary approaches — use both:
+Zwei sich ergänzende Ansätze, nutze beide:
 
-- **Synthetic (Lighthouse, DevTools Performance tab):** Controlled conditions, reproducible. Best for CI regression detection and isolating specific issues.
-- **RUM (web-vitals library, CrUX):** Real user data in real conditions. Required to validate that a fix actually improved user experience.
+- **Synthetisch (Lighthouse, DevTools-Performance-Tab):** Kontrollierte Bedingungen, reproduzierbar. Am besten geeignet für die Erkennung von Regressionen in CI und zum Isolieren einzelner Probleme.
+- **RUM (web-vitals-Bibliothek, CrUX):** Echte Nutzerdaten unter realen Bedingungen. Erforderlich, um zu belegen, dass ein Fix die Nutzererfahrung tatsächlich verbessert hat.
 
 **Frontend:**
 ```javascript
@@ -70,9 +70,9 @@ const result = await db.query(...);
 console.timeEnd('db-query');
 ```
 
-### Where to Start Measuring
+### Wo du mit dem Messen beginnst
 
-Use the symptom to decide what to measure first:
+Entscheide anhand des Symptoms, was du zuerst misst:
 
 ```
 What is slow?
@@ -96,99 +96,93 @@ What is slow?
     └── Intermittent slowness? --> Check for lock contention, GC pauses, external deps
 ```
 
-### Step 2: Identify the Bottleneck
+### Schritt 2: Den Engpass identifizieren
 
-Common bottlenecks by category:
+Häufige Engpässe nach Kategorie:
 
 **Frontend:**
 
-| Symptom | Likely Cause | Investigation |
+| Symptom | Wahrscheinliche Ursache | Untersuchung |
 |---------|-------------|---------------|
-| Slow LCP | Large images, render-blocking resources, slow server | Check network waterfall, image sizes |
-| High CLS | Images without dimensions, late-loading content, font shifts | Check layout shift attribution |
-| Poor INP | Heavy JavaScript on main thread, large DOM updates | Check long tasks in Performance trace |
-| Slow initial load | Large bundle, many network requests | Check bundle size, code splitting |
+| Langsamer LCP | Große Bilder, render-blockierende Ressourcen, langsamer Server | Network-Waterfall und Bildgrößen prüfen |
+| Hoher CLS | Bilder ohne Abmessungen, spät ladende Inhalte, Font-Shifts | Layout-Shift-Attribution prüfen |
+| Schlechter INP | Aufwendiges JavaScript im Main Thread, große DOM-Updates | Long Tasks im Performance-Trace prüfen |
+| Langsamer initialer Ladevorgang | Großes Bundle, viele Netzwerk-Requests | Bundle-Größe und Code Splitting prüfen |
 
 **Backend:**
 
-| Symptom | Likely Cause | Investigation |
+| Symptom | Wahrscheinliche Ursache | Untersuchung |
 |---------|-------------|---------------|
-| Slow API responses | N+1 queries, missing indexes, unoptimized queries | Check database query log |
-| Memory growth | Leaked references, unbounded caches, large payloads | Heap snapshot analysis |
-| CPU spikes | Synchronous heavy computation, regex backtracking | CPU profiling |
-| High latency | Missing caching, redundant computation, network hops | Trace requests through the stack |
+| Langsame API-Antworten | N+1-Queries, fehlende Indizes, nicht optimierte Queries | Datenbank-Query-Log prüfen |
+| Wachsender Speicherverbrauch | Geleakte Referenzen, unbegrenzte Caches, große Payloads | Heap-Snapshot analysieren |
+| CPU-Spitzen | Synchrone aufwendige Berechnungen, Regex-Backtracking | CPU-Profiling |
+| Hohe Latenz | Fehlendes Caching, redundante Berechnungen, Netzwerk-Hops | Requests durch den Stack tracen |
 
-### Step 3: Fix the Bottleneck
+### Schritt 3: Den Engpass beheben
 
-Fix the one thing Step 2 identified, nothing else. The anti-patterns below are the usual suspects; each entry gives the rule and the signature to recognize it, and links to a worked fix in [references/optimization-patterns.md](references/optimization-patterns.md). Open the one you need when you reach that code, not before.
+Behebe genau das eine, was Schritt 2 identifiziert hat, sonst nichts. Die folgenden Anti-Patterns sind die üblichen Verdächtigen; jeder Eintrag nennt die Regel und die Signatur, an der du es erkennst, und verlinkt auf einen ausgearbeiteten Fix in [references/optimization-patterns.md](references/optimization-patterns.md). Öffne den Eintrag, den du brauchst, wenn du bei diesem Code angekommen bist, nicht vorher.
 
 **Backend**
 
-- **N+1 queries.** One query per row is the most common backend bottleneck. Fetch the relation in the same query (join/include) instead of in the loop. [Pattern](references/optimization-patterns.md#n1-queries-backend).
-- **Unbounded data fetching.** Every list endpoint paginates with a limit and a stable order. [Pattern](references/optimization-patterns.md#unbounded-data-fetching).
-- **Queries that ignore their index.** "Add an index" is the guess; `EXPLAIN ANALYZE` is the measurement. A `Seq Scan` where you expected an index, a `rows=` estimate off by an order of magnitude, and a `Sort` node above the scan each call for a different fix; a bad `rows=` estimate means stale statistics, so run `ANALYZE` rather than adding an index. Index for the shape of the query (equality columns first, then the range or sort column). A plain index will not help a query on a low-selectivity dominant value (a partial index serves the rare value), a leading wildcard (needs trigram or full-text), or a function applied to the column (index the expression, as in `WHERE lower(email) = ?`), and every index taxes every write. Re-run the plan afterwards; an index that did not change it is a revert. [Pattern](references/optimization-patterns.md#queries-that-ignore-their-index).
-- **Connection pool exhaustion.** Signature: *every* endpoint slows at once, time is spent waiting for a connection rather than executing, and the database shows mostly idle sessions. One pool per process, sized so `instances × max` stays under the database's connection ceiling. Bigger is not faster; it relocates the queue to the database where it is harder to see. With unbounded instance counts (serverless, autoscaling), multiplex through a proxy (pgbouncer, RDS Proxy) instead of raising `max`. [Pattern](references/optimization-patterns.md#connection-pool-exhaustion).
-- **Missing caching.** Cache what is expensive to produce and read far more often than it changes; caching an already-fast query adds a network hop and a staleness bug in exchange for nothing. Pick the layer deliberately (in-process, shared, CDN). Every input that changes the response belongs in the key (tenant, locale, permissions, feature flags): a key that omits the viewer is how one user's data gets served to another. Choose one invalidation strategy (TTL, event or tag based, versioned keys) and state the acceptable staleness window explicitly. Guard hot keys against the stampede: serve stale while one request recomputes, or coalesce concurrent misses behind a single in-flight promise. Never cache what must be fresh (balances, permissions, inventory at checkout). [Pattern](references/optimization-patterns.md#missing-caching-backend); request coalescing, write strategies, and negative caching in `../../references/performance-checklist.md`.
+- **N+1-Queries.** Eine Query pro Zeile ist der häufigste Backend-Engpass. Hole die Relation in derselben Query (join/include), statt in der Schleife. [Muster](references/optimization-patterns.md#n1-queries-backend).
+- **Unbegrenztes Laden von Daten.** Jeder List-Endpoint paginiert mit einem Limit und stabiler Sortierung. [Muster](references/optimization-patterns.md#unbounded-data-fetching).
+- **Queries, die ihren Index ignorieren.** „Index hinzufügen“ ist die Vermutung; `EXPLAIN ANALYZE` ist die Messung. Ein `Seq Scan`, wo du einen Index erwartet hast, eine um eine Größenordnung danebenliegende `rows=`-Schätzung und ein `Sort`-Knoten oberhalb des Scans verlangen jeweils einen anderen Fix; eine schlechte `rows=`-Schätzung bedeutet veraltete Statistiken, führe also `ANALYZE` aus, statt einen Index hinzuzufügen. Indiziere für die Form der Query (zuerst die Gleichheitsspalten, dann die Bereichs- oder Sortierspalte). Ein einfacher Index hilft nicht bei einer Query auf einen dominanten Wert mit niedriger Selektivität (ein partieller Index bedient den seltenen Wert), bei einem führenden Wildcard (braucht Trigram oder Volltext) oder bei einer auf die Spalte angewendeten Funktion (indiziere den Ausdruck, wie in `WHERE lower(email) = ?`), und jeder Index belastet jeden Schreibvorgang. Führe den Plan danach erneut aus; ein Index, der ihn nicht verändert hat, wird zurückgenommen. [Muster](references/optimization-patterns.md#queries-that-ignore-their-index).
+- **Erschöpfter Connection-Pool.** Signatur: *Jeder* Endpoint wird gleichzeitig langsam, die Zeit geht ins Warten auf eine Verbindung statt ins Ausführen, und die Datenbank zeigt überwiegend inaktive Sessions. Ein Pool pro Prozess, so dimensioniert, dass `instances × max` unter dem Verbindungslimit der Datenbank bleibt. Größer ist nicht schneller; es verlagert die Warteschlange in die Datenbank, wo sie schwerer zu sehen ist. Bei unbegrenzter Instanzanzahl (Serverless, Autoscaling) multiplexe über einen Proxy (pgbouncer, RDS Proxy), statt `max` zu erhöhen. [Muster](references/optimization-patterns.md#connection-pool-exhaustion).
+- **Fehlendes Caching.** Cache, was teuer zu erzeugen ist und weit häufiger gelesen als geändert wird; eine ohnehin schnelle Query zu cachen erkauft einen Netzwerk-Hop und einen Staleness-Bug für nichts. Wähle die Ebene bewusst (In-Process, geteilt, CDN). Jeder Input, der die Antwort verändert, gehört in den Key (Tenant, Locale, Berechtigungen, Feature-Flags): Ein Key, der den Betrachter auslässt, ist der Weg, auf dem die Daten eines Nutzers an einen anderen ausgeliefert werden. Wähle eine Invalidierungsstrategie (TTL, Event- oder Tag-basiert, versionierte Keys) und nenne das akzeptable Staleness-Fenster explizit. Schütze Hot Keys vor dem Stampede: liefere veraltete Daten aus, während ein Request neu berechnet, oder fasse gleichzeitige Misses hinter einem einzigen laufenden Promise zusammen. Cache nie, was aktuell sein muss (Kontostände, Berechtigungen, Lagerbestand beim Checkout). [Muster](references/optimization-patterns.md#missing-caching-backend); Request Coalescing, Schreibstrategien und Negative Caching stehen in `../../references/performance-checklist.md`.
 
 **Frontend**
 
-- **Missing image optimization.** Every image declares `width` and `height` (CLS). The LCP image gets `fetchpriority="high"`, modern formats (AVIF, WebP) through `<picture>`, and `srcset`/`sizes` for resolution switching; below-the-fold images get `loading="lazy"` and `decoding="async"`. [Pattern](references/optimization-patterns.md#missing-image-optimization-frontend).
-- **Unnecessary re-renders.** An object or function created in render is a new reference every time and re-renders every child that receives it. Hoist constants; reserve `React.memo` and `useMemo` for work the profile shows is expensive, since overuse is its own cost. [Pattern](references/optimization-patterns.md#unnecessary-re-renders-react).
-- **Large bundle size.** Modern bundlers tree-shake ESM named imports on their own; the real gains are route-level code splitting and lazy-loading heavy, rarely-used features behind `Suspense`. Profile before changing import styles. [Pattern](references/optimization-patterns.md#large-bundle-size).
+- **Fehlende Bildoptimierung.** Jedes Bild deklariert `width` und `height` (CLS). Das LCP-Bild bekommt `fetchpriority="high"`, moderne Formate (AVIF, WebP) über `<picture>` und `srcset`/`sizes` für die Auflösungsauswahl; Bilder unterhalb des sichtbaren Bereichs bekommen `loading="lazy"` und `decoding="async"`. [Muster](references/optimization-patterns.md#missing-image-optimization-frontend).
+- **Unnötige Re-Renders.** Ein Objekt oder eine Funktion, die im Render erzeugt wird, ist jedes Mal eine neue Referenz und rendert jedes Kind neu, das sie erhält. Ziehe Konstanten heraus; hebe `React.memo` und `useMemo` für Arbeit auf, die laut Profil teuer ist, denn übermäßiger Einsatz hat seine eigenen Kosten. [Muster](references/optimization-patterns.md#unnecessary-re-renders-react).
+- **Große Bundle-Größe.** Moderne Bundler tree-shaken benannte ESM-Imports von allein; die echten Gewinne liegen in Code Splitting auf Route-Ebene und im Lazy Loading aufwendiger, selten genutzter Features hinter `Suspense`. Profiliere, bevor du Import-Stile änderst. [Muster](references/optimization-patterns.md#large-bundle-size).
 
-### Step 4: Verify (Keep or Revert)
+### Schritt 4: Verifizieren (behalten oder zurücknehmen)
 
-A fix is a hypothesis until you re-measure. This step decides whether it survives.
+Ein Fix ist eine Hypothese, bis du erneut gemessen hast. Dieser Schritt entscheidet, ob er überlebt.
 
-**Re-measure the way you measured the baseline:** same command, same conditions, same fixed budget (wall-clock, sample count, or request count). A baseline taken on a cold cache against a result taken on a warm one measures the cache, not your change.
+**Miss so erneut, wie du die Baseline gemessen hast:** gleicher Befehl, gleiche Bedingungen, gleiches festes Budget (Wall-Clock-Zeit, Anzahl Samples oder Anzahl Requests). Eine Baseline mit kaltem Cache gegen ein Ergebnis mit warmem Cache misst den Cache, nicht deine Änderung.
 
-**Change one thing at a time.** Three optimizations landed together produce one number, and you cannot attribute it. If they must ship together, measure each in isolation first.
+**Ändere jeweils nur eine Sache.** Drei zusammen eingespielte Optimierungen liefern eine Zahl, und du kannst sie nicht zuordnen. Wenn sie zusammen ausgeliefert werden müssen, miss jede zuerst isoliert.
 
-**Beat the noise, not just the mean.** Repeat the measurement and compare the delta against run-to-run variance. A 3% gain inside ±5% variance is not a gain; it is a different sample.
+**Schlage das Rauschen, nicht nur den Mittelwert.** Wiederhole die Messung und vergleiche das Delta mit der Varianz zwischen den Läufen. Ein Gewinn von 3 % innerhalb von ±5 % Varianz ist kein Gewinn, sondern ein anderes Sample.
 
-Then decide, strictly:
+Entscheide dann strikt:
 
-| Result vs. baseline | Action |
+| Ergebnis vs. Baseline | Aktion |
 |---|---|
-| Past the threshold, tests green | **Keep.** Commit with the before/after numbers in the message. |
-| Within noise (no measurable change) | **Revert.** |
-| Worse | **Revert.** |
-| Improved, but a test went red | **Revert.** A regression wearing a win's clothing. |
+| Über der Schwelle, Tests grün | **Behalten.** Commit mit den Vorher-/Nachher-Zahlen in der Nachricht. |
+| Innerhalb des Rauschens (keine messbare Änderung) | **Zurücknehmen.** |
+| Schlechter | **Zurücknehmen.** |
+| Verbessert, aber ein Test ist rot geworden | **Zurücknehmen.** Eine Regression im Gewand eines Gewinns. |
 
-**"Neutral" is a revert, not a keep.** This is the step teams skip: the change is already written, throwing it away feels wasteful, so it lands unmeasured, and the codebase accretes complexity that never bought anything. Code you keep, you maintain forever. Make it pay for itself.
+**„Neutral“ bedeutet zurücknehmen, nicht behalten.** Diesen Schritt überspringen Teams: Die Änderung ist schon geschrieben, sie wegzuwerfen fühlt sich verschwenderisch an, also landet sie ungemessen im Code, und die Codebasis sammelt Komplexität an, die nie etwas gebracht hat. Code, den du behältst, pflegst du für immer. Sorge dafür, dass er sich selbst bezahlt macht.
 
-**Correctness gates the metric.** The suite stays green *and* the number moves. An "optimization" that wins by dropping work the product needed (skipping a validation, caching something that must be fresh, removing an `await` that was load-bearing) is a regression, not a win.
+**Korrektheit bestimmt die Metrik.** Die Suite bleibt grün *und* die Zahl bewegt sich. Eine „Optimierung“, die gewinnt, indem sie Arbeit weglässt, die das Produkt brauchte (eine Validierung überspringen, etwas cachen, das aktuell sein muss, ein tragendes `await` entfernen), ist eine Regression, kein Gewinn.
 
-#### Log every attempt, including the reverted ones
+#### Protokolliere jeden Versuch, auch die zurückgenommenen
 
-Reverted work leaves no trace in git history, which is exactly why the same dead idea gets tried again next quarter. Keep a short ledger so a discarded idea stays discarded:
+Zurückgenommene Arbeit hinterlässt keine Spur in der Git-Historie, und genau deshalb wird dieselbe tote Idee im nächsten Quartal erneut versucht. Führe ein kurzes Logbuch, damit eine verworfene Idee verworfen bleibt:
 
-| Idea | Baseline → Result | Verdict | Why |
+| Idee | Baseline → Ergebnis | Urteil | Begründung |
 |---|---|---|---|
-| Memoize the row component | INP 240ms → 235ms | reverted | Inside noise (±15ms). Rows weren't the bottleneck. |
-| Virtualize the list | INP 240ms → 90ms | kept | Long tasks gone from the trace. |
-| Preconnect to the API origin | LCP 2.8s → 2.8s | reverted | Already same-origin. |
+| Row-Komponente memoizen | INP 240ms → 235ms | zurückgenommen | Innerhalb des Rauschens (±15ms). Die Rows waren nicht der Engpass. |
+| Liste virtualisieren | INP 240ms → 90ms | behalten | Long Tasks sind aus dem Trace verschwunden. |
+| Preconnect zum API-Origin | LCP 2.8s → 2.8s | zurückgenommen | Ist bereits Same-Origin. |
 
-A section in the PR description or a `PERF.md` in the repo both work. What matters is that the next person (or the next agent) reads it before proposing an experiment, and doesn't re-run one that already failed.
+Ein Abschnitt in der PR-Beschreibung oder eine `PERF.md` im Repo funktionieren beide. Entscheidend ist, dass die nächste Person (oder der nächste Agent) das liest, bevor sie ein Experiment vorschlägt, und keines wiederholt, das bereits fehlgeschlagen ist.
 
-### Step 5: Guard Against Regression
+### Schritt 5: Gegen Regression absichern
 
-Guard the metric the user actually feels, not every available number. Use the
-same LCP, INP, p95 latency, or other primary metric that justified the fix.
+Sichere die Metrik ab, die der Nutzer tatsächlich spürt, nicht jede verfügbare Zahl. Verwende denselben LCP, INP, p95-Latenz oder eine andere primäre Metrik, die den Fix gerechtfertigt hat.
 
-Use two complementary layers when the surface is user-facing:
+Nutze zwei sich ergänzende Ebenen, wenn die Oberfläche nutzernah ist:
 
-- **Synthetic CI gate:** Catch reproducible regressions before merge with a
-  performance budget. Repeat noisy measurements or compare a median/trend so
-  normal run-to-run variance does not turn the gate into a flaky check.
-- **Field monitoring:** Alert on a meaningful p75 movement in RUM data. Use
-  attributed `web-vitals` data to locate the cause; treat CrUX's rolling window
-  as confirmation rather than an immediate alert.
+- **Synthetisches CI-Gate:** Fange reproduzierbare Regressionen vor dem merge mit einem Performance-Budget ab. Wiederhole verrauschte Messungen oder vergleiche einen Median/Trend, damit normale Varianz zwischen den Läufen das Gate nicht zu einem flaky Check macht.
+- **Field-Monitoring:** Alarmiere bei einer bedeutsamen p75-Bewegung in den RUM-Daten. Nutze attribuierte `web-vitals`-Daten, um die Ursache zu lokalisieren; behandle das rollierende Fenster von CrUX als Bestätigung statt als sofortigen Alarm.
 
-When either guard fires, return to Step 1 and establish a fresh baseline before
-proposing another fix.
+Wenn eine der beiden Absicherungen auslöst, kehre zu Schritt 1 zurück und stelle eine frische Baseline her, bevor du einen weiteren Fix vorschlägst.
 
-**Set budgets and enforce them:**
+**Lege Budgets fest und erzwinge sie:**
 
 ```
 JavaScript bundle: < 200KB gzipped (initial load)
@@ -200,7 +194,7 @@ Time to Interactive: < 3.5s on 4G
 Lighthouse Performance score: ≥ 90
 ```
 
-**Enforce in CI:**
+**In CI erzwingen:**
 ```bash
 # Bundle size check
 npx bundlesize --config bundlesize.config.json
@@ -209,59 +203,59 @@ npx bundlesize --config bundlesize.config.json
 npx --package=@lhci/cli lhci autorun
 ```
 
-## See Also
+## Siehe auch
 
-For detailed performance checklists, optimization commands, and anti-pattern reference, see `../../references/performance-checklist.md`.
+Detaillierte Performance-Checklisten, Optimierungsbefehle und eine Anti-Pattern-Referenz findest du in `../../references/performance-checklist.md`.
 
 
-## Common Rationalizations
+## Häufige Ausreden
 
-| Rationalization | Reality |
+| Ausrede | Realität |
 |---|---|
-| "We'll optimize later" | Performance debt compounds. Fix obvious anti-patterns now, defer micro-optimizations. |
-| "It's fast on my machine" | Your machine isn't the user's. Profile on representative hardware and networks. |
-| "This optimization is obvious" | If you didn't measure, you don't know. Profile first. |
-| "Users won't notice 100ms" | Research shows 100ms delays impact conversion rates. Users notice more than you think. |
-| "The framework handles performance" | Frameworks prevent some issues but can't fix N+1 queries or oversized bundles. |
-| "The query is slow, add an index" | Read the plan first. The index may already exist and be unusable, and every index taxes writes forever. |
-| "Just cache it" | Caching an already-cheap call buys nothing and adds a staleness bug. Cache what is expensive *and* re-read far more than written. |
-| "Raise the pool size, we're running out of connections" | A pool bigger than the database can serve moves the queue somewhere less visible. Find what holds connections. |
-| "It didn't help much, but it doesn't hurt" | Neutral changes are a revert. You pay maintenance on them forever and got nothing back. |
-| "We already wrote it, may as well keep it" | Sunk cost. The measurement doesn't care how long the change took to write. |
-| "The improvement is obvious, no need to re-measure" | Then re-measuring is cheap and proves it. Unmeasured wins are how neutral complexity lands. |
+| „Wir optimieren später“ | Performance-Schulden wachsen mit Zinseszins. Behebe offensichtliche Anti-Patterns jetzt, schiebe Mikro-Optimierungen auf. |
+| „Auf meinem Rechner ist es schnell“ | Dein Rechner ist nicht der des Nutzers. Profiliere auf repräsentativer Hardware und in repräsentativen Netzwerken. |
+| „Diese Optimierung ist offensichtlich“ | Wenn du nicht gemessen hast, weißt du es nicht. Profiliere zuerst. |
+| „Nutzer merken 100ms nicht“ | Studien zeigen, dass Verzögerungen von 100ms die Conversion-Raten beeinflussen. Nutzer bemerken mehr, als du denkst. |
+| „Das Framework kümmert sich um Performance“ | Frameworks verhindern manche Probleme, können aber keine N+1-Queries oder überdimensionierten Bundles beheben. |
+| „Die Query ist langsam, füg einen Index hinzu“ | Lies zuerst den Plan. Der Index existiert womöglich schon und ist nicht nutzbar, und jeder Index belastet Schreibvorgänge für immer. |
+| „Cach das einfach“ | Einen ohnehin billigen Aufruf zu cachen bringt nichts und fügt einen Staleness-Bug hinzu. Cache, was teuer ist *und* weit häufiger gelesen als geschrieben wird. |
+| „Erhöh die Pool-Größe, uns gehen die Verbindungen aus“ | Ein Pool, der größer ist als die Datenbank bedienen kann, verlagert die Warteschlange an eine weniger sichtbare Stelle. Finde heraus, was die Verbindungen hält. |
+| „Es hat nicht viel gebracht, schadet aber auch nicht“ | Neutrale Änderungen werden zurückgenommen. Du zahlst dafür dauerhaft Wartungsaufwand und hast nichts zurückbekommen. |
+| „Wir haben es schon geschrieben, also können wir es auch behalten“ | Sunk Cost. Die Messung interessiert sich nicht dafür, wie lange das Schreiben der Änderung gedauert hat. |
+| „Die Verbesserung ist offensichtlich, kein Grund neu zu messen“ | Dann ist das erneute Messen billig und belegt es. Ungemessene Gewinne sind der Weg, auf dem neutrale Komplexität landet. |
 
-## Red Flags
+## Warnsignale
 
-- Optimization without profiling data to justify it
-- N+1 query patterns in data fetching
-- An index added without a query plan before and after to justify it
-- A cache key that omits an input the response depends on (tenant, locale, viewer)
-- A cache with no stated staleness window and no invalidation strategy
-- Connection pool size raised in response to exhaustion, without finding what holds connections
-- List endpoints without pagination
-- Images without dimensions, lazy loading, or responsive sizes
-- Bundle size growing without review
-- No performance monitoring in production
-- `React.memo` and `useMemo` everywhere (overusing is as bad as underusing)
-- Optimizations kept without a re-measurement that justifies them
-- Several optimizations bundled into one measurement, so no single change can be attributed
-- A "win" that required a test to be changed, skipped, or deleted
-- The same failed optimization attempted more than once because nobody recorded the first attempt
+- Optimierung ohne Profiling-Daten, die sie rechtfertigen
+- N+1-Query-Muster beim Laden von Daten
+- Ein Index, der ohne Query-Plan davor und danach hinzugefügt wurde
+- Ein Cache-Key, der einen Input auslässt, von dem die Antwort abhängt (Tenant, Locale, Betrachter)
+- Ein Cache ohne angegebenes Staleness-Fenster und ohne Invalidierungsstrategie
+- Connection-Pool-Größe wurde als Reaktion auf Erschöpfung erhöht, ohne herauszufinden, was die Verbindungen hält
+- List-Endpoints ohne Pagination
+- Bilder ohne Abmessungen, Lazy Loading oder responsive Größen
+- Bundle-Größe wächst ohne Review
+- Kein Performance-Monitoring in Produktion
+- `React.memo` und `useMemo` überall (übermäßiger Einsatz ist genauso schlecht wie zu geringer)
+- Optimierungen, die ohne rechtfertigende Neumessung behalten wurden
+- Mehrere Optimierungen in einer Messung gebündelt, sodass sich keine einzelne Änderung zuordnen lässt
+- Ein „Gewinn“, für den ein Test geändert, übersprungen oder gelöscht werden musste
+- Derselbe fehlgeschlagene Optimierungsversuch wurde mehrfach unternommen, weil niemand den ersten Versuch festgehalten hat
 
-## Verification
+## Verifikation
 
-After any performance-related change:
+Nach jeder Performance-bezogenen Änderung:
 
-- [ ] Before and after measurements exist (specific numbers)
-- [ ] The result was re-measured the same way as the baseline (same command, same conditions)
-- [ ] The improvement exceeds run-to-run variance, not just the mean
-- [ ] Changes that didn't beat the baseline were reverted, not kept as neutral
-- [ ] Attempts are logged, kept and reverted alike, so a dead idea isn't re-run
-- [ ] The specific bottleneck is identified and addressed
-- [ ] Core Web Vitals are within "Good" thresholds
-- [ ] Bundle size hasn't increased significantly
-- [ ] No N+1 queries in new data fetching code
-- [ ] Any new index is justified by a query plan before and after, and its write cost was considered
-- [ ] Any new cache states what it keys on and how it goes stale
-- [ ] The measured user-facing metric has a synthetic budget or field monitor that can detect regression
-- [ ] Existing tests still pass (optimization didn't break behavior)
+- [ ] Messungen vorher und nachher liegen vor (konkrete Zahlen)
+- [ ] Das Ergebnis wurde genauso neu gemessen wie die Baseline (gleicher Befehl, gleiche Bedingungen)
+- [ ] Die Verbesserung übersteigt die Varianz zwischen den Läufen, nicht nur den Mittelwert
+- [ ] Änderungen, die die Baseline nicht geschlagen haben, wurden zurückgenommen und nicht als neutral behalten
+- [ ] Versuche sind protokolliert, behaltene wie zurückgenommene, damit eine tote Idee nicht erneut ausgeführt wird
+- [ ] Der konkrete Engpass ist identifiziert und behoben
+- [ ] Core Web Vitals liegen innerhalb der „Gut“-Schwellenwerte
+- [ ] Die Bundle-Größe ist nicht wesentlich gewachsen
+- [ ] Keine N+1-Queries im neuen Code zum Laden von Daten
+- [ ] Jeder neue Index ist durch einen Query-Plan vorher und nachher begründet, und seine Schreibkosten wurden berücksichtigt
+- [ ] Jeder neue Cache gibt an, worauf er keyt und wie er veraltet
+- [ ] Die gemessene nutzernahe Metrik hat ein synthetisches Budget oder einen Field-Monitor, der Regressionen erkennen kann
+- [ ] Bestehende Tests laufen weiterhin durch (die Optimierung hat das Verhalten nicht gebrochen)
